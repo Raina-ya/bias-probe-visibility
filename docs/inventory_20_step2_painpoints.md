@@ -1,140 +1,168 @@
-# 20 篇文獻盤點：第二步 共通痛點（2026-11-10，Claude 草稿，待使用者確認）
+# Common Pain Points in the Literature
 
-> 輸入：docs/inventory_20_step1.md 的 20 篇與疑點欄（commit 601e47c）。
-> 計數規則：同一作者的系列作合併計 1。#8 Scavino Alfaro 2026 與 #9 Scavino 2026 合併為「Scavino 系列」，所以獨立來源共 19 個。
-> 只計 20 篇內的文獻。library 裡其他篇（例如 Tsubouchi 2023、Köster & Mauerer 2605.29872）不計入，需要時另外註明。
-> 判斷依據標示：〔段〕＝讀過相關段落或全文摘錄；〔摘〕＝只依摘要。
-> 本步驟只做痛點歸類，不提研究面向與進度。
+This document groups the open issues recorded in the 20-paper inventory (docs/inventory_20_step1.md) into common pain points, identifies which of them this project responds to, and checks three questions that bear directly on the novelty claim.
 
-## A. 共通痛點（≥ 3 個獨立來源）
+## Method
 
-> 2026-11-10 使用者決定：原痛點 7「證據範圍窄，外推性不明」（8 個獨立來源）移到 D 節不處理清單，不進研究面向。共通痛點剩 6 個。
+Counting rule. A series of papers by the same author counts as one source. Entry 8 (Scavino Alfaro 2026) and entry 9 (Scavino 2026) are merged into "the Scavino series", giving 19 independent sources.
+Scope. Only the 20 inventory papers are counted. Other library entries (for example Tsubouchi 2023, or Koster and Mauerer, arXiv 2605.29872) are not counted and are mentioned separately where relevant.
+Threshold. A pain point is common if at least three independent sources support it. Pain points with fewer sources are listed as minor, with their actual count.
+Basis labels. [passages] means relevant passages or extracted full text were read; [abstract] means the judgement rests on the abstract only.
+This document classifies pain points only; research facets are set out in docs/inventory_20_step3_facets.md.
 
-### 痛點 1：方法的有效性依賴特定誤差結構，而失效條件只寫了一部分
-- **支撐**：7 個獨立來源
-  - Giurgica-Tiron 2020〔段〕：作者自承 folding 可能無法放大 coherent 與 SPAM 誤差
-  - Wallman & Emerson 2016〔段〕：Theorem 1 需要 easy gates 雜訊與閘無關，一般雜訊的證明留作開放問題
-  - Köster & Mauerer 2026〔段〕：訊號落到 floor 時 ZNE 退化為固定縮放
-  - Scavino 系列〔段〕：SV 留下 "residual undetectable-sector bias"
-  - Maciejewski 2021〔摘〕：假設讀出相關的局部性不太高，只校正邊際分布
-  - Czarnik 2021〔摘〕：摘要未說明 Clifford 訓練資料何時不能代表目標
-  - Chen 2023〔摘〕：結果限於 Clifford 閘上的 Pauli 雜訊
-- **為什麼是痛點**：每個方法都只在部分誤差結構下有效，但失效條件散在各篇，有的只是「預期」，有的根本沒寫。使用者在執行時無從得知自己是否落在失效區，失效時也不會有警訊。
-- **可能回應**：Part 1b 的探針 × 誤差結構矩陣，涵蓋 P1（folding）、P2（Clifford 孿生）、P3（RC）、P4（讀出，E5）、P5（對稱性）。
-- **回應方式**：邊界條件。每一格給不變性證明或敏感度推導，並事先寫下失效條件。
+## A. Common pain points (at least three independent sources)
 
-### 痛點 2：偏差資訊依賴理想值、參考值或先驗模型，執行時無法直接取得
-- **支撐**：3 個獨立來源（第 4 個較弱）
-  - Scavino 系列〔段〕：#9 把 â_m 當 Algorithm 1 的輸入，據我們所讀未說明如何取得；#8 的偏差係數依賴理想態、可觀測量與雜訊模型
-  - Armstrong & Kolesár 2020〔段〕：最壞偏差來自先驗函數類別 F(M)，需要已知 M
-  - Köster & Mauerer 2026〔段〕：recovery ratio ρ 需要理想值（但它另外提出不需理想值的 W_neg）
-  - 較弱：Cirstoiu 2023〔摘〕用經典模擬作為評估參考。這是事後評估、不是執行時，所以不計入門檻
-- **為什麼是痛點**：會翻轉決策的正是偏差，但多數理論把偏差當已知，或要求理想值與正確的雜訊模型才能算。真正執行時，這些量都拿不到。
-- **可能回應**：Part 1a（識別區域定義）、Part 1c（偏差感知認證，其中 B 由探針資料決定）、P1–P5。
-- **回應方式**：命題（何時偏差可由執行時資料識別）加方法（探針）。
+### Pain point 1: a method's validity depends on a specific error structure, and its failure conditions are only partly stated
 
-### 痛點 3：控制抽樣誤差或改善平均指標，不等於控制會翻轉決策的偏差
-- **支撐**：4 個獨立來源
-  - Scavino 系列〔段〕：#9 原文 "pointwise marginals, variances, confidence intervals, and MSE do not suffice"；#8 的認證主要針對抽樣誤差
-  - Köster & Mauerer 2026〔段〕："a bogus apparent improvement that is independent of noise amplification"
-  - Armstrong & Kolesár 2020〔段〕：傳統區間若忽略估計量偏差，覆蓋率失效，所以要用偏差調整臨界值
-  - Bultrini 2023〔摘〕：只比較估計準確度
-- **為什麼是痛點**：信賴區間、MSE、平均改善看起來很好時，決策仍可能錯，而且 shots 越多越確定地錯。舊專案的結果也一樣，但舊專案不計入。
-- **可能回應**：Part 1a 的 Lemma 1；Part 1c 的偏差感知認證；P0（只用 CI 的基線）。
-- **回應方式**：命題（Lemma 1：只看目標的認證對可容許偏差是盲的）加比較（偏差感知認證 vs CI-only）。
+Why it matters. Each method works only under some error structures, but the failure conditions are scattered across papers; some are only "expected", others are not written down. At runtime a practitioner cannot tell whether the current situation falls in a failure region, and nothing warns when it does.
+Basis: 7 independent sources.
+  Giurgica-Tiron 2020 [passages]: the authors state that folding may fail to amplify coherent error and state-preparation-and-measurement error.
+  Wallman and Emerson 2016 [passages]: Theorem 1 requires gate-independent noise on easy gates; the proof for general noise is left open.
+  Koster and Mauerer 2026 [passages]: when the signal reaches the floor, ZNE reduces to a fixed rescaling.
+  Scavino series [passages]: symmetry verification leaves a "residual undetectable-sector bias".
+  Maciejewski 2021 [abstract]: readout correlations are assumed not to be too nonlocal, and only marginals are corrected.
+  Czarnik 2021 [abstract]: the abstract does not say when Clifford training data fail to represent the target.
+  Chen 2023 [abstract]: the result is limited to Pauli noise on Clifford gates.
+Project response. The probe-by-structure matrix of Part 1b, covering P1 (folding), P2 (Clifford twin), P3 (randomized compiling), P4 (readout, E5) and P5 (symmetry).
+Expected output: boundary conditions. Every cell gets an invariance proof or a sensitivity derivation, with its failure condition written in advance.
 
-### 痛點 4：評比停在估計準確度，沒有評估下游決策
-- **支撐**：4 個獨立來源
-  - Bultrini 2023〔摘〕：只比較估計準確度
-  - Cirstoiu 2023〔摘〕：未見「何時有益」的建議如何驗證
-  - Takagi 2022〔摘〕：只處理估計誤差與抽樣成本
-  - Quek 2024〔摘〕：只處理估計誤差與抽樣成本
-  - Sarovar 2020〔摘〕摘要未談對決策的影響，但它是特性化協定、不是評比，只列參考，不計入
-  - Scavino 系列**不計入**：#9 本身就是在評估決策
-- **為什麼是痛點**：準確度提升不保證決策變好，而多數評比沒有檢查這一點。
-- **可能回應**：本專案的決策層設定（top-1 選擇）；Part 3 的 Proposition 1 事前預測測試。
-- **回應方式**：比較表加命題（延伸 Proposition 1）。
-- **注意**：Scavino 2026 已經處理「準確度不等於決策」，所以這個痛點本身不是本專案的新穎性來源，只是背景與定位。
+### Pain point 2: bias information depends on ideal values, reference values or a prior model, and is not directly available at runtime
 
-### 痛點 5：可識別性結果要嘛是局部的，要嘛限於特定雜訊類別，而且沒有接到決策
-- **支撐**：4 個獨立來源
-  - Chen 2023〔摘〕：cut space 學不到，但限於 Clifford 閘上的 Pauli 雜訊
-  - Nielsen 2021〔摘〕：有 gauge 自由，但它對決策量的影響未讀，無法判斷
-  - Imbens & Manski 2004〔段〕：給出識別區域，但 𝒜 是事先固定的集合，原文未正式定義部分識別
-  - Scavino 系列〔段〕：Corollary C.1 是局部條件（Fisher 資訊零空間）
-- **為什麼是痛點**：「哪些東西原理上看不到」已有工具，但沒有人回答過：對一個具體的 top-1 決策，偏差在什麼條件下全域地翻轉決策，而且任何探針都無法排除。
-- **可能回應**：Part 1a 的 Lemma 1（識別區域的符號條件）與可學性判準（第 3 節 1b）。
-- **回應方式**：命題加邊界條件（見 C.2 的局部 vs 全域分析）。
+Why it matters. Bias is exactly what flips a decision, yet most theories treat it as known or require ideal values and a correct noise model to compute it. None of these is available at runtime.
+Basis: 3 independent sources, plus one weaker source.
+  Scavino series [passages]: entry 9 takes â_m as an input to Algorithm 1 and, in what we read, does not state how it is obtained; in entry 8 the bias coefficients depend on the ideal state, the observable and the noise model.
+  Armstrong and Kolesar 2020 [passages]: the worst-case bias comes from a function class F(M) fixed in advance, so M must be known.
+  Koster and Mauerer 2026 [passages]: the recovery ratio rho needs the ideal value (the paper also proposes W_neg, which does not).
+  Weaker: Cirstoiu 2023 [abstract] uses classical simulation as the evaluation reference. This is evaluation after the fact, not runtime, and is not counted toward the threshold.
+Project response. Part 1a (definition of the identification region), Part 1c (bias-aware certificate, with B set by probe data), probes P1 to P5.
+Expected output: a proposition (when bias can be identified from runtime data) and a method (the probes).
 
-### 痛點 6：診斷或對照沒有正式、可證偽的判定門檻
-- **支撐**：3 個獨立來源，剛好達門檻
-  - Köster & Mauerer 2026〔段〕：作者自承 W_neg 沒有正式門檻，只在研究的電路上驗證
-  - Lipsitch 2010〔段〕：U-comparability 是程度性措辭（"To the extent that … overlaps"），未見量化檢驗
-  - Scavino 系列〔段〕：#9 原文 "The ratio GVS is only a diagnostic"
-- **為什麼是痛點**：沒有事先凍結的門檻，診斷結果就容易事後解讀，無法證偽。
-- **可能回應**：Part 1d 凍結門檻與敏感度；Part 2 用 E0 虛無分布校準警報；Part 3 holdout 只讀一次。
-- **回應方式**：方法（凍結的警報規則與門檻敏感度）加比較（holdout 上的一致率）。
+### Pain point 3: controlling sampling error or improving average metrics does not control the bias that flips a decision
 
-## B. 次要痛點（支撐 < 3 個獨立來源）
+Why it matters. A decision can be wrong while the confidence interval, the MSE and the average improvement all look good, and more shots make it wrong with more certainty. The previous project found the same, but it is not counted here.
+Basis: 4 independent sources.
+  Scavino series [passages]: entry 9 states "pointwise marginals, variances, confidence intervals, and MSE do not suffice"; the certification in entry 8 mainly addresses sampling error.
+  Koster and Mauerer 2026 [passages]: "a bogus apparent improvement that is independent of noise amplification".
+  Armstrong and Kolesar 2020 [passages]: conventional intervals that ignore estimator bias lose coverage, so the critical value is adjusted by the bias.
+  Bultrini 2023 [abstract]: only estimation accuracy is compared.
+Project response. Lemma 1 in Part 1a; the bias-aware certificate in Part 1c; P0 (the confidence-interval-only baseline).
+Expected output: a proposition (Lemma 1: a certificate that looks only at the target is blind to any admissible bias) and a comparison (bias-aware certificate versus confidence-interval-only).
 
-### 次要 1：QEM 極限理論停在估計器層，沒有決策層的對應結果
-- **支撐**：2 個獨立來源，**支撐不足，此痛點列為次要**
-  - Takagi 2022〔摘〕
-  - Quek 2024〔摘〕
-- **說明**：在 20 篇內只有這 2 篇。若把已換出的 Tsubouchi 2023 算進來會是 3，但它已依第一步的決定換出，依規則不計。Takagi, Tajima & Gu 2023 與 Takagi 2022 同一作者，就算加入也合併計 1。
-- **影響**：口試第 1 題的回答仍然需要這兩篇，但不能把「極限理論缺決策層」當成本專案的主要痛點或新穎性支柱。要不要在第三步把 Tsubouchi 換回、或擴大 20 篇範圍，由使用者決定。
-- **可能回應**：延伸 Proposition 1 時，說明 γ 是這些下界在單一估計器上的實例（規範第 8 條）。
+### Pain point 4: benchmarks stop at estimation accuracy and do not evaluate downstream decisions
 
-### 次要 2：特性化與偵測協定的成本沒有在決策預算中計價
-- **支撐**：我們的判讀，對象是 Sarovar 2020〔摘〕與 Proctor 2022〔摘〕。兩者的摘要都沒談成本或預算，但這是「未見」，不是原文說沒有。
-- **說明**：2 個來源，而且是「未見」型判讀，所以列為次要。
+Why it matters. Better accuracy does not guarantee a better decision, and most benchmarks do not check this.
+Basis: 4 independent sources.
+  Bultrini 2023 [abstract]: only estimation accuracy is compared.
+  Cirstoiu 2023 [abstract]: how the guidance on when mitigation helps was validated was not seen.
+  Takagi 2022 [abstract]: only estimation error and sampling cost are treated.
+  Quek 2024 [abstract]: only estimation error and sampling cost are treated.
+  Not counted: Sarovar 2020 [abstract] does not discuss decisions, but it is a characterization protocol, not a benchmark. The Scavino series is not counted, because entry 9 does evaluate decisions.
+Project response. The decision-level setting of this project (top-1 selection); the Proposition 1 prediction test in Part 3.
+Expected output: a comparison table and a proposition (the extension of Proposition 1).
+Note. Scavino 2026 already addresses the point that accuracy is not the same as a good decision, so this pain point is background and positioning, not a source of novelty.
 
-## C. 三個影響新穎性的特別檢查
+### Pain point 5: identifiability results are either local or limited to particular noise classes, and are not connected to decisions
 
-### C.1 「執行時偵測差異偏差」：三篇算不算已經做了？
-| 文獻 | 有沒有執行時、不需理想值的偏差診斷 | 診斷針對什麼 | 是否在固定預算內計費 | 有沒有凍結、可證偽的門檻 | 是否針對候選間的差異偏差與決策 |
-|---|---|---|---|---|---|
-| Köster & Mauerer 2026（W_neg）〔段〕 | **有**。W_neg 不需理想值，只用每個 λ 的計數 | Richardson ZNE 在訊號落到 floor 時的人為改善（單一方法、單一失效模式） | 使用既有計數，無額外成本；原文沒有談預算分配 | **沒有**，作者自承沒有正式門檻 | 未見，針對單一估計值 |
-| Scavino 2026 Decision Kernels〔段〕 | 據我們所讀，**沒有**偏差診斷。DRI、GRI 需要邊際 μ_m（真實差距）；GVS 不需參考值，但不含邊際 | 決策風險與協方差結構 | 固定總預算 | 不適用 | 針對決策，但偏差當輸入 |
-| Scavino Alfaro 2026 Certified Windows（2606.15464）〔段〕 | 部分。監控 VD 分母的 clip 事件；crossing 需通過 self-consistency test。殘差偏差（含 "residual undetectable-sector bias"）用模型與理想態計算，原文工具摘錄稱其診斷是對精確或模擬資料的離線檢查 | VD 分母穩定性、方法比較的局部定律是否成立 | 否，預算 B 是變數 | 有門檻（分母樣本量門檻），但針對抽樣，不是偏差 | 否，比較的是估計量 MSE |
+Why it matters. Tools exist for deciding what cannot be seen in principle, but none answers this question: for a concrete top-1 decision, under what conditions does bias flip the decision globally such that no probe can rule it out?
+Basis: 4 independent sources.
+  Chen 2023 [abstract]: the cut space cannot be learned, but only for Pauli noise on Clifford gates.
+  Nielsen 2021 [abstract]: gauge freedom exists, but its effect on decision quantities was not read and cannot be judged.
+  Imbens and Manski 2004 [passages]: an identification region is given, but the admissible set is fixed in advance, and partial identification is not formally defined in the paper.
+  Scavino series [passages]: Corollary C.1 is a local condition (Fisher-information null space).
+Project response. Lemma 1 in Part 1a (a sign condition on the identification region) and the learnability criterion (research plan, section 3.2).
+Expected output: a proposition and boundary conditions (see the local-versus-global analysis in C.2).
 
-**結論**
-- 「執行時偵測」這個空白**不能**再寫成「沒有人做過執行時診斷」。Köster & Mauerer 的 W_neg 就是一個不需理想值的執行時診斷，只是針對 ZNE 的單一失效模式。
-- 改寫後的空白（以「據我們所讀」限定）：既有診斷都針對特定方法的特定失效模式，而且沒有正式門檻，或依賴模型與理想值。據我們所讀，沒有一個同時滿足以下四點：
-  1. 針對候選之間的差異偏差與 top-1 決策；
-  2. 探針成本在固定總預算內計費；
-  3. 有事先凍結、可證偽的警報門檻；
-  4. 能判定哪些誤差結構下任何探針都原理上看不到。
-- **對 W_neg 的處理建議**（第三步再決定）：W_neg 可以當成 P1 家族的一個現成探針，或當成對照基線，放進矩陣一起評估。
+### Pain point 6: diagnostics and controls lack a formal, falsifiable decision threshold
 
-**2606.15464 的定位（和第一步保持一致的修正）**
-- 它**沒有**做執行時偵測殘差偏差：殘差偏差是用模型與理想態算出來的。所以它不構成 P5 的「執行時偵測」先例。
-- 但它已經明說 SV 會留下 "residual undetectable-sector bias"，也就是「對稱性檢查看不到某一部分偏差」這件事**已有前人指出**。因此 P5 的新穎性必須重新定位：
-  - 不能說「我們發現 P5 有盲點」；
-  - 應該是「在固定預算、決策層、全域符號條件下，把 P5 的盲點放進同一張可見性邊界圖，並和其他探針比較」。
-- 第一步表中 #8 的關係欄已依使用者 2026-11-10 決定，從「競爭」改為「**對照**（支撐 P5 盲點預測的既有證據；非執行時偵測）」，兩步一致。
+Why it matters. Without a threshold frozen in advance, diagnostic results are easily interpreted after the fact and cannot be falsified.
+Basis: 3 independent sources, exactly at the threshold.
+  Koster and Mauerer 2026 [passages]: the authors state that W_neg has no formal threshold and was validated only on the circuits studied.
+  Lipsitch 2010 [passages]: U-comparability is stated in degrees ("To the extent that … overlaps"); no quantitative test was seen.
+  Scavino series [passages]: entry 9 states "The ratio GVS is only a diagnostic".
+Project response. Thresholds and their sensitivity are frozen in Part 1d; alarms are calibrated on the E0 null distribution in Part 2; the holdout is read once in Part 3.
+Expected output: a method (frozen alarm rules with threshold sensitivity) and a comparison (agreement rate on the holdout).
 
-### C.2 「可識別性的局部 vs 全域」：Corollary C.1 和我們的「盲」是什麼關係？
-- **Scavino 的 Corollary C.1**〔段〕：假設 primitive laws 平滑；若 "Gh = 0 for every h ∈ ker Ī(w, θ)"，則 "the target gaps are identifiable under the chosen primitive measurements"。適用 "in the locally efficient, identifiable, small-margin, and realizable case"，用來推出錯誤指數。
-- **我們的定義**：識別區域 {f(P, e′) : e′ ∈ 𝓔} 同時含有正值與非正值時，稱為「原理上盲」。
-- **判斷**（以下是我們的推論，必須在 Part 1a 寫成正式命題並附反例）：兩者是**不同的條件，彼此不互相包含**。
-  1. **局部可識別，但全域盲**：在真參數附近差距可識別，但遠處可能有另一組觀測等價的參數，讓差距異號。局部條件看不到這種情況。
-  2. **局部不可識別，但全域不盲**：差距在局部不能唯一確定，但只要邊際夠大，所有觀測等價的參數都給出同號差距。這時決策方向仍然確定。
-  3. **只有在小邊際的極限下兩者會接近**，而 Corollary C.1 的適用範圍正是 small-margin。
-- **未定之處**：Scavino 的 θ 包含哪些量，據我們所讀並不明確。若 θ 包含雜訊參數，Corollary C.1 就是我們「可見」條件的局部、點值版本。論文要引用它並說明差別。
+## B. Minor pain points (fewer than three independent sources)
 
-### C.3 「估計器極限 vs 決策層後果」：兩篇夠不夠撐主要痛點？
-- **不夠**。20 篇內只有 Takagi 2022、Quek 2024 兩個獨立來源，已列為次要 1，標「支撐不足」。
-- 主要痛點 4（評比停在估計準確度）雖然也收錄這兩篇，但它另有 Bultrini、Cirstoiu 兩個獨立來源，所以痛點 4 本身成立。
-- 痛點 4 和次要 1 必須分開陳述，不能把次要 1 併進痛點 4 來湊數。
+### Minor pain point 1: limits theory of error mitigation stops at the estimator level, with no decision-level counterpart
 
-## D. 本專案不處理的痛點
+Basis: 2 independent sources (Takagi 2022 [abstract]; Quek 2024 [abstract]). Support is insufficient, so this is a minor pain point.
+Note. Within the 20 papers there are only these two. Tsubouchi 2023 is not among the 20 and is not counted. Takagi, Tajima and Gu 2023 is by the same group as Takagi 2022 and would be merged with it.
+Consequence. The answer to the expected examiner question on limits still needs these two papers, but "limits theory lacks a decision level" cannot serve as a main pain point or a pillar of novelty.
+Project response. When Proposition 1 is extended, it is explained that gamma is an instance, for a single estimator, of these lower bounds.
 
-| 痛點 | 不處理的理由 |
-|---|---|
-| 原痛點 7：證據範圍窄，外推性不明（8 個獨立來源：Köster & Mauerer〔段〕、Scavino 系列〔段〕、Quek〔段〕、Maciejewski〔摘〕、Czarnik〔摘〕、Hashim〔摘〕、Bonet-Monroig〔摘〕、Bultrini〔摘〕） | 資源：本專案以模擬為主，硬體只做需另外授權的讀出實驗，本身也有同樣問題，無法解決。只在限制段承認，結論限定在存在性，並用 E7 裝置參數模擬做敏感度分析。2026-11-10 使用者決定移到本清單，不進研究面向 |
-| 讀出相關的完整校正（Maciejewski 只校正邊際） | 範圍：本專案偵測偏差，不做緩解 |
-| RC 在一般雜訊下的完整證明（Wallman & Emerson 自承的開放問題） | 範圍：屬於 RC 理論本身，本專案只使用其不變性做探針推導 |
-| 極限理論的最壞情況 vs 典型情況（Quek 自承） | 範圍：屬於估計器層的極限研究，不是決策層 |
-| GST／特性化協定的可擴展性與成本（Nielsen、Proctor、Sarovar） | 已有專門研究；本專案只借用它們的可識別性與偵測概念 |
-| 評比方法學的統計嚴謹性（Köster & Mauerer 2605.29872 的主題，不在 20 篇內） | 已被別人處理；本專案只採用其建議的做法（凍結、敏感度、漂移紀錄） |
+### Minor pain point 2: the cost of characterization and detection protocols is not charged to the decision budget
+
+Basis: an inference from Sarovar 2020 [abstract] and Proctor 2022 [abstract]. Neither abstract discusses cost or budget; this is "not seen", not a statement in the papers.
+Note. Two sources, and of the "not seen" kind, so it is minor.
+
+## C. Three checks that bear on the novelty claim
+
+### C.1 Runtime detection of differential bias: has it already been done?
+
+Koster and Mauerer 2026, W_neg [passages]
+  Runtime diagnostic without ideal values: yes; W_neg uses only the counts at each lambda.
+  Target: artefactual improvement of Richardson ZNE when the signal reaches the floor (one method, one failure mode).
+  Cost charged to a fixed budget: it uses counts already collected, at no extra cost; budget allocation is not discussed.
+  Frozen, falsifiable threshold: no; the authors state there is no formal threshold.
+  Targets differential bias between candidates and the decision: not seen; it targets a single estimate.
+
+Scavino 2026, Decision Kernels [passages]
+  Runtime diagnostic without ideal values: in what we read, there is no bias diagnostic. DRI and GRI need the margins mu_m (the true gaps); GVS needs no reference values but does not include the margins.
+  Target: decision risk and covariance structure.
+  Cost charged to a fixed budget: fixed total budget.
+  Frozen, falsifiable threshold: not applicable.
+  Targets the decision: yes, but bias is an input.
+
+Scavino Alfaro 2026, Certified Operating Windows (arXiv 2606.15464) [passages]
+  Runtime diagnostic without ideal values: partly. Clip events of the virtual-distillation denominator are monitored, and a crossing must pass a self-consistency test. The residual bias, including the "residual undetectable-sector bias", is computed from a model and the ideal state; the extracted text describes its diagnostics as offline checks against exact or simulated data.
+  Target: stability of the virtual-distillation denominator; whether the local laws of the method comparison hold.
+  Cost charged to a fixed budget: no; the budget B is a variable.
+  Frozen, falsifiable threshold: there is a threshold (a sample-size threshold for the denominator), but it concerns sampling, not bias.
+  Targets differential bias between candidates and the decision: no; estimator MSE is compared.
+
+Conclusions
+  The gap can no longer be stated as "no runtime diagnostic exists". The W_neg diagnostic of Koster and Mauerer is a runtime diagnostic that needs no ideal values; it targets a single failure mode of ZNE.
+  Restated gap, qualified by "in what we read": existing diagnostics each target a specific failure mode of a specific method, and either lack a formal threshold or depend on a model and ideal values. In what we read, none satisfies all four of the following:
+    1. targets the differential bias between candidates and the top-1 decision;
+    2. charges the probe cost to a fixed total budget;
+    3. uses an alarm threshold frozen in advance and open to falsification;
+    4. determines under which error structures every probe is blind in principle.
+  W_neg could serve as a ready-made probe in the P1 family or as a reference baseline evaluated in the same matrix; this option is set out in the research facets.
+
+Positioning of arXiv 2606.15464
+  It does not detect residual bias at runtime; the residual bias is computed from a model and the ideal state. It is therefore not a precedent for runtime detection by P5.
+  It does state that symmetry verification leaves a "residual undetectable-sector bias", so the fact that a symmetry check cannot see part of the bias has already been pointed out. The novelty of P5 is therefore positioned as follows:
+    it cannot be claimed that this project discovered the P5 blind spot;
+    the claim is that the P5 blind spot is placed on the same visibility boundary map as the other probes, under a fixed budget, at the decision level, and with a global sign criterion.
+  Accordingly, entry 8 in the inventory is classified as contrast (existing evidence for the predicted P5 blind spot; not runtime detection).
+
+### C.2 Local versus global identifiability: how does Corollary C.1 relate to this project's "blind"?
+
+Scavino's Corollary C.1 [passages]. Assuming the primitive laws are smooth, if "Gh = 0 for every h ∈ ker Ī(w, θ)", then "the target gaps are identifiable under the chosen primitive measurements". It applies "in the locally efficient, identifiable, small-margin, and realizable case" and is used to derive an error exponent.
+This project's definition. The case is blind in principle when the identification region {f(P, e') : e' in E} contains both positive and non-positive values.
+Assessment (an inference, to be written as a formal proposition with counterexamples in Part 1a): the two are different conditions, and neither contains the other.
+  1. Locally identifiable but globally blind: near the true parameter the gap is identifiable, but a distant, observationally equivalent parameter may give a gap of opposite sign. A local condition cannot see this.
+  2. Not locally identifiable but globally not blind: the gap is not uniquely determined locally, but if the margin is large enough, every observationally equivalent parameter gives a gap of the same sign, so the direction of the decision is still determined.
+  3. Only in the small-margin limit do the two come close, and the scope of Corollary C.1 is exactly the small-margin case.
+Open point. What Scavino's theta contains is not clear in what we read. If theta includes noise parameters, Corollary C.1 is a local, point-value version of our "visible" condition, and the paper must cite it and explain the difference.
+
+### C.3 Estimator-level limits versus decision-level consequences: are two sources enough for a main pain point?
+
+No. Within the 20 papers, only Takagi 2022 and Quek 2024 support it; it is listed as minor pain point 1 with insufficient support.
+Pain point 4 (benchmarks stop at estimation accuracy) also includes these two papers, but it has two further independent sources (Bultrini and Cirstoiu), so pain point 4 stands on its own.
+Pain point 4 and minor pain point 1 are stated separately; the minor pain point is not merged into pain point 4 to raise its count.
+
+## D. Outside the scope of this phase
+
+Narrow evidence base and unclear generalization. Supported by 8 independent sources: Koster and Mauerer [passages], the Scavino series [passages], Quek [passages], Maciejewski [abstract], Czarnik [abstract], Hashim [abstract], Bonet-Monroig [abstract], Bultrini [abstract]. Reason: this project is mainly simulation, with hardware limited to a separately authorized readout experiment, so it shares the same limitation and cannot resolve it. It is acknowledged in the limitations section, conclusions are limited to existence claims, and E7 device-parameter simulation is used for sensitivity analysis.
+
+Complete correction of correlated readout (Maciejewski corrects only marginals). Reason: this project detects bias; it does not mitigate it.
+
+A full proof of randomized compiling under general noise (an open problem stated by Wallman and Emerson). Reason: it belongs to the theory of randomized compiling; this project only uses its invariance in deriving probe properties.
+
+Worst-case versus typical-case limits (stated by Quek et al.). Reason: it belongs to estimator-level limits research, not to the decision level.
+
+Scalability and cost of GST and other characterization protocols (Nielsen, Proctor, Sarovar). Reason: dedicated work already exists; this project borrows only their identifiability and detection concepts.
+
+Statistical rigour of error-mitigation benchmarking (the topic of Koster and Mauerer, arXiv 2605.29872, not among the 20). Reason: it is already addressed elsewhere; this project adopts the recommended practices (freezing, sensitivity analysis, drift records).

@@ -1,68 +1,101 @@
-# 20 篇文獻盤點：第三步 研究面向與調整建議（2026-11-10；使用者已拍板）
+# Research Facets and Plan Settings
 
-> 輸入：docs/inventory_20_step2_painpoints.md（6 個共通痛點、2 個次要痛點、不處理清單）。
-> 本文件**不修改**計畫。所有調整建議由使用者拍板後，才寫進 project_plan。
-> 凍結狀態：目前沒有任何規則經過 Part 1d 凍結或 OSF 登記。以下說的「已決定事項」，指計畫 v0.4 第 11 節中使用者已拍板的項目。
+This document derives the research facets of the project from the common pain points (docs/inventory_20_step2_painpoints.md) and records the resulting settings of the research plan, each with its rationale and cost.
 
-## 0. 第二步的兩處修改（依使用者 2026-11-10 指示）
-1. **原痛點 7「證據範圍窄，外推性不明」**（8 個獨立來源）：從共通痛點移到 D 節不處理清單，不進研究面向。理由寫在 D 節：本專案以模擬為主，自身也有這個問題，只在限制段承認並限定為存在性結論。共通痛點從 7 個變成 6 個。
-2. **2606.15464 的關係**：docs/inventory_20_step1.md 的 #8 關係欄從「競爭」改成「對照（支撐 P5 盲點預測的既有證據；非執行時偵測）」。step2 文件 C.1 的對應敘述也一起改了，兩個檔案已同步，寫進 repo 並比對過雜湊。
+## 1. Research facets
 
-## 1. 研究面向（3 個）
+### Facet F1: visibility boundary (global sign criterion and probe matrix)
 
-### 面向 F1：可見性邊界（全域符號判準加探針矩陣）
-- **一句話**：在固定總預算下，對每個探針與誤差結構的組合，用「識別區域是否同時含正負差距」這個全域符號判準，判定差異偏差是可見、預算內盲，還是原理上盲，並在 holdout 上檢驗事先凍結的預測。
-- **對應痛點**：痛點 1（失效條件不完整）、痛點 5（可識別性是局部的，或沒接到決策）。
-- **預期產出**：
-  - 命題：Lemma 1 的全域符號判準；一個「局部 vs 全域」命題，附兩個反例，和 Scavino Corollary C.1 對照；
-  - 邊界條件：探針 × 結構矩陣中，每一格的不變性證明或敏感度推導。
-- **終點層級**：**主要終點**，即計畫既有的「holdout 上可見性預測與觀測分類的一致率」，不變。
+What. Under a fixed total budget, for every combination of probe and error structure, use the global sign criterion (whether the identification region contains gaps of both signs) to classify the differential bias as visible, blind within budget, or blind in principle, and test the predictions, frozen in advance, on the holdout.
+Purpose. To state where each method fails (pain point 1) and to connect identifiability to concrete decisions in a global rather than local sense (pain point 5).
+Basis. Lemma 1 in the form of Imbens and Manski (2004); Scavino (2026), Corollary C.1, as the local condition to be contrasted; the invariance and failure conditions stated by Giurgica-Tiron et al. (2020) and Wallman and Emerson (2016).
+Expected output.
+  Propositions: the global sign criterion of Lemma 1; a local-versus-global proposition with two counterexamples, contrasted with Scavino's Corollary C.1.
+  Boundary conditions: an invariance proof or sensitivity derivation for every cell of the probe-by-structure matrix.
+Endpoint level: primary. This is the existing primary endpoint of the plan, the agreement rate between predicted and observed visibility on the holdout.
 
-### 面向 F2：資料決定偏差上界的偏差感知認證
-- **一句話**：用探針資料決定與資料相容的最大差異偏差 B，只有在差距的信賴下界超過 B 時才認證，並推導探針區間與目標區間的聯合覆蓋。
-- **對應痛點**：痛點 2（偏差需要理想值或先驗模型）、痛點 3（控制抽樣誤差不等於控制偏差）。
-- **預期產出**：
-  - 方法：認證規則；
-  - 命題：聯合覆蓋，延伸 Armstrong & Kolesár 的先驗偏差上界到資料相依的上界；
-  - 比較表：與 CI-only 在相同總預算下的錯誤認證率與未決率。
-- **終點層級**：**次要終點**，和計畫既有的次要終點相同。
+### Facet F2: bias-aware certificate with a data-driven bias bound
 
-### 面向 F3：把既有診斷放進同一張可見性矩陣比較
-- **一句話**：把 Köster & Mauerer 的 W_neg（不需理想值）與 Scavino 的 GVS（不含邊際）當成既有診斷，和 P0–P5 一起放進矩陣，用同一套凍結門檻和預算計費比較。
-- **對應痛點**：痛點 6（診斷沒有正式、可證偽的門檻）；也支撐第二步 C.1 改寫後的空白：「據我們所讀，既有診斷沒有同時做到差異偏差、預算計費、凍結門檻、原理上盲判定」。
-- **預期產出**：
-  - 比較表：每個診斷在各結構下的可見性與成本；
-  - 邊界條件：W_neg 依其定義只針對 Richardson ZNE 在 floor 的失效，預期在非 floor 情況與讀出結構下為盲（這是推論，要在 Part 1b 推導）。
-- **終點層級**：**探索性**，不進主要終點，以免擴大 holdout 的檢定負擔。
+What. Use probe data to set B, the largest differential bias compatible with the data; certify only when the lower confidence bound of the gap exceeds B; derive joint coverage of the probe interval and the target interval.
+Purpose. To provide a certificate that does not assume bias is known or computable from ideal values (pain point 2), and that controls bias rather than only sampling error (pain point 3).
+Basis. Armstrong and Kolesar (2020), honest confidence intervals with a bias bound fixed in advance; Imbens and Manski (2004), confidence intervals for identification regions.
+Expected output.
+  Method: the certification rule.
+  Proposition: joint coverage, extending the prior bias bound of Armstrong and Kolesar to a data-dependent bound.
+  Comparison table: false-certification rate and unresolved rate against the confidence-interval-only certificate under the same total budget.
+Endpoint level: secondary, identical to the existing secondary endpoint of the plan.
 
-### 沒有選為面向的痛點與理由
-- **痛點 4**（評比停在估計準確度）：Scavino 2026 已經處理「準確度不等於決策」，本專案在這點沒有新穎性。保留為背景與定位，由既有的 Proposition 1 次要終點承接，不另立面向。
-- **次要 1**（極限理論停在估計器層，2 篇）：支撐不足。只在寫作時回應口試第 1 題（γ 是下界的實例），不立面向。
-- **次要 2**（偵測成本沒有計價，2 篇，判讀型）：已經被 F1、F2 的固定預算設定涵蓋，不另立。
+### Facet F3: existing diagnostics compared on the same visibility matrix
 
-## 2. 對 Part 1–4 的調整建議（待拍板，未寫入計畫）
+What. Treat the W_neg diagnostic of Koster and Mauerer (no ideal values needed) and the GVS diagnostic of Scavino (no margins included) as existing diagnostics, place them in the matrix next to P0 to P5, and compare them under the same frozen thresholds and budget accounting.
+Purpose. To give diagnostics a formal, falsifiable threshold (pain point 6), and to support the restated gap: in what we read, no existing diagnostic combines differential bias, budget accounting, a frozen threshold and a determination of blindness in principle.
+Basis. Koster and Mauerer (2026); Scavino (2026), Section 10.
+Expected output.
+  Comparison table: the visibility and cost of each diagnostic under each structure.
+  Boundary conditions: by its definition, W_neg targets only the failure of Richardson ZNE at the floor and is expected to be blind away from the floor and under readout structures (an inference, to be derived in Part 1b).
+Endpoint level: exploratory. It is kept out of the primary endpoint so that the testing burden on the holdout does not grow.
 
-> 規範第 16 條要求 Part 的內容在開工前一次決定。Part 1a 預定 2026-11-17 開始，所以以下調整若要做，必須在那之前拍板；開工後不再改 Part 內容。
+### Pain points without a facet of their own
 
-| # | 建議 | 代價 | 影響哪個 Part | 會不會動到已決定或已凍結的規則 |
-|---|---|---|---|---|
-| A1 | **把 W_neg 加入探針集**，作為 P1 家族的 P1b；GVS 當對照基線（F3） | 矩陣多 2 列。Part 1b 要多推導 W_neg 和 GVS 在各結構的可見性，估計多 3–4 天；Part 2 多實作 2 個統計量（W_neg 用既有計數，不加 shots）；Part 3 計算量增加 | Part 1b、2、3 | 沒有凍結規則受影響。但探針數從 7 變成 9，計畫第 9 節第 4 點「砍範圍規則」的優先順序要重寫（建議 F3 的診斷最先砍） |
-| A2 | **Part 1a 新增「局部 vs 全域」命題與兩個反例**，和 Scavino Corollary C.1 對照（F1） | Part 1a 多約 3–5 天；需要先確認 Scavino 的 θ 是否包含雜訊參數（讀附錄 C 完整推導） | Part 1a，可能讓 Part 1 整體順延數天 | 不動規則。但依「延期只能順延」，若超出 Part 1a 期程，後續日期整體順延 |
-| A3 | **P5 新穎性重新定位**：計畫文字改成「P5 的盲點已由 Scavino Alfaro 2026（2606.15464）以 residual undetectable-sector bias 的形式指出；本專案的貢獻是把它放進固定預算、決策層、全域符號條件的同一張邊界圖，並和其他探針比較」 | 只改文字，幾乎沒有研究成本；但論文的新穎性宣稱要降一級 | Part 1b（P5 預測的陳述）、Part 4（寫作） | 不動規則。P5 仍然是已決定納入的探針，只改定位 |
-| A4 | **新穎性陳述改寫**：計畫第 0 節與文獻回顧第 6 節，從「沒看到有人做執行時偵測」改成第二步 C.1 的四條件版本 | 只改文字 | Part 4（寫作），現在先改計畫敘述 | 不動規則 |
-| A5 | **限制段預先寫入原痛點 7**：在計畫第 9 節加一條「證據範圍窄是本專案也有的問題，不處理，只限定為存在性」 | 只改文字 | Part 4 | 不動規則 |
-| A6 | **極限文獻的處理**（次要 1）：論文 Related Work 照常引用 Takagi 2022、Takagi 2023、Quek 2024、Tsubouchi 2023（都在 library 裡），但不把「極限理論缺決策層」當主要痛點或新穎性支柱。不需要把 Tsubouchi 換回 20 篇 | 無研究成本 | Part 4 | 不動規則 |
-| A7 | **主要終點不改**。F1 已經對應既有的主要終點；F2 與 Proposition 1 測試仍是次要；F3 是探索性 | 無 | 無 | 不動已決定事項：主要終點唯一、Proposition 1 測試只做一次且為次要 |
+Pain point 4 (benchmarks stop at estimation accuracy). Scavino (2026) already addresses the point that accuracy is not the same as a good decision, so this project has no novelty there. It remains background and positioning and is covered by the existing secondary endpoint for Proposition 1.
+Minor pain point 1 (limits theory stops at the estimator level; two sources). Support is insufficient. It is addressed only in writing, to answer the expected examiner question on limits (gamma is an instance of those lower bounds).
+Minor pain point 2 (detection cost is not charged to a budget; two sources, inferred). It is already covered by the fixed-budget setting of F1 and F2.
 
-**我建議採用**：A3、A4、A5、A6、A7（只改文字，或維持不變）；A2（理論上必要，否則回應不了 Scavino Corollary C.1 的審查問題）。
-**A1 由你取捨**：它最能直接支撐改寫後的新穎性（「既有診斷在同一張圖上比較」），但會擴大範圍。若不採用，F3 就只剩文字比較（相關研究表），不做模擬比較。
+## 2. Settings adopted in the research plan
 
-## 2b. 拍板結果（使用者 2026-11-10）
-- **採用**：A2（局部 vs 全域命題）、A3–A6（文字修正）、A7（主要終點不改）。
-- **暫緩**：A1（W_neg 加入探針集）。依規範第 16 條，Part 1a 開工（2026-11-17）後不能再改 Part 內容。所以 A1 必須在 2026-11-16 前定案；逾期不定案就視為不採用，F3 只做文字層比較（相關研究表）。
-- 因為 A2 增加 Part 1a 的工作量，後續期程依「延期只能順延」整體往後移，見第四步。
+The order and content of the Parts are fixed before Part 1a begins and are not changed afterwards. The settings below are therefore made before Part 1a starts.
 
-## 3. 等第四步再做的事
-- 依拍板結果，把面向排成條列式進度，每一項都附可直接貼給 AI 執行的 prompt。
-- 附上凍結規則與本輪不做清單。
-- 本文件不提進度與天數，A1、A2 的天數只是說明代價用的估計。
+### Local-versus-global proposition in Part 1a (adopted)
+
+What. Add to Part 1a a proposition that local identifiability and the global sign criterion do not contain each other, with two counterexamples, contrasted with Scavino's Corollary C.1 (F1).
+Purpose. Without it, the project cannot answer a reviewer who asks how its notion of blindness differs from Corollary C.1.
+Cost. Additional work in Part 1a. It first requires settling whether Scavino's theta includes noise parameters, which needs the full derivation in Appendix C. Under the schedule rule, any overrun moves later stages later.
+Effect on frozen rules: none.
+
+### Repositioning of P5 (adopted)
+
+What. The plan states that the P5 blind spot has already been pointed out by Scavino Alfaro (2026, arXiv 2606.15464) as a "residual undetectable-sector bias", and that this project's contribution is to place it on the same boundary map as the other probes, under a fixed budget, at the decision level, and with a global sign criterion.
+Purpose. The novelty claim must not include something earlier work has already shown.
+Cost. Text only, with almost no research cost; the novelty claim for P5 is weaker.
+Affected Parts: Part 1b (statement of the P5 predictions) and Part 4 (writing).
+Effect on frozen rules: none. P5 remains in the probe set; only its positioning changes.
+
+### Four-condition novelty statement (adopted)
+
+What. The novelty statement in the research plan (section 0) and the literature review (section 6) uses the four-condition version from C.1 of the pain-point analysis instead of "no runtime detection has been seen".
+Purpose. A runtime diagnostic without ideal values (W_neg) already exists, so the broader statement is no longer accurate.
+Cost. Text only.
+Effect on frozen rules: none.
+
+### Narrow evidence base in the limitations section (adopted)
+
+What. The plan's list of scientific concerns includes the narrow evidence base: this project shares the problem, does not address it, and limits its conclusions to existence claims.
+Purpose. The limitation is supported by eight independent sources and applies to this project as well; stating it in advance keeps the conclusions honest.
+Cost. Text only.
+Effect on frozen rules: none.
+
+### Treatment of the limits literature (adopted)
+
+What. The paper's related work cites Takagi 2022, Takagi 2023, Quek 2024 and Tsubouchi 2023 (all in the library), but "limits theory lacks a decision level" is not used as a main pain point or a pillar of novelty. The 20-paper inventory is not changed for this purpose.
+Purpose. The claim has only two sources within the inventory.
+Cost. None in research terms.
+Effect on frozen rules: none.
+
+### Primary endpoint unchanged (adopted)
+
+What. F1 corresponds to the existing primary endpoint; F2 and the Proposition 1 test remain secondary; F3 is exploratory.
+Purpose. The project keeps a single primary endpoint, and the Proposition 1 test remains a secondary endpoint run once.
+Cost. None.
+
+### W_neg as probe P1b, with GVS as a reference baseline (optional)
+
+What. Add W_neg to the probe set as P1b in the P1 family and use GVS as a reference baseline (F3).
+Purpose. It most directly supports the restated novelty, because existing diagnostics would be compared on the same map.
+Cost. Two more rows in the matrix. Part 1b must derive the visibility of W_neg and GVS under each structure; Part 2 implements two more statistics (W_neg uses existing counts and needs no extra shots); Part 3 needs more computation. The probe set grows from seven to nine, and the priority order of the scope-cutting rule (research plan, section 9, item 4) must be rewritten, with the F3 diagnostics cut first.
+Affected Parts: 1b, 2 and 3.
+Effect on frozen rules: none.
+Condition. Because Part content cannot change after Part 1a begins, this option is adopted only if it is decided before Part 1a starts. Otherwise F3 remains a text-level comparison (a related-work table) with no simulation.
+
+### Consequence for the schedule
+
+The local-versus-global proposition adds work to Part 1a. Under the schedule rule, later stages move later and their content does not change. The task list is in docs/inventory_20_step4_schedule.md.

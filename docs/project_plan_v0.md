@@ -1,278 +1,297 @@
-# 偏差探針的可見性邊界：研究計畫 v0.5（草稿，尚未凍結）
+# Visibility Boundary of Bias Probes: Research Plan
 
-> 狀態：草稿。尚未 commit，也尚未在 OSF/AsPredicted 登記。
-> 本文件中所有「預測」都只是 Part 1 要推導的假設。Part 1 推導完成後才會凍結。
-> 本計畫中沒有任何新的數值結果。引用的舊專案數字都出自
-> Raina-ya/adaptive-qem-benchmark 的 paper/main_v2.tex 與 README.md，證據類型是有雜訊模擬。
+This plan is not yet frozen. Every prediction in it is a hypothesis that Part 1 must derive; predictions become binding only when Part 1 freezes them. The plan contains no new numerical results. Figures quoted from the previous project come from paper/main_v2.tex and README.md of adaptive-qem-benchmark, and their evidence type is noisy simulation.
 
----
+## 0. Research question
 
-## 0. 一句話
+The previous project asked when quantum error mitigation (QEM) is unreliable. This project asks whether that unreliability can be detected at runtime: which probes, paid for out of the same budget, can see a differential bias that flips a decision, which cannot see it in principle, and where the boundary between the two lies.
 
-舊專案回答「QEM 什麼時候不可靠」。新專案回答「不可靠的時候，能不能在執行時知道」：
-找出哪些花預算的探針（probe）能看到「會翻轉決策的差異偏差」，哪些在原理上看不到，並畫出這條邊界。
+Success criterion. The project succeeds if it draws the boundary between "the probe can see it" and "the probe cannot see it". If every probe fails, a proof of why it cannot see the bias also counts as success.
 
-**成功標準**：能畫出「探針看得到」與「看不到」的邊界。
-就算所有探針都無效，只要能證明為什麼看不到，也算完成。
+Scope of the novelty claim. Runtime diagnostics already exist for specific failure modes of specific methods; for example, the W_neg diagnostic of Koster and Mauerer (2026) needs no ideal values. In what we read, no existing diagnostic does all four of the following: (1) targets the differential bias between candidates and the top-1 decision; (2) charges the probe cost to a fixed total budget; (3) uses an alarm threshold frozen in advance and open to falsification; (4) determines under which error structures every probe is blind in principle. This project claims novelty only for the combination of these four points. The supporting analysis is in docs/inventory_20_step2_painpoints.md, section C.1.
 
-**新穎性的陳述範圍**（v0.5，依 docs/inventory_20_step2_painpoints.md C.1）：已有針對特定方法、特定失效模式的執行時診斷（例如 Köster & Mauerer 2026 的 W_neg，不需理想值）。據我們所讀，沒有一個同時做到：(1) 針對候選之間的差異偏差與 top-1 決策；(2) 探針成本在固定總預算內計費；(3) 有事先凍結、可證偽的警報門檻；(4) 能判定哪些誤差結構下任何探針都原理上看不到。本專案的新穎性只主張這四點的組合。
+## 1. Starting point: blind spots already observed in the previous project
 
-## 1. 出發點：舊專案已經看到的盲點（全部是有雜訊模擬）
+All observations below are noisy-simulation evidence from the previous project.
 
-| 舊專案觀察 | 出處 | 在本專案中的角色 |
+| Observation | Source in the previous project | Role in this project |
 |---|---|---|
-| 信賴區間只控制 σ 項；當 β ≤ −Δ 時，shots 越多，錯誤越確定 | main_v2.tex Eq. (decision) | 問題的起點 |
-| 候選之間 gate noise 不平衡（高雜訊，margin 0.05）時，raw 大約 2,000 shots 後每次都認證錯的贏家 | 第 Certification 節、README | CI-only 盲的實例 |
-| 兩層認證的 6 個偏差警報最多只在 2.4% 的 Layer-1 通過中觸發；near-tie 全部失敗；coherent over-rotation 的錯誤認證率最高 | Two-layer certification | 既有探針效果很弱的實例 |
-| 逆閘會抵消 over-rotation，所以 folding 放大不了它 | Signal strength 節 | 「對稱性造成盲點」的實例（P1 × E2） |
-| 校準矩陣的 condition number 從未預警 | Calibration mismatch 節 | 探針只讀到過期資訊 |
-| 1,024-shot 的基態檢查看不到「邊際不變、但變成成對相關」的讀出變化 | Calibration mismatch 節 | 「邊際不變性造成盲點」的實例（P4a × E5） |
+| A confidence interval controls only the sigma term; when beta <= -Delta, more shots make the wrong answer more certain | main_v2.tex, Eq. (decision) | The starting problem |
+| With gate-noise imbalance between candidates (high noise, margin 0.05), raw certifies the wrong winner in every repeat after about 2,000 shots | Certification section; README | An instance of confidence-interval-only blindness |
+| The six bias alarms of two-layer certification fire in at most 2.4% of Layer-1 passes; all near ties fail; coherent over-rotation has the highest false-certification rate | Two-layer certification | An instance of weak existing probes |
+| Inverse gates cancel over-rotation, so folding cannot amplify it | Signal strength section | An instance of blindness caused by symmetry (P1 under E2) |
+| The condition number of the calibration matrix never gave a warning | Calibration mismatch section | A probe that reads only stale information |
+| A 1,024-shot basis-state check cannot see a readout change that keeps the marginals but adds pairwise correlation | Calibration mismatch section | An instance of blindness caused by marginal invariance (P4a under E5) |
 
-這些都是零散的反例。本專案要把它們系統化：用同一套定義解釋，並推廣到其他誤差結構。
+These are scattered counterexamples. This project explains them with one set of definitions and extends them to other error structures.
 
-## 2. 核心定義（Part 1 定稿）
+## 2. Core definitions
 
-- **決策**：從 K 個候選中選 argmax。決定性差距為 Δ_k = μ_(1) − μ_k > 0。
-- **決策相關偏差**：β_k = E[差距估計] − Δ_k。若存在某個 k 使 Δ_k + β_k ≤ 0，就是「會翻轉決策」。
-  兩個候選共有的偏差（common-mode）不影響決策，不列入。
-- **誤差結構** e ∈ 𝓔：有參數的雜訊模型族，每個 e 決定一組 β(e)。
-- **探針** P = （執行時要跑的電路集合，統計量 T，警報規則）。
-  - 不可讀目標電路的理想值。可以使用「不依賴目標理想值、執行時就能用古典方法算出」的量，
-    例如 Clifford 電路的理想值；每個探針都要說明這一點。
-  - 成本 c(P) = 電路數、shots 數、深度倍數，全部從同一份總預算 N 扣除。經典後處理時間另外報告。
-- **可見 / 盲**（v0.4 依 Imbens & Manski 2004 第 2 節的形式改寫；核對紀錄見 docs/reading_notes_2026-11-10.md 第 2 節）：
-  - 依 Imbens & Manski 的寫法，參數是 Δ = f(P, e)：P 是目標加探針的聯合可觀測分布，e 是只知道屬於 𝓔 的雜訊。
-  - 識別區域 = {f(P, e′) : e′ ∈ 𝓔}。不相容的雜訊由 P 的形式本身排除，𝓔 仍是事先固定的集合。這一步是我們的推導，不是原文的。
-  - 原理上盲：識別區域同時含有正值與非正值。
-  - 預算內盲：觀測分布不同，但在預算 fN 內無法以給定的功效分辨。
-  - 可見：在凍結的探針預算內，功效達標而且假警報受控。
-  - 必須明說的假設：
-    (i) 給定 P 與 e，理想差距唯一確定（雜訊映射在相關觀測量上可逆）；
-    (ii) 電路已知時理想差距在原理上是確定的數；我們把它當成未知，是因為規則禁止探針讀理想值，而且目標電路在實務上無法經典模擬。
-  - v0.2 的寫法「存在 e₁、e₂ 使觀測同分布但 sign(Δ+β) 不同」在數學上不成立：目標的觀測分布本身就決定了 Δ+β，所以作廢。
+Decision. Choose the argmax among K candidates. The decisive gap is Delta_k = mu_(1) - mu_k > 0.
 
-## 3. 理論工作（Part 1 交付；必須在任何有雜訊模擬之前凍結）
+Decision-relevant bias. beta_k = E[gap estimate] - Delta_k. The decision flips if Delta_k + beta_k <= 0 for some k. Bias shared by both candidates (common-mode) does not affect the decision and is excluded.
 
-1. **Lemma 1（不可分辨即盲）**：若 (Δ₁, e₁)、(Δ₂, e₂) 在所有執行時觀測量上同分布，而且 Δ₁、Δ₂ 異號，
-   則任何決策或認證規則都滿足 P_{θ₁}(錯) + P_{θ₂}(錯) ≥ 1。
-   推論：只看目標估計值的 CI 認證只觀測到 Δ+β。只要 𝓔 允許夠大的 β，它就無法和 Δ 分開。
-   這就是「統計工具管不到偏差」的正式版本。
-   方法出處：Le Cam 兩點法（lecam1973，頁碼待查證）；識別集合語言：Imbens & Manski 2004、Tamer 2010。
-1b. **可學性判準**（新增，依 Chen et al. 2023）：探針資料只能識別雜訊的可學分量。
-   若差異偏差 β 對不可學分量（cut space）的敏感度足以抵消 Δ，則任何探針組合都原理上盲。
-   這是「原理上盲」的第一類物理實例。Part 1 要推導 β 在 cut space 上的投影，並判斷哪些 E 結構屬於這一類。
-   這只是假設，推導後可能被否證。
-1c. **局部 vs 全域命題**（v0.5 新增，A2）：證明 Scavino 2026 Corollary C.1 型的局部可識別條件（Fisher 資訊零空間）與本專案的全域符號判準互不包含，各附一個反例：局部可識別但全域盲；局部不可識別但全域不盲。兩個反例都用解析或無雜訊計算驗證。和 C.1 的精確關係，取決於 Scavino 的 θ 是否包含雜訊參數（W0-2 待確認）。
-2. **有限 shots 版本**：用 total variation 或 Hellinger 距離，把「需要多少 shots 才看得到」寫成下界。
-   這個下界把「原理上盲」（距離為 0）和「預算內盲」（距離小）分開。
-3. **對稱性判準與負對照條件**：若探針統計量在某個擾動族 G 下不變，探針就對 G 盲。
-   盲點矩陣的每一格都要給出不變性證明，或寫出敏感度 κ = ∂E[T]/∂β ≠ 0 的推導。
-   每一格的 ✓ 條件用一個我們自己定義的量子版條件表述：探針統計量與目標差距對同一組雜訊參數有非零敏感度，而且探針的理想值已知。
-   這個條件**類比於** Lipsitch et al. 2010 的 U-comparability（負對照與目標的未觀測共同原因集合相同，且不受暴露影響）。只能說是類比，不能說是原文的條件；原文措辭見 reading notes 第 1 節。
-   每個決策另外報告「翻轉所需的最小差異偏差」，格式借用 Rosenbaum 1987、VanderWeele & Ding 2017。
-4. **Proposition 2（探針在固定預算下是否划算）**：以 Proposition 1 為範本。
-   拿 fN shots 做探針，剩下 (1−f)N 做決策，比較以下兩者：
-   - 偵測功效 ≈ Φ(κ|β|√(fN)/σ_T − z_α)；
-   - 轉移預算的代價：決策誤差從 Φ(−(Δ+β)√N/σ) 變成 Φ(−(Δ+β)√((1−f)N)/σ)。
-   目標是推出「何時值得花」的條件。結果要等 Part 1 推導，現在不預設。
-5. **偏差感知認證（bias-aware certificate）**：只有在「差距的 CI 下界 > 與探針資料相容的最大偏差 B」時才認證。
-   在盲的方向上，B 就是先驗界，所以永遠不會認證。
-   形式上是 honest CI（Armstrong & Kolesár 2020：用偏差上界調整臨界值），也是對識別集合的 CI（Imbens & Manski 2004）。
-   注意：Armstrong & Kolesár 的最壞偏差來自先驗函數類別，本專案的 B 來自探針資料，覆蓋率不能直接繼承。
-   Part 1c 要補上「探針區間與目標區間聯合覆蓋」的推導。
-   預算分配（Proposition 2）借用最佳臂辨識與 OCBA 的語言（Kaufmann 2016、Garivier & Kaufmann 2016、Chen et al. 2000）。
-   這保證無論結果如何都有正向產出：要嘛偵測到偏差，要嘛把「不能認證的程度」量化出來。
-6. **Proposition 1 延伸**（專案規範第 8 條）：推廣到 K 個候選、γ 與 a 用估計值代入、小樣本修正。
-   事前預測測試排在 Part 3，只作為次要終點（使用者 2026-11-09 決定）：
-   - 只做一次。
-   - Part 1 凍結：pilot 程序、a 與 γ 的估計式，以及「預測 raw 或 ZNE 較好」的判定規則。
-   - Part 3 開始前：pilot 跑完後，先把每張新圖的預測值寫入檔案，commit 並登記（OSF/AsPredicted），之後才跑評分用的新資料。
-   - 命中率只報告一次，不論結果都不調整規則，也不重跑。
+Error structure. e in E, a parameterized family of noise models; each e determines a set of biases beta(e).
 
-## 4. 誤差結構 × 探針矩陣（草稿預測；Part 1 推導後凍結）
+Probe. A probe is a set of circuits run at runtime, a statistic T, and an alarm rule.
+  A probe may not read the ideal value of the target circuit. It may use quantities that do not depend on the target's ideal value and can be computed classically at runtime, such as ideal values of Clifford circuits; each probe must state which such quantities it uses.
+  Its cost c(P) (number of circuits, number of shots, depth multiplier) is charged to the same total budget N. Classical post-processing time is reported separately.
 
-### 誤差結構
+Visible and blind. These are written in the form of Imbens and Manski (2004, Section 2); the check of that source is in section 2 of the reading notes.
+  Following Imbens and Manski, the parameter is Delta = f(P, e), where P is the joint observable distribution of the target and probe outputs, and e is the noise, known only to lie in E.
+  Identification region = {f(P, e') : e' in E}. Noise models incompatible with P are excluded by the form of P itself; E remains a fixed set. This step is our own derivation, not part of the source.
+  Blind in principle: the identification region contains both positive and non-positive values.
+  Blind within budget: the observable distributions differ, but they cannot be told apart with the required power within the probe budget fN.
+  Visible: within the frozen probe budget, power reaches the target and false alarms are controlled.
+  Assumptions that must be stated:
+    (i) given P and e, the ideal gap is uniquely determined (the noise map is invertible on the relevant observables);
+    (ii) when the circuits are known, the ideal gap is in principle a fixed number; we treat it as unknown because probes are not allowed to read ideal values and the target circuits cannot be simulated classically in practice.
+  A formulation of the form "there exist e1, e2 with the same observable distribution but different sign(Delta + beta)" cannot hold, because the target's observable distribution already determines Delta + beta. It is therefore not used.
 
-| 代號 | 結構 | 說明 |
+## 3. Theoretical work (Part 1; frozen before any noisy simulation)
+
+### 3.1 Lemma 1: indistinguishable implies blind
+
+What. If (Delta1, e1) and (Delta2, e2) have the same distribution over all runtime observables and Delta1 and Delta2 have opposite signs, then every decision or certification rule satisfies P_theta1(error) + P_theta2(error) >= 1.
+Purpose. This is the formal version of the statement that statistical tools cannot control bias. Corollary: a confidence-interval certificate that looks only at the target estimate observes only Delta + beta, so whenever E allows a large enough beta, it cannot separate beta from Delta.
+Basis. Le Cam's two-point method (lecam1973; page numbers not yet verified); identification-region language from Imbens and Manski (2004) and Tamer (2010).
+
+### 3.2 Learnability criterion
+
+What. Probe data can identify only the learnable components of the noise. If the sensitivity of the differential bias beta to the unlearnable components (the cut space) is large enough to offset Delta, then every combination of probes is blind in principle.
+Purpose. This gives a first physical class of blindness in principle. Part 1 derives the projection of beta onto the cut space and determines which error structures fall into this class.
+Basis. Chen et al. (2023), "The learnability of Pauli noise".
+Status of the claim. This is a hypothesis; the derivation may refute it.
+
+### 3.3 Local versus global identifiability
+
+What. Prove that a local identifiability condition of the type in Scavino (2026), Corollary C.1 (a Fisher-information null-space condition), and this project's global sign criterion do not contain each other, with one counterexample in each direction: locally identifiable but globally blind; not locally identifiable but globally not blind. Both counterexamples are checked analytically or by noiseless computation.
+Purpose. To state precisely how this project's notion of blindness differs from the closest existing identifiability result.
+Basis. Scavino (2026), Corollary C.1. The exact relation depends on whether Scavino's theta includes noise parameters, which task W0-2 determines.
+
+### 3.4 Finite-shot version
+
+What. Using total variation or Hellinger distance, write a lower bound on the number of shots needed to see a bias.
+Purpose. The bound separates blindness in principle (distance zero) from blindness within budget (small distance).
+
+### 3.5 Invariance criterion and validity condition
+
+What. If a probe statistic is invariant under a family of perturbations G, the probe is blind to G. Every cell of the blind-spot matrix gets either an invariance proof or a derivation of the sensitivity kappa = dE[T]/dbeta != 0.
+Validity condition. A cell is marked visible under a quantum condition defined by this project: the probe statistic and the target gap have nonzero sensitivity to the same noise parameters, and the probe's ideal value is known.
+Basis. This condition is an analogy to the U-comparability of Lipsitch et al. (2010): the negative control and the target share the same set of unobserved common causes, and the negative control is not affected by the exposure. It may be described only as an analogy, not as the original condition; the original wording is in section 1 of the reading notes.
+Reporting. For each decision, the minimum differential bias needed to flip it is also reported, in the format of Rosenbaum (1987) and VanderWeele and Ding (2017).
+
+### 3.6 Proposition 2: is a probe worth its budget?
+
+What. Using Proposition 1 as a template, spend fN shots on probes and (1 - f)N on the decision, and compare:
+  detection power, approximately Phi(kappa |beta| sqrt(fN) / sigma_T - z_alpha);
+  the cost of moving budget away from the decision: the decision error changes from Phi(-(Delta + beta) sqrt(N) / sigma) to Phi(-(Delta + beta) sqrt((1 - f)N) / sigma).
+Purpose. To derive a condition for when spending on probes pays off. The result is left to the Part 1 derivation and is not assumed here.
+Basis. Budget allocation uses the language of best-arm identification and OCBA (Kaufmann et al. 2016; Garivier and Kaufmann 2016; Chen et al. 2000).
+
+### 3.7 Bias-aware certificate
+
+What. Certify only if the lower confidence bound of the gap exceeds B, the largest bias compatible with the probe data. In a blind direction, B equals the prior bound, so the rule never certifies.
+Basis. In form, this is an honest confidence interval (Armstrong and Kolesar 2020, which adjusts the critical value by a bias bound) and a confidence interval for an identification region (Imbens and Manski 2004). The worst-case bias in Armstrong and Kolesar comes from a function class fixed in advance, whereas B here comes from probe data, so coverage cannot be inherited directly. Part 1c adds a derivation of joint coverage for the probe interval and the target interval.
+Purpose. Every outcome yields a positive result: either the bias is detected, or the degree to which certification is impossible is quantified.
+
+### 3.8 Extension of Proposition 1
+
+What. Extend Proposition 1 to K candidates, to gamma and a estimated from data, and to small samples.
+Prediction test. A test of predictions made in advance is part of Part 3 and is a secondary endpoint only:
+  it is run exactly once;
+  Part 1 freezes the pilot procedure, the estimators of a and gamma, and the rule that predicts whether raw or ZNE is better;
+  before Part 3 scoring begins, the pilot is run, the prediction for each new graph is written to a file, committed and registered (OSF or AsPredicted), and only then are the new scoring data run;
+  the hit rate is reported once; the rule is not adjusted and the test is not rerun, whatever the result.
+
+## 4. Error structure by probe matrix
+
+The predictions below are hypotheses until Part 1 derives and freezes them.
+
+### 4.1 Error structures
+
+| Code | Structure | Note |
 |---|---|---|
-| E0 | 只有 common-mode（對照組） | 不可能翻轉決策；用來量測假警報 |
-| E1 | 隨機 Pauli 或去極化，候選之間閘數不同 | 差異衰減 |
-| E2 | coherent over-rotation（與角度有關） | 舊專案顯示 folding 對它盲 |
-| E3 | 相關 ZZ crosstalk | 預測最不確定 |
-| E4 | 獨立、非對稱讀出誤差 | |
-| E5 | 成對相關讀出，邊際不變 | 舊專案顯示邊際檢查對它盲 |
-| E5′ | 三體相關讀出，成對邊際不變 | 用來檢驗 P4b 的盲點 |
-| E6 | 校準和執行之間漂移 | |
-| E7 | qiskit fake backend 組合模型 | 標為「裝置參數模擬」，不是硬體證據；不做事前預測，只量測 |
+| E0 | Common-mode only (control) | Cannot flip a decision; used to measure false alarms |
+| E1 | Stochastic Pauli or depolarizing noise, with different gate counts between candidates | Differential attenuation |
+| E2 | Coherent over-rotation (angle dependent) | The previous project showed folding is blind to it |
+| E3 | Correlated ZZ crosstalk | Least certain prediction |
+| E4 | Independent, asymmetric readout error | |
+| E5 | Pairwise-correlated readout with unchanged marginals | The previous project showed marginal checks are blind to it |
+| E5' | Three-body correlated readout with unchanged pairwise marginals | Tests the blind spot of P4b |
+| E6 | Drift between calibration and execution | |
+| E7 | Combined model from a Qiskit fake backend | Labelled device-parameter simulation, not hardware evidence; measured only, no advance prediction |
 
-每個結構都掃偏差大小 β/Δ ∈ {0, −0.5, −1.0, −1.5}，以及正向偏差。確切網格在 Part 1 凍結。
+Each structure is swept over bias size beta/Delta in {0, -0.5, -1.0, -1.5}, plus positive bias. The exact grid is frozen in Part 1.
 
-### 探針
+### 4.2 Probes
 
-| 代號 | 探針 | 執行成本（草稿） |
+| Code | Probe | Runtime cost |
 |---|---|---|
-| P0 | 只用 CI 認證（基線） | 0 額外電路 |
-| P1 | 差距 folding 斜率：兩個候選都跑 λ=1、3，檢查差距隨 λ 的變化及外推後是否變號 | 每個候選多 1 個電路，深度 ×3 |
-| P2 | Clifford 孿生：把非 Clifford 旋轉換成最近的 Clifford 角，理想值用 stabilizer 模擬算出，量孿生差距的偏差 | 每個候選多 1 個電路，深度 ×1 |
-| P3 | Twirl 對比：同一候選做一般執行和 m 個 randomized compiling 版本，看差距是否改變 | 每個候選多 m 個電路 |
-| P4a | 讀出邊際檢查：全 0 與全 1 基態 | 2 個電路 |
-| P4b | 讀出成對檢查：每對量子位元 4 個基態 | 4·C(w,2) 個電路，或用分組設計減少 |
-| P5 | 對稱性檢查（v0.3 新增）：從目標本身的計數算出理想值已知的對稱分量，例如 QAOA MaxCut 的全域翻轉對稱，不另外跑電路（Bonet-Monroig et al. 2018） | 0 額外電路、0 額外 shots |
+| P0 | Confidence-interval certificate only (baseline) | No extra circuits |
+| P1 | Gap folding slope: run both candidates at lambda = 1 and 3, check how the gap changes with lambda and whether the extrapolated gap changes sign | One extra circuit per candidate, depth x3 |
+| P2 | Clifford twin: replace non-Clifford rotations with the nearest Clifford angle, compute the ideal value by stabilizer simulation, and measure the bias of the twin gap | One extra circuit per candidate, depth x1 |
+| P3 | Twirl contrast: run each candidate plainly and in m randomized-compiling versions, and check whether the gap changes | m extra circuits per candidate |
+| P4a | Readout marginal check: all-zeros and all-ones basis states | 2 circuits |
+| P4b | Readout pairwise check: four basis states per qubit pair | 4 C(w,2) circuits, or fewer with a grouped design |
+| P5 | Symmetry check: compute, from the target's own counts, a symmetry component whose ideal value is known (for example the global bit-flip symmetry of QAOA MaxCut); no extra circuits (Bonet-Monroig et al. 2018) | No extra circuits, no extra shots |
 
-P5 的定位（v0.5，A3）：對稱性檢查會留下看不到的殘差偏差，這點已由 Scavino Alfaro 2026（arXiv 2606.15464）以 "residual undetectable-sector bias" 的形式指出；它的殘差偏差是用雜訊模型與理想態算出的，不是執行時偵測。本專案不主張「發現 P5 的盲點」，只主張把它放進固定預算、決策層、全域符號條件的同一張邊界圖，並和其他探針比較。
-P5 的預期盲點：保持該對稱性的誤差。草稿預測：P5 對 E1 中破壞對稱的部分 △，對 E2 中保持對稱的旋轉 ✗，對讀出 E4 △。
-預測在 Part 1 推導後才凍結，和其他探針一樣。
+Positioning of P5. A symmetry check leaves a residual bias it cannot see. Scavino Alfaro (2026, arXiv 2606.15464) has already stated this as "residual undetectable-sector bias"; that residual bias is computed from a noise model and the ideal state, not detected at runtime. This project does not claim to have discovered the blind spot of P5. It claims only to place it on the same boundary map as the other probes, under a fixed budget, at the decision level, and with a global sign criterion.
+Expected blind spot of P5: errors that preserve the symmetry. Hypothesis: partial for the symmetry-breaking part of E1, blind for symmetry-preserving rotations in E2, partial for readout under E4. These predictions are frozen only after the Part 1 derivation, as for every other probe.
 
-### 草稿預測（✓ 看得到，✗ 原理上盲，△ 部分或依參數而定，? 待推導）
+### 4.3 Predictions
 
-| | E1 | E2 | E3 | E4 | E5 | E5′ | E6 |
+Legend: V visible, B blind in principle, Pt partial or parameter dependent, ? to be derived.
+
+| | E1 | E2 | E3 | E4 | E5 | E5' | E6 |
 |---|---|---|---|---|---|---|---|
-| P0 | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ | ✗ |
-| P1 | ✓ | ✗（U U† 抵消） | ? | ✗（folding 不放大讀出誤差） | ✗ | ✗ | △ |
-| P2 | ✓ | △（偏差隨角度變，孿生角度不同） | ? | △ | △ | △ | △ |
-| P3 | ✗（Pauli 通道在 twirl 下不變） | ✓ | ✓? | ✗ | ✗ | ✗ | ✗ |
-| P4a | ✗ | ✗ | ✗ | ✓ | ✗（邊際不變） | ✗ | △ |
-| P4b | ✗ | ✗ | ✗ | ✓ | ✓ | ✗（成對邊際不變） | △ |
+| P0 | B | B | B | B | B | B | B |
+| P1 | V | B (U U-dagger cancels) | ? | B (folding does not amplify readout error) | B | B | Pt |
+| P2 | V | Pt (bias depends on angle; the twin uses a different angle) | ? | Pt | Pt | Pt | Pt |
+| P3 | B (a Pauli channel is invariant under twirling) | V | V? | B | B | B | B |
+| P4a | B | B | B | V | B (marginals unchanged) | B | Pt |
+| P4b | B | B | B | V | V | B (pairwise marginals unchanged) | Pt |
 
-### 每個探針預先寫下的失效條件（草稿）
+### 4.4 Failure conditions written in advance
 
-- **P1**：誤差在 U U† 下抵消（E2、部分 E3）；偏差不隨 folding 放大（讀出）；在 near-tie 時斜率估計的變異太大。
-- **P2**：孿生電路的雜訊和目標不同，例如誤差與角度有關（E2）；孿生電路的輸出分布和目標差很多，使讀出偏差的權重不同。
-- **P3**：誤差已經是隨機 Pauli 形式（E1）；讀出誤差（除非另外做讀出 twirl）；m 太小時對比被抽樣雜訊淹沒。
-- **P4a/P4b**：探針檢查的邊際階數低於實際相關的階數；漂移發生在探針之後。
+P1: the error cancels under U U-dagger (E2, part of E3); the bias is not amplified by folding (readout); near a tie, the variance of the slope estimate is too large.
+P2: the twin circuit's noise differs from the target's, for example when the error depends on the angle (E2); the twin's output distribution differs strongly from the target's, so readout bias is weighted differently.
+P3: the error is already stochastic Pauli (E1); readout error (unless a separate readout twirl is used); with small m, the contrast is swamped by sampling noise.
+P4a and P4b: the order of the marginals checked is lower than the order of the actual correlation; drift happens after the probe.
 
-## 5. 終點
+## 5. Endpoints
 
-- **主要終點（唯一）**：在 holdout 上，Part 1 凍結的可見性預測（✓/△/✗）和觀測分類一致的比例，附 Wilson 區間。
-  - 觀測分類：「看得到」= 在凍結的探針預算下，β/Δ = −1.5 時功效 ≥ 0.8，而且對應 E0 對照的假警報 ≤ 0.10；
-    「盲」= 功效 ≤ α + 0.05；其他歸為「部分」。
-  - 成功門檻（草稿）：一致率的 Wilson 下界 ≥ 0.8。
-- **次要終點**：
-  - 偏差感知認證和 CI-only 在相同總預算下的錯誤認證率與未決率；
-  - 每個探針達到功效 0.8 所需的最小預算比例 f*（邊界圖的數值）；
-  - Proposition 1 事前預測命中率（新的 QAOA 圖；只做一次，預測值事先登記）。
-- **探索性**：E7 fake backend 的結果；組合探針。
+Primary endpoint (the only one). On the holdout, the proportion of cells where the visibility prediction frozen in Part 1 (visible, partial, blind) agrees with the observed classification, with a Wilson interval.
+  Observed classification: "visible" means power >= 0.8 at beta/Delta = -1.5 within the frozen probe budget, with false alarms <= 0.10 under the matching E0 control; "blind" means power <= alpha + 0.05; everything else is "partial".
+  Success threshold: Wilson lower bound of the agreement rate >= 0.8.
 
-## 6. 門檻與敏感度分析（凍結時一起寫入）
+Secondary endpoints.
+  False-certification rate and unresolved rate of the bias-aware certificate versus the confidence-interval-only certificate, under the same total budget.
+  For each probe, the minimum budget fraction f* needed to reach power 0.8 (the values on the boundary map).
+  Hit rate of the Proposition 1 prediction test (new QAOA graphs; run once; predictions registered in advance).
 
-| 門檻 | 主值 | 敏感度分析 |
+Exploratory. Results under E7 (fake backend); combinations of probes.
+
+## 6. Thresholds and sensitivity analysis (written into the frozen protocol)
+
+| Threshold | Main value | Sensitivity values |
 |---|---|---|
-| 「看得到」的功效 | 0.8 | 0.5、0.9 |
-| 警報 α | 0.05 | 0.01、0.10 |
-| 探針預算比例 f | 0.10 | 0.05、0.25 |
-| 用來分類的偏差大小 β/Δ | −1.5 | −1.0、−0.5 |
-| 主要終點的成功門檻 | 0.8 | 0.7、0.9 |
-| near-tie margin | 沿用舊專案 0.02 | 0.01、0.05 |
+| Power for "visible" | 0.8 | 0.5, 0.9 |
+| Alarm alpha | 0.05 | 0.01, 0.10 |
+| Probe budget fraction f | 0.10 | 0.05, 0.25 |
+| Bias size used for classification, beta/Delta | -1.5 | -1.0, -0.5 |
+| Success threshold of the primary endpoint | 0.8 | 0.7, 0.9 |
+| Near-tie margin | 0.02, as in the previous project | 0.01, 0.05 |
 
-每個「數值 vs 門檻」的判斷都要報告離門檻多近（工程教訓第 38(d) 條）。
+Every value-versus-threshold decision reports how far the value is from the threshold.
 
-## 7. 四個 Part（順序與內容現在一次決定，不看結果調整）
+## 7. Four Parts
 
-### Part 1：理論與凍結（只有解析，不跑有雜訊模擬）
-- 文獻庫建到 60 篇，並全部查證。
-- 完成第 3 節的推導，以及第 4 節矩陣中每一格的證明或敏感度推導。
-- 預測凍結之後，才用模擬做檢定力分析，決定以下設計：
-  holdout ≥ 100 個電路；QAOA ≥ 50 張圖、≥ 3 種圖族；每個寬度與深度 > 1 個電路；重複次數。
-- 凍結的內容：結構與參數網格、探針實作規格、成本公式、門檻與敏感度、dev/holdout 的 seed 切分、
-  主要終點，以及在合成資料上測過的分析程式骨架。
-- OSF 或 AsPredicted 登記，然後由使用者 commit 並 push。
-- **出口條件**：凍結文件有內容雜湊；OSF 時間戳存在。
-- **無論後續結果如何的產出**：Lemma 1、對稱性判準、Proposition 2。
+The order and content of the Parts are fixed before work starts and are not adjusted in light of results.
 
-### Part 2：探針實作與開發集（只用開發集的有雜訊模擬）
-- 實作 P0–P4，每個探針都有成本帳本；測試總 shots 等於預算。
-- 正對照：解析上已知 β 的案例必須觸發警報。負對照：E0 必須只有約 α 的假警報率。
-- 用 Mitiq 的 folding 交叉驗證 P1；Clifford 理想值用兩套 stabilizer 程式交叉驗證。
-- 警報門檻只用 E0 的虛無分布校準，程序在 Part 1 已經凍結；結果在 Part 3 之前 commit。
-- 開發集的邊界圖只算探索性結果。和 Part 1 預測不一致的格子照實記錄，不回頭改理論。
-- 建立 fake backend 模型。
-- **出口條件**：門檻已 commit；開發集的不一致清單已寫好。
+### Part 1: theory and freeze (analytic only, no noisy simulation)
+Build the literature library to at least 60 verified papers.
+Complete the derivations in section 3 and a proof or sensitivity derivation for every cell of the matrix in section 4.
+Only after the predictions are frozen, run a power analysis by simulation to set: a holdout of at least 100 circuits; at least 50 QAOA graphs from at least 3 graph families; more than one circuit for each width and depth; the number of repeats.
+Freeze: structures and parameter grid, probe implementation specifications, cost formulas, thresholds and sensitivity ranges, the split of development and holdout seeds, the primary endpoint, and an analysis code skeleton tested on synthetic data.
+Register on OSF or AsPredicted; the project owner then commits and pushes.
+Exit condition: the frozen protocol has a content hash and an OSF timestamp exists.
+Results that hold whatever happens later: Lemma 1, the invariance criterion, Proposition 2.
 
-### Part 3：驗證性 holdout（只讀一次）
-- E0–E6 合成結構，加上 E7 裝置參數模擬。
-- 計算主要終點；比較偏差感知認證與 CI-only。
-- Proposition 1 事前預測測試（次要終點）：pilot → 預測值寫檔、commit、登記 → 跑評分資料 → 報告一次命中率。
-- Windows 和 Linux CI 兩個平台都跑並比較；run log 記錄 numpy 版本與 BLAS 設定。
-- **出口條件**：結果進入 claim ledger，並且能從 raw rows 獨立重算。
+### Part 2: probe implementation and development set (noisy simulation on the development set only)
+Implement P0 to P5, each with a cost ledger; test that total shots equal the budget.
+Positive control: cases with an analytically known beta must trigger the alarm. Negative control: under E0 the false-alarm rate must be about alpha.
+Cross-check P1 with Mitiq's folding; cross-check Clifford ideal values with two stabilizer simulators.
+Calibrate alarm thresholds from the E0 null distribution only, following the procedure frozen in Part 1; commit the results before Part 3.
+The development-set boundary map is exploratory only. Cells that disagree with the Part 1 predictions are recorded as they are; the theory is not revised.
+Build the fake-backend model.
+Exit condition: thresholds committed; list of development-set mismatches written.
 
-### Part 4：邊界整合、硬體決策、論文
-- 畫出邊界圖（結構 × β/Δ × f*）。失敗按成因分類：方法、資源、模型、設計。
-- 硬體 go/no-go 審查。若判定 go，而且使用者授權那一次實驗：
-  10 分鐘、只跑讀出的 P4a 與 P4b，事前登記預測，檢驗真實讀出是否有邊際檢查看不到的成對相關。
-  判定 no-go 同樣照實報告。
-- 寫論文（沿用上一篇報告的格式，先上 arXiv），完成 claim ledger 與跨平台重建。
+### Part 3: confirmatory holdout (read once)
+Synthetic structures E0 to E6, plus E7 device-parameter simulation.
+Compute the primary endpoint; compare the bias-aware certificate with the confidence-interval-only certificate.
+Proposition 1 prediction test (secondary endpoint): pilot, then predictions written to file, committed and registered, then the scoring data, then the hit rate reported once.
+Run on both Windows and Linux and compare; run logs record the numpy version and BLAS configuration.
+Exit condition: results are entered in the claim ledger and can be recomputed independently from raw rows.
 
-## 8. 沿用與新增的全專案規則
-沿用舊專案的全部規則（固定預算、先凍結、holdout 只讀一次、保留失敗資料、證據類型分開、不用 ML、參考值只用於評分）。
-新增三條：
-1. 探針不能讀理想值，而且要說明成本；
-2. 解析預測在模擬之前凍結，模擬結果不能回頭改理論；
-3. 每個「探針有效」的主張，都要同時報告它在哪些結構下無效。
+### Part 4: boundary synthesis, hardware decision, paper
+Draw the boundary map (structure by beta/Delta by f*). Classify every failure by cause: method, resources, model, design.
+Hardware go or no-go review. If the verdict is go and the specific run is explicitly authorized: run only the readout probes P4a and P4b within ten minutes, with predictions registered in advance, to test whether real readout has pairwise correlation that marginal checks cannot see. A no-go verdict is reported in the same way.
+Write the paper (same format as the previous report; posted to arXiv first), and complete the claim ledger and cross-platform rebuild.
 
-## 9. 目前的科學疑慮
-1. Lemma 1 在數學上接近顯然，口試可能質疑。貢獻要放在具體的不變性、shots 下界和 Proposition 2，而不是 Lemma 本身。
-2. 合成誤差結構是我們自己選的，可能被設計成「剛好符合預測」。緩解方式：矩陣先凍結、E7 不做預測、對不一致的格子照實報告。
-3. E3（ZZ）的預測目前最不確定，可能在 Part 1 推導後才知道要不要拆成子結構。
-4. 範圍：7 個探針（含 P5）× 8 個結構 × 偏差網格可能太大。如果 Part 1 的檢定力分析顯示算不完，砍範圍的規則（例如先砍 P3）要在凍結時寫好，不能事後決定。
-7. 可學性判準（第 3 節 1b）依賴 Chen et al. 2023 的定理條件。目前只讀了摘要，條件可能不適用於本專案的非 Clifford 目標電路。
-5. P2 用古典方法算 Clifford 理想值。需要論證這不算「讀理想值」：它不依賴目標電路的理想值，而且執行時就能算。
-6. Proposition 1 的事前預測測試（規範第 8(c) 條）放在 Part 3 作為次要終點。它和本專案主題有關，但不是主線。
-8. 證據範圍窄、外推性不明（v0.5，A5）：20 篇盤點中有 8 個獨立來源有此問題，本專案以模擬為主，自身也有。不處理，只在限制段承認，結論限定在存在性，並用 E7 裝置參數模擬做敏感度分析。
+## 8. Project-wide rules
 
-## 10. 文獻（v0.3 更新，2026-11-10）
-- 文獻庫：`docs/literature/library.csv`，共 83 筆，每筆都有查證狀態與 3 行筆記。
-  其中 77 筆已查證，放在 `paper/references.bib`；6 筆 partial 暫不收錄。
-- 文獻回顧與方向錨點：`docs/literature_review.md`。本次計畫修正（第 2、3、4 節）都出自那份回顧的第 5 節。
-- v0.2 第 10 節列出的待查證項目，除 Le Cam 1973 的頁碼外都已查證：Proctor 2022、Hashim 2021、TREX、Stim、Zhou 2020、Kim & Nelson、OCBA、Kaufmann 2016。
-- 限制：目前沒有讀任何全文，所有「能不能引它的數字」都是「否」。精讀清單見 literature_review.md 第 7 節。
-- v0.5 更新：library 86 筆、references.bib 81 筆；20 篇盤點與痛點分析見 docs/inventory_20_step1.md 至 step4。
-- 極限文獻（A6）：論文照常引用 Takagi 2022、Takagi 2023、Quek 2024、Tsubouchi 2023，用來回答口試第 1 題（γ 是下界在單一估計器上的實例）；但「極限理論缺決策層」在 20 篇盤點中只有 2 個來源，不作為主要痛點或新穎性支柱。
+All rules of the previous project carry over: fixed total budget, freeze before running, holdout read once, failed data kept, evidence types labelled separately, no machine learning, reference values used only for scoring.
+Three rules are added:
+1. probes may not read ideal values and must state their cost;
+2. analytic predictions are frozen before simulation, and simulation results never revise the theory;
+3. every claim that a probe works also reports the structures where it fails.
 
-## 11. 已決定事項（2026-11-09；2026-11-10 補充）
-1. 任務：第零部分 A 的 (b)，只做計畫，不跑實驗。
-2. 格式：沿用上一篇報告（舊 repo paper/main_v2.tex）的單篇論文格式，先上 arXiv。若之後要投特定期刊，再依該期刊規定修改。
-3. Repo：開新的公開 repo，名稱 bias-probe-visibility，不放在舊 repo 裡。舊 repo 只作為引用與程式來源，不修改。
-4. Proposition 1 事前預測測試：保留，只當次要終點，只做一次，預測值事先登記（見第 3 節第 6 點、Part 3）。
+## 9. Scientific concerns
 
-5. Zhou et al. 2020 (PRX) 確認為 QAOA 那篇：PRX 10, 021067，DOI 10.1103/PhysRevX.10.021067（2026-11-10）。
-6. 進度規則：延期只能往後順延，不能改 Part 內容（2026-11-10）。
-7. Part 2 開始前舊專案必須結案（2026-11-10）。
-8. 精讀分工如第 14 節 W0 列；Lipsitch 的原文措辭不得用轉述寫進論文（2026-11-10）。
-9. 20 篇盤點第三步拍板（2026-11-10）：採用 A2（局部 vs 全域命題）、A3–A6（文字修正）、A7（主要終點不改）；A1（W_neg 進探針集）暫緩。研究面向：F1 可見性邊界（主要）、F2 資料決定上界的認證（次要）、F3 既有診斷比較（探索性）。
-10. 協作規則（2026-11-10）：可逆、低成本的決定由 Claude 自行決定並在回報中說明；動到凍結規則、擴大範圍或影響主要終點的決定由使用者拍板；交付預設直接寫 repo。
+1. Lemma 1 is close to mathematically obvious and may be challenged at the defence. The contribution must rest on the concrete invariances, the shot lower bound and Proposition 2, not on the lemma itself.
+2. The synthetic error structures are chosen by this project and could be chosen to fit the predictions. Mitigation: the matrix is frozen first, E7 carries no prediction, and mismatched cells are reported as they are.
+3. The prediction for E3 (ZZ) is the least certain; the Part 1 derivation may show that it must be split into substructures.
+4. Scope: seven probes (including P5) by eight structures by the bias grid may be too large. If the Part 1 power analysis shows it cannot be completed, the scope-cutting rule (for example, cut P3 first) must be written at freeze time, not decided afterwards.
+5. P2 computes Clifford ideal values classically. It must be argued that this is not "reading ideal values": it does not depend on the target's ideal value and can be computed at runtime.
+6. The Proposition 1 prediction test is placed in Part 3 as a secondary endpoint. It is related to the topic of this project but is not its main line.
+7. The learnability criterion (section 3.2) depends on the theorem conditions of Chen et al. (2023). Only the abstract has been read so far, and the conditions may not apply to the non-Clifford target circuits of this project.
+8. Narrow evidence and unclear generalization: in the 20-paper inventory, 8 independent sources share this problem, and this project, being mainly simulation, has it too. It is not addressed; it is acknowledged in the limitations section, conclusions are limited to existence claims, and E7 device-parameter simulation is used for sensitivity analysis.
 
-## 12. 仍待決定
-1. Part 4 的硬體實驗屆時需要另外授權。
-2. A1（把 W_neg 加入探針集作為 P1b，GVS 為對照基線）：2026-11-16 前定案；逾期視為不採用，F3 只做文字層比較。
+## 10. Literature
 
-## 13. 硬體實驗的時間預算（Part 1 凍結）
-- 配額依 IBM 官方說明（2026-11-09 查）：Open Plan 每 28 天滾動視窗最多相當於 10 分鐘 QPU 時間；以 QPU usage 計，不是牆鐘時間。跑前要再查一次。
-- 只跑讀出電路（P4a 與 P4b），不跑任何目標電路。
-- 時間上限（草稿）：總用量 ≤ 6 分鐘，保留 4 分鐘緩衝。每個 job 都設 max_execution_time。
-- 順序：
-  1. 先跑一個極小的 job，量測每 shot 的實際 QPU 時間；
-  2. 用量測值和事先凍結的公式算出 shots 分配；
-  3. 若超出上限，依事先凍結的降級順序縮減（先減 shots，再減寬度），不臨場決定。
-- 記錄 backend 名稱、校準時間戳、job ID、每個 job 的 quantum_seconds。
+The library is docs/literature/library.csv: 86 entries, each with a verification status and a three-line note. The 81 verified entries are in paper/references.bib; the 5 partial entries are excluded.
+The literature review and research anchors are in docs/literature_review.md.
+The 20-paper inventory and pain-point analysis are in docs/inventory_20_step1.md to docs/inventory_20_step4_schedule.md.
+Limitation: no full text has been read word for word, so no numbers from new sources are cited yet. The reading list is in section 7 of docs/literature_review.md.
+Limits literature: the paper cites Takagi 2022, Takagi 2023, Quek 2024 and Tsubouchi 2023 to answer the expected examiner question about limits of error mitigation (gamma is an instance, for a single estimator, of those lower bounds). The claim "limits theory has no decision-level counterpart" has only two sources in the 20-paper inventory and is not used as a main pain point or a pillar of novelty.
 
-## 14. 進度（v0.5：因 A2 整體順延 4 天；之後不看結果調整 Part 內容）
+## 11. Settings adopted by this project
 
-日期是建議值，假設每週投入時間和上一個專案相近。延期只能順延，不能改 Part 的內容。
+Task type: design the research plan in at most four Parts before running experiments.
+Output format: a single paper in the same format as the previous report, posted to arXiv first; adapted to a specific journal only if one is targeted.
+Repository: a separate public repository, bias-probe-visibility. The previous repository is used only as a source of citations and code and is not modified.
+Proposition 1 prediction test: kept as a secondary endpoint only, run once, with predictions registered in advance (sections 3.8 and 7).
+Zhou et al. 2020 (PRX) refers to the QAOA paper: PRX 10, 021067, DOI 10.1103/PhysRevX.10.021067.
+Schedule rule: delays move later stages later; the content of the Parts does not change.
+Part 2 starts only after the previous project is closed, so that results of both projects are not produced from a shared, still-changing code base.
+The original wording of Lipsitch et al. (2010) is quoted, never paraphrased, in the paper, because a paraphrase introduced an inaccurate condition once.
+Research facets: F1 visibility boundary (primary), F2 certificate with a data-driven bias bound (secondary), F3 comparison with existing diagnostics (exploratory).
+Adopted adjustments: the local-versus-global proposition (section 3.3); the repositioning of P5 (section 4.2); the four-condition novelty statement (section 0); the narrow-evidence limitation (section 9, item 8); the treatment of the limits literature (section 10); the primary endpoint unchanged.
+Decision rule: reversible, low-cost choices are made by whoever executes a task and are documented in its report; choices that touch frozen rules, widen the scope or affect the primary endpoint require approval by the project owner. Results are written directly into the repository by default.
 
-| 階段 | 期間（建議） | 交付物 | 出口條件 |
-|---|---|---|---|
-| W0 文獻與收尾 | 2026-11-10 至 11-16 | 文獻庫 v1（已完成）；精讀分工：Chen 2023、Imbens & Manski 由使用者讀全文，Armstrong & Kolesár、Lipsitch、Scavino 由 Claude 初讀、使用者複核（初讀已完成，見 reading notes） | library.csv 更新精讀欄位 |
-| 舊專案收尾（與 Part 1 並行） | 本週起，由使用者排時段 | 第二次 Linux 重建；selector_v3 是否改變；docs/release_rebuild_v1.md 與舊論文第 8 節；核對 scavino2026 的標題 | **Part 2 開始前舊專案必須結案** |
-| Part 1a 定義與 Lemma | 11-17 至 12-04 | 部分識別形式的 Lemma 1 與有限 shots 下界；局部 vs 全域命題與兩個反例（A2）；可學性判準草稿（精讀 Chen 2023 後） | 推導寫成 docs/theory/*.md，經自我審查 |
-| Part 1b 矩陣推導 | 12-05 至 12-18 | 每個探針 × 結構格子的不變性證明或 κ 推導；負對照條件；P5 預測 | 矩陣每格都有推導或明確寫「?」 |
-| Part 1c Proposition 2 與認證 | 12-19 至 2027-01-01 | Proposition 2；偏差感知認證；Proposition 1 延伸（K 個候選、γ 需估計） | 推導完成；文獻達 90 篇以上 |
-| Part 1d 凍結 | 2027-01-02 至 01-15 | 檢定力模擬（預測凍結後才跑）；凍結文件；OSF/AsPredicted 登記；使用者 commit 並 push | 凍結文件有內容雜湊與 OSF 時間戳 |
-| Part 2 實作與開發集 | 01-16 至 02-26 | P0–P5 實作與成本帳本；正負對照；Mitiq 與兩套 stabilizer 程式交叉驗證；門檻 commit | 門檻已 commit；開發集不一致清單 |
-| Part 3 驗證性 holdout | 02-27 至 03-26 | holdout 只讀一次；Proposition 1 事前預測測試（只做一次）；兩個平台比較 | claim ledger 可從 raw rows 重算 |
-| Part 4 整合與論文 | 03-27 至 05-07 | 邊界圖；硬體 go/no-go 審查（go 時需另外授權）；論文；arXiv | 論文編譯完成，所有引用查證，claim ledger 0 不符 |
+## 12. Conditional settings
 
-- 逐項工作清單（每項附可執行的 prompt）見 docs/inventory_20_step4_schedule.md。
-- 緩衝：農曆新年（2027 年 2 月上旬）落在 Part 2，已把 Part 2 排成 6 週。
-- 每個 Part 結束時，用規範 v2 第零部分 E 的 8 項格式回報一次。
-- **Part 2 的開始條件**：Part 1d 凍結完成，而且舊專案已結案（使用者 2026-11-10 決定）。Part 1 只做解析，可以和舊專案收尾並行。
-- 若 Part 1d 的檢定力模擬顯示範圍算不完，依凍結時寫好的砍範圍規則縮減（第 9 節第 4 點），不延長 Part 3。
+Hardware: any hardware run requires a separate, explicit authorization.
+Optional extension: adding W_neg as probe P1b, with GVS as a reference baseline. It is adopted only if decided before Part 1a begins; otherwise F3 remains a text-level comparison.
+
+## 13. Time budget for the hardware experiment (frozen in Part 1)
+
+Quota: according to IBM's published terms at the time of planning, the Open Plan provides up to the equivalent of 10 minutes of QPU time per rolling 28-day window, counted as QPU usage rather than wall-clock time. The terms are checked again before any run.
+Only readout circuits (P4a and P4b) are run; no target circuits.
+Time limit: total usage at most 6 minutes, keeping 4 minutes in reserve. Every job sets max_execution_time.
+Order:
+  1. run one very small job to measure the actual QPU time per shot;
+  2. allocate shots from the measured value using a formula frozen in advance;
+  3. if the limit would be exceeded, reduce in an order frozen in advance (first shots, then width), never decided on the spot.
+Record the backend name, calibration timestamp, job IDs, and quantum_seconds for every job.
+
+## 14. Stages
+
+Delays move later stages later; the content of the Parts does not change. Each stage ends with a report in the eight-item format.
+
+| Stage | Deliverables | Exit condition |
+|---|---|---|
+| Preparation | Literature library; close reading of the key sources (Chen 2023 and Imbens and Manski in full; Armstrong and Kolesar, Lipsitch and Scavino in their relevant passages) | Reading-depth fields in library.csv updated |
+| Closing the previous project (in parallel with Part 1) | Second Linux rebuild; whether the selector_v3 numbers change; update of docs/release_rebuild_v1.md and section 8 of the previous paper; correction of the scavino2026 title | The previous project is closed before Part 2 starts |
+| Part 1a: definitions and Lemma 1 | Lemma 1 in partial-identification form and the finite-shot bound; the local-versus-global proposition with two counterexamples; draft learnability criterion | Derivations written as docs/theory/*.md and self-reviewed |
+| Part 1b: matrix derivation | Invariance proof or kappa derivation for every probe-by-structure cell; validity condition; P5 predictions | Every cell has a derivation or an explicit "?" |
+| Part 1c: Proposition 2 and certificate | Proposition 2; bias-aware certificate; extension of Proposition 1 (K candidates, estimated gamma) | Derivations complete; at least 90 papers in the library |
+| Part 1d: freeze | Power analysis (only after predictions are frozen); frozen protocol; OSF or AsPredicted registration; commit and push by the project owner | Frozen protocol has a content hash and an OSF timestamp |
+| Part 2: implementation and development set | Probe implementations and cost ledger; positive and negative controls; cross-checks with Mitiq and two stabilizer simulators; thresholds committed | Thresholds committed; development-set mismatch list |
+| Part 3: confirmatory holdout | Holdout read once; Proposition 1 prediction test (run once); comparison of two platforms | Claim ledger recomputable from raw rows |
+| Part 4: synthesis and paper | Boundary map; hardware go or no-go review (go requires separate authorization); paper; arXiv | Paper compiles, all citations verified, claim ledger has zero mismatches |
+
+The task list, with a prompt for each task, is in docs/inventory_20_step4_schedule.md.
+Part 2 starts only when Part 1d is frozen and the previous project is closed. Part 1 is analytic only and can run in parallel with closing the previous project.
+If the Part 1d power analysis shows the scope cannot be completed, it is reduced using the scope-cutting rule written at freeze time (section 9, item 4), and Part 3 is not extended.
