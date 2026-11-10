@@ -54,3 +54,9 @@ After each unit of work, report only: files created or changed; the experiment g
 run; test and verification results; supported main findings; negative or inconclusive findings;
 remaining scientific concerns; whether the next unit can start; the commit hash if the user has
 committed.
+
+## Work log
+
+After each task, add one entry at the top of `docs/WORKLOG.md` in the format given there. Keep only
+the 20 most recent entries; move older ones, unchanged, to `docs/WORKLOG_archive.md`. Never delete
+or edit anyone else's entries; moving to the archive is the only allowed change.
