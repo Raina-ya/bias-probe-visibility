@@ -67,26 +67,56 @@
 - 偏差感知認證的區間形式可以直接引用。
 - 但它的最壞偏差來自**先驗**函數類別，本專案的 B 來自**探針資料**。覆蓋率不能直接繼承，需要自己補一步，例如同時控制探針與目標兩個區間的聯合覆蓋。這要寫進 Part 1c 的推導目標。
 
-## 4. Scavino (2026)：最接近的前作
+## 4. Scavino (2026)：最接近的前作（2026-11-10 第二次閱讀，含附錄 C 與第 10 節）
 
-來源：<https://arxiv.org/pdf/2607.02888>（2026-07-02 版本，作者 Vicenzo Scavino，獨立研究者）。
+讀取範圍：arXiv PDF 全文 178,598 字元，分兩段讀完（0–100,000、100,000–結尾）。另外讀了 arXiv 摘要頁、arXiv HTML 頁、作者的 GitHub README。
+讀取工具是摘錄式的，以下「據我們所讀」都是指這個範圍。
 
-**書目問題（屬於舊專案，要另外處理）**
-- 上一版參考文獻對 arXiv 2607.02888 寫的標題是 "Accuracy, Decision Risk, and Sampling Cost in Quantum Error Mitigation"，作者 "Scavino Alfaro, Vicenzo"。
-- 現在 arXiv PDF 的標題是 "Decision Kernels for Quantum Error Mitigation: Why Accuracy Gains Need Not Improve Downstream Decisions"，作者 "Vicenzo Scavino"。
-- 可能是改版改了標題，但沒有查到版本紀錄。本 repo 的 references.bib 已改用現行標題並加註。**舊論文 main_v2.tex 的這筆引用要在舊專案收尾時核對。**
+### 4.1 問題一：舊論文引的標題在 arXiv 版本紀錄裡存在過嗎？
 
-**內容**（摘要級，加部分段落）
-- 決策只取決於差距；定義 decision kernel Σ_m = L K_m Lᵀ；偏差經由有效邊際 μ_m = Δ + L a_m 進入。
-- 明確區分 common-mode（被對比映射 L 消掉）與差異偏差。這和上一版 Proposition 1 的方向高度重疊。
-- 固定總 shot 預算，非適應性分配。
-- 有目標差距的可識別性條件（Corollary C.1："Then the target gaps are identifiable under the chosen primitive measurements."）。
-- 有診斷量 DRI、GRI、GVS。關於 GVS："The ratio GVS is only a diagnostic of how much ambient covariance survives projection into the chosen gap contrasts."
-- 有一個小型硬體壓力測試："A pre-registered hardware micro-cell stress test."；"The hardware run is not used to support the primary simulation claims."
-- **沒有**執行時偵測偏差或認證決策的方法。它的 Algorithm 1 把估計的殘差偏差 â_m 當輸入，沒有說明怎麼取得。它也沒有信賴區間分析，只寫了 "pointwise marginals, variances, confidence intervals, and MSE do not suffice"。
-- 它列出的未來工作包括："Sequential allocation, stopping rules, and best-arm-identification style fixed-confidence guarantees"。
+**答：依 arXiv 版本紀錄，沒有存在過。所以舊論文的引用標題和 arXiv 紀錄不符，舊專案要改引用。**
 
-**對本專案的意義**
-- 好消息：「執行時能不能看到差異偏差」正是它留下的空白。它把 â_m 當已知輸入，本專案問的就是 â_m 能不能在同一預算內得到、什麼時候原理上得不到。
-- 風險：它的 Corollary C.1（目標差距可識別性）和本專案的「盲」定義可能重疊；診斷量 DRI、GRI、GVS 也可能被視為探針。**必須讀它的附錄 C 和第 10 節全文**，在相關研究表中逐格寫清楚差異，不能寫「它沒有做 X」，除非原文可查證。
-- 上一版 Proposition 1（Δ_m > √γ Δ_r）和它的有效邊際理論有重疊。下一篇延伸 Proposition 1 時要引用並比較它。
+觀察到的事實：
+- arXiv 摘要頁 <https://arxiv.org/abs/2607.02888>：只列出一個版本，"This version: v1 2026-07-03"，沒有 v2 或更新版本。標題是 "Decision Kernels for Quantum Error Mitigation: Why Accuracy Gains Need Not Improve Downstream Decisions"，作者是 "Vicenzo Scavino"。
+- arXiv PDF 與 HTML 頁實際讀取時，顯示的都是同一個新標題，日期 July 2, 2026。
+- 舊標題 "Accuracy, Decision Risk, and Sampling Cost in Quantum Error Mitigation" 出現在兩個非 arXiv 版本紀錄的地方：
+  1. 搜尋引擎索引裡 arxiv.org/html/2607.02888 的頁面標題（但實際讀取該頁時顯示的是新標題）；
+  2. 作者的 GitHub repo README 標題（<https://github.com/vicenzoscavino1999/decision-aware-qem>）。README 提到的是作者自己的稿件版本號（"manuscript v45"、"The current manuscript (v47)"），不是 arXiv 版本。
+- 結論依你給的二分法：arXiv 紀錄中從沒存在過，所以算引錯。但舊標題確實是作者在 GitHub 上用的標題，這可以說明舊論文的標題從哪裡來。
+- 建議舊專案改成 arXiv 上的標題與作者名 "Vicenzo Scavino"，arXiv ID 2607.02888 不變。本 repo 的 references.bib 已經這樣寫。
+
+### 4.2 問題二：全文有沒有說明怎麼取得偏差估計？
+
+**答：據我們所讀，它未說明殘差偏差 a_m（或估計值 â_m）如何取得。**
+
+依據（逐字摘錄）：
+- 第 3 節，式 (8)：「$a_m$ denotes the deterministic, budget-independent residual bias of method m」。這是定義，不是估計方法。
+- Algorithm 1 的輸入行把它列為已知輸入：「Candidate methods $m \in \{\text{Raw}, \text{ZNE}, \text{CDR}, \text{PEC}\}$ ; budget B; estimated residual bias $\widehat{a}_m$」……「estimated covariance $\widehat{K}_m$ ; contrast matrix L; estimated landscape $\widehat{f}$ ; decision rule $\delta$」。
+- 第 8.2 節，Theorem 8.4：「or lower bounded by certified values $\underline{\mu}_i > 0$」。這是假設已有認證值，沒有給取得方法。
+- 第 8.4 節（PEC）：「In the ideal scalar-overhead PEC model with correct noise characterization」，也就是假設 a_PEC = 0。
+- 附錄 A 有兩處相關但不是偏差估計的文字：
+  - 「In hardware practice, $G_r$ may」……「instead be obtained by subtracting a high-accuracy pilot estimate」，講的是差距樣本；
+  - 式 (180)「using a high-accuracy reference for $\mu_m$」，講的是模擬中用高精度參考值當邊際。
+
+### 4.3 問題三：逐欄比較表
+
+| 項目 | Scavino (2026)，據我們所讀 | 本專案（計畫 v0.4，尚未執行） |
+|---|---|---|
+| 固定預算 | 有。總 shot 預算 B、固定分配比例、非適應性分配。原文把適應性分配列為範圍外："Sequential allocation, stopping rules, and best-arm-identification style fixed-confidence guarantees"（第 13 節，列為未來工作） | 有。目標、探針、校準、folding 全部從同一總預算扣除 |
+| 評估決策 | 有。gap-based 決策（argmin、ranking、top-k），決策錯誤機率 R_m(B)，診斷量 GRI 是「存在某個差距翻號」的機率 | 有。top-1 決策；但主要終點是「可見性預測與觀測是否一致」，不是決策錯誤率本身 |
+| 執行時偵測偏差 | 據我們所讀，未說明 â_m 如何取得（見 4.2）。三個診斷量中：DRI 與 GRI 需要邊際 μ_m，模擬中來自高精度參考值；GVS 只需要 K_m 與 L，原文說它 "does not include the margins $\mu_m$" | 核心問題：在不讀理想值、且計入預算的前提下，探針能否偵測差異偏差，以及何時原理上不能 |
+| 可識別性條件 | Corollary C.1：假設 "the primitive laws $p_{s,\theta}$ are smooth"，若 "Gh = 0 for every $h \in \ker \overline{\mathcal{I}}(w, \theta)$"，則 "the target gaps are identifiable under the chosen primitive measurements"；適用範圍 "in the locally efficient, identifiable, small-margin, and realizable case"；用途是推出 shot 層級的指數 $\min_i \mu_i^2/(2\Sigma_{\text{eff},ii}(w))$。primitive measurements 原文未正式定義；θ 包含哪些量，據我們所讀未明確 | 識別區域 {f(P, e′) : e′ ∈ 𝓔}（Imbens & Manski 形式）；雜訊 e 是未知量，𝓔 是模型類別，P 含探針輸出 |
+| 和我們的「盲」定義差在哪 | 它的條件是**局部**的：在給定 θ 附近，用 Fisher 資訊的零空間判斷差距能否被估計，目的是算錯誤指數 | 我們的定義是**全域、看符號**的：整個識別區域是否同時含正值與非正值。另外明確把雜訊當未知擾動量，並讓探針改變 P |
+
+**表格以外、需要標明是我們推論的兩點**
+- 如果 Scavino 的 θ 包含雜訊參數，那麼 Corollary C.1 的零空間條件可以看成我們「可見」的局部版本。到時候論文要引用它，並說明我們的全域符號版本和它的差別。θ 的內容要讀附錄 C 的完整推導才能確定，目前只讀到摘錄。
+- GVS 不含邊際，所以依其定義看不到偏差；DRI、GRI 需要邊際（真實差距）。照本專案「探針不能讀理想值」的規則，DRI、GRI 不能當執行時探針，GVS 可以算但不含偏差資訊。這是我們從原文定義推出來的，不是原文的說法。
+
+### 4.4 其他事實
+- 硬體部分：原文說小型硬體壓力測試的決策準則沒有達成："projected ranking error below 0.25 times the predicted risk margin, at an upper 95% cluster-bootstrap bound"（未達成），硬體結果支持的是 "the pullback prediction $\Sigma^{pred}$ versus the directly estimated covariance $\widehat{\Sigma}$, not decision advantage"。另見 "The hardware run is not used to support the primary simulation claims."
+- 和上一版 Proposition 1 的重疊：有效邊際 μ_m = Δ + L a_m 與 common-mode 被 L 消掉，和 Proposition 1 的差距寫法高度一致。延伸 Proposition 1 時要引用它並比較。
+
+### 4.5 新穎性（表格填完後才談）
+- 據我們所讀，Scavino 把偏差當成已給定的輸入，沒有說明執行時怎麼取得；它的可識別性條件是局部的、針對差距估計效率。
+- 本專案的「同一預算內、不讀理想值的探針能否看到差異偏差，以及全域意義上何時原理上看不到」，在它的範圍之外。
+- 但不能寫「它沒有做執行時偵測」，只能寫「據我們所讀，它未說明偏差估計的取得方式」。
