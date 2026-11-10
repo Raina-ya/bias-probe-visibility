@@ -26,7 +26,7 @@
 | 5 | Lipsitch et al. 2010 | 統計決策 | 相關段落（負對照選擇一節） | 條件是程度性的（"To the extent that … overlaps"、"as nearly identical as possible"），未見量化檢驗方法；設定是觀察性流行病學 | U-comparable 的原文定義；負對照不受暴露影響的要求 | 支撐（類比） |
 | 6 | Takagi et al. 2022 | QEM 極限 | 摘要 | 摘要說界適用於「一般類別」的協定，但沒有定義該類別；只處理估計誤差與抽樣成本，不涉及決策 | 局部去極化分層電路中，達到固定精度的抽樣成本隨深度指數成長；局部 dephasing 下 PEC 在一大類策略中最優 | 對照（估計器層） |
 | 7 | Quek et al. 2024 | QEM 極限 | 摘要級（arXiv HTML 前段） | 作者自承：最壞情況界；困難電路高度糾纏，主要構造用全連接；非 unital 情形用 2-design 簡化模型；不排除小雜訊下 QEM 有用；典型情況留待研究 | 區分 weak／strong mitigation；涵蓋 VD、CDR、ZNE、PEC；局部去極化下樣本成本隨量子位元數與深度超多項式成長（最壞情況） | 對照（估計器層） |
-| 8 | Scavino Alfaro 2026, Certified Finite-Shot Operating Windows for VD and SV（2026-11-10 換入，取代 Tsubouchi 2023） | 評比與特性化 | 全文（摘錄式） | 認證主要針對抽樣誤差；偏差用局部一階展開處理，原文："The noisy state is assumed to admit the first-order expansion in Equation (4)"；偏差係數依賴理想態、可觀測量與雜訊模型；比較的是估計量 MSE，不是決策；未見通用的執行時模型誤設偵測。作者自承："The hardware layer is qualitative and budget-limited"，嚴格的全例驗證準則在一個 Level 1 族中未達成 | SV 結果明說報告 "residual undetectable-sector bias"；VD 分母可信的樣本量門檻；兩方法比較的選擇三分法 | 競爭（與 P5 盲點、「認證」直接相關；與 #9 同一作者系列） |
+| 8 | Scavino Alfaro 2026, Certified Finite-Shot Operating Windows for VD and SV（2026-11-10 換入，取代 Tsubouchi 2023） | 評比與特性化 | 全文（摘錄式） | 認證主要針對抽樣誤差；偏差用局部一階展開處理，原文："The noisy state is assumed to admit the first-order expansion in Equation (4)"；偏差係數依賴理想態、可觀測量與雜訊模型；比較的是估計量 MSE，不是決策；未見通用的執行時模型誤設偵測。作者自承："The hardware layer is qualitative and budget-limited"，嚴格的全例驗證準則在一個 Level 1 族中未達成 | SV 結果明說報告 "residual undetectable-sector bias"；VD 分母可信的樣本量門檻；兩方法比較的選擇三分法 | 對照（支撐 P5 盲點預測的既有證據；非執行時偵測；與 #9 同一作者系列。2026-11-10 由「競爭」改為「對照」，依第二步 C.1） |
 | 9 | Scavino 2026, Decision Kernels | 評比與特性化 | 全文（摘錄式） | 據我們所讀，未說明 â_m 如何取得；可識別性條件是局部的；θ 的內容未明確；硬體決策準則未達成；作者自列未來工作含序列分配、停止規則、BAI 型保證 | 決策只依差距；common-mode 被對比映射 L 消去；Corollary C.1 的條件原文 | 競爭（最接近） |
 | 10 | Köster & Mauerer 2026 | 評比與特性化 | 全文（摘錄式） | 作者自承：硬體證據只有一台裝置、一個電路族；模擬假設理想去極化；W_neg 沒有正式門檻，只在研究的電路上驗證；起始深度與雜訊水準依裝置而異 | 訊號落在 floor 時 Richardson ZNE 退化為固定縮放 Ê(0) = (15/8)E(λ₁) − (7/8)f；W_neg 不需理想值；用 garbage-folding 當負對照 | 競爭／對照（現成的執行時診斷，P1 的近親） |
 | 11 | Bultrini et al. 2023 | 評比與特性化 | 摘要 | 只比較估計準確度，未評估決策；雜訊模型是離子阱模型的模擬 | 各方法表現強烈依賴 shot 預算；UNITED 在最大預算下最準 | 對照 |
@@ -40,7 +40,7 @@
 | 19 | Maciejewski et al. 2021 | 讀出 | 摘要 | 作者自承：只校正邊際分布；殘差誤差只給上界；假設相關的局部性不太高；QAOA 結果只有數值 | k-local 讀出 crosstalk 用 O(k2^k log N) 個電路特性化；量測相關和實體佈局不一致（IBM 15 量子位元、Rigetti 23 量子位元） | 支撐（E5 與 Part 4 硬體動機） |
 | 20 | Sarovar et al. 2020 | 評比與特性化 | 摘要 | 摘要只談偵測與定位 crosstalk，未談對決策的影響，也未談偵測成本與預算 | crosstalk 的嚴格操作定義；用觀測機率的條件相依性偵測 | 支撐／對照（E3 探針） |
 
-各類篇數：統計決策 3、評比與特性化 9（含 3 篇競爭）、QEM 極限 2、QEM 方法 4、硬體實驗 1、讀出 1，合計 20 篇。
+各類篇數：統計決策 3、評比與特性化 9（含競爭 2 篇：#9、#10；#8 為對照）、QEM 極限 2、QEM 方法 4、硬體實驗 1、讀出 1，合計 20 篇。
 
 **計數規則（使用者 2026-11-10 決定）**：第二步計算「出現 3 次以上的共通痛點」時，同一作者的系列作合併計為 1 個來源。#8 與 #9（Scavino／Scavino Alfaro）合併計 1。
 
