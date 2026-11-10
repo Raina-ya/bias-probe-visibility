@@ -21,6 +21,11 @@ predictions and the protocol are frozen, they will be committed here and registe
 AsPredicted before any noisy simulation is run.
 
 - Plan: [docs/project_plan_v0.md](docs/project_plan_v0.md) (in Chinese)
+- Literature review and research anchors: [docs/literature_review.md](docs/literature_review.md)
+  (in Chinese); library with verification status and notes:
+  [docs/literature/library.csv](docs/literature/library.csv); verified bibliography (Zotero-importable):
+  [paper/references.bib](paper/references.bib). Full texts have not been read yet; notes are based on
+  abstracts or are marked as unconfirmed.
 - Contributor rules: [AGENTS.md](AGENTS.md)
 
 ## Scope
