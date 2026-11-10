@@ -22,3 +22,5 @@ outputs/
 *.log
 .env
 HANDOFF.md
+
+docs/WORKLOG.md
