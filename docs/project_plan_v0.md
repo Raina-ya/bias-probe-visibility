@@ -67,7 +67,7 @@ Status of the claim. This is a hypothesis; the derivation may refute it.
 
 What. Prove that a local identifiability condition of the type in Scavino (2026), Corollary C.1 (a Fisher-information null-space condition), and this project's global sign criterion do not contain each other, with one counterexample in each direction: locally identifiable but globally blind; not locally identifiable but globally not blind. Both counterexamples are checked analytically or by noiseless computation.
 Purpose. To state precisely how this project's notion of blindness differs from the closest existing identifiability result.
-Basis. Scavino (2026), Corollary C.1. The exact relation depends on whether Scavino's theta includes noise parameters, which task W0-2 determines.
+Basis. Scavino (2026), Corollary C.1. In what we read, Scavino defines theta as "an ideal-landscape instance" and does not state whether it includes noise parameters; Remark C.4 describes a converse over channel parameters as a different formulation. Corollary C.1 is therefore treated as a local condition over ideal-landscape instances under fixed primitive measurements, and the comparison covers both locality and the level of the unknown (reading notes, section 4.6).
 
 ### 3.4 Finite-shot version
 
@@ -115,7 +115,7 @@ The predictions below are hypotheses until Part 1 derives and freezes them.
 | E0 | Common-mode only (control) | Cannot flip a decision; used to measure false alarms |
 | E1 | Stochastic Pauli or depolarizing noise, with different gate counts between candidates | Differential attenuation |
 | E2 | Coherent over-rotation (angle dependent) | The previous project showed folding is blind to it |
-| E3 | Correlated ZZ crosstalk | Least certain prediction |
+| E3 | Static coherent ZZ crosstalk inserted after each hard two-qubit cycle on a fixed layout and schedule | The same parameter is shared across candidates; P1 and P2 need transfer conditions, while balanced full-Pauli P3 removes its first-order coherent mean |
 | E4 | Independent, asymmetric readout error | |
 | E5 | Pairwise-correlated readout with unchanged marginals | The previous project showed marginal checks are blind to it |
 | E5' | Three-body correlated readout with unchanged pairwise marginals | Tests the blind spot of P4b |
@@ -134,10 +134,14 @@ Each structure is swept over bias size beta/Delta in {0, -0.5, -1.0, -1.5}, plus
 | P3 | Twirl contrast: run each candidate plainly and in m randomized-compiling versions, and check whether the gap changes | m extra circuits per candidate |
 | P4a | Readout marginal check: all-zeros and all-ones basis states | 2 circuits |
 | P4b | Readout pairwise check: four basis states per qubit pair | 4 C(w,2) circuits, or fewer with a grouped design |
+| P1b | W_neg: the weight of negative Richardson-extrapolated probabilities, computed from the per-scale-factor counts of folded circuits, needing no ideal values (Koster and Mauerer 2026) | Uses counts of folded circuits; no extra shots when P1's folded runs are reused (scale factors and reuse fixed in Part 1b) |
+| GVS | Reference baseline: the share of covariance that survives projection onto the gap contrasts (Scavino 2026, Section 10); it contains no margins | Computed from the target counts and the contrast matrix; no extra circuits |
 | P5 | Symmetry check: compute, from the target's own counts, a symmetry component whose ideal value is known (for example the global bit-flip symmetry of QAOA MaxCut); no extra circuits (Bonet-Monroig et al. 2018) | No extra circuits, no extra shots |
 
 Positioning of P5. A symmetry check leaves a residual bias it cannot see. Scavino Alfaro (2026, arXiv 2606.15464) has already stated this as "residual undetectable-sector bias"; that residual bias is computed from a noise model and the ideal state, not detected at runtime. This project does not claim to have discovered the blind spot of P5. It claims only to place it on the same boundary map as the other probes, under a fixed budget, at the decision level, and with a global sign criterion.
 Expected blind spot of P5: errors that preserve the symmetry. Hypothesis: partial for the symmetry-breaking part of E1, blind for symmetry-preserving rotations in E2, partial for readout under E4. These predictions are frozen only after the Part 1 derivation, as for every other probe.
+
+P1b and GVS form facet F3, the comparison with existing diagnostics. Hypotheses: by its definition, W_neg targets the failure of Richardson ZNE when the signal reaches the floor, so it is expected to be blind away from the floor and under readout structures; GVS contains no margins, so by its definition it carries no bias information. Both are derived in Part 1b.
 
 ### 4.3 Predictions
 
@@ -146,18 +150,22 @@ Legend: V visible, B blind in principle, Pt partial or parameter dependent, ? to
 | | E1 | E2 | E3 | E4 | E5 | E5' | E6 |
 |---|---|---|---|---|---|---|---|
 | P0 | B | B | B | B | B | B | B |
-| P1 | V | B (U U-dagger cancels) | ? | B (folding does not amplify readout error) | B | B | Pt |
-| P2 | V | Pt (bias depends on angle; the twin uses a different angle) | ? | Pt | Pt | Pt | Pt |
-| P3 | B (a Pauli channel is invariant under twirling) | V | V? | B | B | B | B |
+| P1 | V | B (U U-dagger cancels) | Pt (depends on the folded ZZ sensitivity) | B (folding does not amplify readout error) | B | B | Pt |
+| P2 | V | Pt (bias depends on angle; the twin uses a different angle) | Pt (requires target-twin ZZ sensitivity transfer) | Pt | Pt | Pt | Pt |
+| P3 | B (a Pauli channel is invariant under twirling) | V | V under the frozen balanced full-Pauli frame model | B | B | B | B |
 | P4a | B | B | B | V | B (marginals unchanged) | B | Pt |
 | P4b | B | B | B | V | V | B (pairwise marginals unchanged) | Pt |
+| P1b | ? | ? | ? | B (folding does not amplify readout error) | B | B | ? |
+| GVS | B (no margins) | B | B | B | B | B | B |
 
 ### 4.4 Failure conditions written in advance
 
 P1: the error cancels under U U-dagger (E2, part of E3); the bias is not amplified by folding (readout); near a tie, the variance of the slope estimate is too large.
 P2: the twin circuit's noise differs from the target's, for example when the error depends on the angle (E2); the twin's output distribution differs strongly from the target's, so readout bias is weighted differently.
-P3: the error is already stochastic Pauli (E1); readout error (unless a separate readout twirl is used); with small m, the contrast is swamped by sampling noise.
+P3: the error is already stochastic Pauli (E1); readout error (unless a separate readout twirl is used); the E3 frame set is incomplete or unbalanced, its coefficients depend on the frames, or layout/schedule changes; with small m, the contrast is swamped by sampling noise.
 P4a and P4b: the order of the marginals checked is lower than the order of the actual correlation; drift happens after the probe.
+P1b: the signal stays above the floor, so the arithmetic artefact W_neg detects does not occur; readout error; the source gives no formal threshold, so the threshold is set by the frozen E0 calibration.
+GVS: it contains no margin information, so it cannot respond to bias by construction; it serves as a reference for what a covariance-only diagnostic sees.
 
 ## 5. Endpoints
 
@@ -170,7 +178,7 @@ Secondary endpoints.
   For each probe, the minimum budget fraction f* needed to reach power 0.8 (the values on the boundary map).
   Hit rate of the Proposition 1 prediction test (new QAOA graphs; run once; predictions registered in advance).
 
-Exploratory. Results under E7 (fake backend); combinations of probes.
+Exploratory. Results under E7 (fake backend); combinations of probes; the cells of P1b and GVS (facet F3), which are evaluated under the same frozen thresholds and budget accounting but excluded from the primary endpoint.
 
 ## 6. Thresholds and sensitivity analysis (written into the frozen protocol)
 
@@ -199,7 +207,7 @@ Exit condition: the frozen protocol has a content hash and an OSF timestamp exis
 Results that hold whatever happens later: Lemma 1, the invariance criterion, Proposition 2.
 
 ### Part 2: probe implementation and development set (noisy simulation on the development set only)
-Implement P0 to P5, each with a cost ledger; test that total shots equal the budget.
+Implement P0 to P5, P1b and GVS, each with a cost ledger; test that total shots equal the budget.
 Positive control: cases with an analytically known beta must trigger the alarm. Negative control: under E0 the false-alarm rate must be about alpha.
 Cross-check P1 with Mitiq's folding; cross-check Clifford ideal values with two stabilizer simulators.
 Calibrate alarm thresholds from the E0 null distribution only, following the procedure frozen in Part 1; commit the results before Part 3.
@@ -231,8 +239,8 @@ Three rules are added:
 
 1. Lemma 1 is close to mathematically obvious and may be challenged at the defence. The contribution must rest on the concrete invariances, the shot lower bound and Proposition 2, not on the lemma itself.
 2. The synthetic error structures are chosen by this project and could be chosen to fit the predictions. Mitigation: the matrix is frozen first, E7 carries no prediction, and mismatched cells are reported as they are.
-3. The prediction for E3 (ZZ) is the least certain; the Part 1 derivation may show that it must be split into substructures.
-4. Scope: seven probes (including P5) by eight structures by the bias grid may be too large. If the Part 1 power analysis shows it cannot be completed, the scope-cutting rule (for example, cut P3 first) must be written at freeze time, not decided afterwards.
+3. E3 (ZZ) is frozen as the static coherent insertion model in `docs/theory/06_matrix.md`. Its predictions do not generalize to time-varying, spectator-dependent, or frame-dependent crosstalk; those are model violations rather than evidence for revising the frozen matrix.
+4. Scope: nine probes (P0 to P5, P1b and GVS) by eight structures by the bias grid may be too large. If the Part 1 power analysis shows it cannot be completed, the scope-cutting rule must be written at freeze time, not decided afterwards. Its priority order starts with the F3 diagnostics (GVS first, then P1b), because they do not enter the primary endpoint, and then P3.
 5. P2 computes Clifford ideal values classically. It must be argued that this is not "reading ideal values": it does not depend on the target's ideal value and can be computed at runtime.
 6. The Proposition 1 prediction test is placed in Part 3 as a secondary endpoint. It is related to the topic of this project but is not its main line.
 7. The learnability criterion (section 3.2) depends on the theorem conditions of Chen et al. (2023). Only the abstract has been read so far, and the conditions may not apply to the non-Clifford target circuits of this project.
@@ -257,13 +265,13 @@ Schedule rule: delays move later stages later; the content of the Parts does not
 Part 2 starts only after the previous project is closed, so that results of both projects are not produced from a shared, still-changing code base.
 The original wording of Lipsitch et al. (2010) is quoted, never paraphrased, in the paper, because a paraphrase introduced an inaccurate condition once.
 Research facets: F1 visibility boundary (primary), F2 certificate with a data-driven bias bound (secondary), F3 comparison with existing diagnostics (exploratory).
+W_neg as probe P1b, with GVS as a reference baseline: adopted, so that existing diagnostics are compared on the same visibility map and under the same budget accounting, which directly supports the four-condition novelty statement. The F3 comparison is done by simulation; P1b and GVS cells are exploratory and excluded from the primary endpoint.
 Adopted adjustments: the local-versus-global proposition (section 3.3); the repositioning of P5 (section 4.2); the four-condition novelty statement (section 0); the narrow-evidence limitation (section 9, item 8); the treatment of the limits literature (section 10); the primary endpoint unchanged.
 Decision rule: reversible, low-cost choices are made by whoever executes a task and are documented in its report; choices that touch frozen rules, widen the scope or affect the primary endpoint require approval by the project owner. Results are written directly into the repository by default.
 
 ## 12. Conditional settings
 
 Hardware: any hardware run requires a separate, explicit authorization.
-Optional extension: adding W_neg as probe P1b, with GVS as a reference baseline. It is adopted only if decided before Part 1a begins; otherwise F3 remains a text-level comparison.
 
 ## 13. Time budget for the hardware experiment (frozen in Part 1)
 
@@ -285,10 +293,10 @@ Delays move later stages later; the content of the Parts does not change. Each s
 | Preparation | Literature library; close reading of the key sources (Chen 2023 and Imbens and Manski in full; Armstrong and Kolesar, Lipsitch and Scavino in their relevant passages) | Reading-depth fields in library.csv updated |
 | Closing the previous project (in parallel with Part 1) | Second Linux rebuild; whether the selector_v3 numbers change; update of docs/release_rebuild_v1.md and section 8 of the previous paper; correction of the scavino2026 title | The previous project is closed before Part 2 starts |
 | Part 1a: definitions and Lemma 1 | Lemma 1 in partial-identification form and the finite-shot bound; the local-versus-global proposition with two counterexamples; draft learnability criterion | Derivations written as docs/theory/*.md and self-reviewed |
-| Part 1b: matrix derivation | Invariance proof or kappa derivation for every probe-by-structure cell; validity condition; P5 predictions | Every cell has a derivation or an explicit "?" |
+| Part 1b: matrix derivation | Invariance proof or kappa derivation for every probe-by-structure cell, including P1b and GVS; validity condition; P5 predictions | Every cell has a derivation or an explicit "?" |
 | Part 1c: Proposition 2 and certificate | Proposition 2; bias-aware certificate; extension of Proposition 1 (K candidates, estimated gamma) | Derivations complete; at least 90 papers in the library |
 | Part 1d: freeze | Power analysis (only after predictions are frozen); frozen protocol; OSF or AsPredicted registration; commit and push by the project owner | Frozen protocol has a content hash and an OSF timestamp |
-| Part 2: implementation and development set | Probe implementations and cost ledger; positive and negative controls; cross-checks with Mitiq and two stabilizer simulators; thresholds committed | Thresholds committed; development-set mismatch list |
+| Part 2: implementation and development set | Implementations of P0 to P5, P1b and GVS, with cost ledger; positive and negative controls; cross-checks with Mitiq and two stabilizer simulators; thresholds committed | Thresholds committed; development-set mismatch list |
 | Part 3: confirmatory holdout | Holdout read once; Proposition 1 prediction test (run once); comparison of two platforms | Claim ledger recomputable from raw rows |
 | Part 4: synthesis and paper | Boundary map; hardware go or no-go review (go requires separate authorization); paper; arXiv | Paper compiles, all citations verified, claim ledger has zero mismatches |
 
