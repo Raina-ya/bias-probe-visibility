@@ -1,0 +1,27 @@
+Gate ratio design check (noiseless density matrices; software_test split 99 only)
+graphs=50 exact_ideal_ties=0
+E1 strength=+0.0025: median=-0.0866 min=-0.2708 fraction_le_minus1=0.0000
+E1 strength=+0.0050: median=-0.1654 min=-0.5085 fraction_le_minus1=0.0000
+E1 strength=+0.0100: median=-0.3021 min=-0.9001 fraction_le_minus1=0.0000
+E1 strength=+0.0200: median=-0.5099 min=-1.4335 fraction_le_minus1=0.0400
+E1 strength=+0.0400: median=-0.7358 min=-1.9279 fraction_le_minus1=0.0800
+E2 strength=-0.0400: median=-0.0912 min=-5.0748 fraction_le_minus1=0.1200
+E2 strength=-0.0200: median=-0.0122 min=-7.7432 fraction_le_minus1=0.0800
+E2 strength=-0.0100: median=-0.0095 min=-5.1515 fraction_le_minus1=0.0200
+E2 strength=-0.0050: median=+0.0003 min=-2.8742 fraction_le_minus1=0.0200
+E2 strength=+0.0050: median=-0.0010 min=-0.5089 fraction_le_minus1=0.0000
+E2 strength=+0.0100: median=-0.0141 min=-1.0187 fraction_le_minus1=0.0200
+E2 strength=+0.0200: median=-0.0674 min=-2.0231 fraction_le_minus1=0.0400
+E2 strength=+0.0400: median=-0.1878 min=-3.8763 fraction_le_minus1=0.1000
+E3 strength=-0.0400: median=-0.0781 min=-11.1876 fraction_le_minus1=0.0600
+E3 strength=-0.0200: median=-0.0252 min=-5.4173 fraction_le_minus1=0.0400
+E3 strength=-0.0100: median=-0.0028 min=-2.6626 fraction_le_minus1=0.0400
+E3 strength=-0.0050: median=-0.0012 min=-1.3196 fraction_le_minus1=0.0200
+E3 strength=+0.0050: median=+0.0008 min=-0.1874 fraction_le_minus1=0.0000
+E3 strength=+0.0100: median=+0.0011 min=-0.3704 fraction_le_minus1=0.0000
+E3 strength=+0.0200: median=-0.0030 min=-0.7222 fraction_le_minus1=0.0000
+E3 strength=+0.0400: median=-0.0259 min=-1.3649 fraction_le_minus1=0.0200
+manifest_sha256=b93abe7292735353fe4c6d9f092c20adc62acabde0ca7465aa578115e1d0d311
+python=3.13.18
+platform=Linux-6.18.44-fc-v378-x86_64-with-glibc2.39
+numpy=2.5.3

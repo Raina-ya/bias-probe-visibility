@@ -1,0 +1,15 @@
+Dry-run ledger v2 (outcome-free; no circuit built, no seed instantiated)
+ledger_rows=85
+budget_failures=0
+section12_mismatches={}
+graphs=150
+parameter_conditions=60
+aggregate_rows=2016000
+nominal_shots=33030144000
+unique_probability_solves=1231200
+projected_raw_bytes=16389242880
+within_structural_caps=True
+python=3.13.18
+platform=Linux-6.18.44-fc-v378-x86_64-with-glibc2.39
+numpy=2.5.3
+dry_run_status=PASS

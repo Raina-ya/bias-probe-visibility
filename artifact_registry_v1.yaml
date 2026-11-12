@@ -3,24 +3,52 @@
   "artifacts": [
     {
       "path": "experiments/power/power_analysis_raw_v4.csv",
-      "sha256": "b61b86c9e10378a19ecf30ad04996a23f53a951ebc575492485019b2a5d2d2d2",
+      "sha256": "457c095bd811d492647b846b4bda95842e16d77f5a2961c249bba0fd1da2f8f9",
       "generator": "experiments/power/run_power_analysis_v4.py",
       "output_pattern": "power_analysis_raw_v4.csv",
       "status": "current_design_only"
     },
     {
       "path": "experiments/power/power_analysis_summary_v4.csv",
-      "sha256": "df95709306a3fd4030f48fec7bbabfdaf8455a7f6f6babf15b66542d44a644d6",
+      "sha256": "dcf47ddfd2e6b0847e74a2d74b28f474192538387c771b4661b9820c711fd715",
       "generator": "experiments/power/run_power_analysis_v4.py",
       "output_pattern": "power_analysis_summary_v4.csv",
       "status": "current_design_only"
     },
     {
       "path": "experiments/power/run_log_v4.txt",
-      "sha256": "74901ee6d078a5fa89f6ea74be167b1d6f4a76a0f4f59f217c7cbc72a934ea64",
+      "sha256": "096bee823243be6a6707050c782a9b856e34c529c63faecc0429140354c0d6df",
       "generator": "experiments/power/run_power_analysis_v4.py",
       "output_pattern": "run_log_v4.txt",
       "status": "current_design_only"
+    },
+    {
+      "path": "experiments/dry_run/dry_run_ledger_v2.csv",
+      "sha256": "09ba32711a06678bfee14d9c51e51f66a67c0ac91f42740cf7847545ec819abb",
+      "generator": "experiments/dry_run/run_dry_run_v2.py",
+      "output_pattern": "dry_run_ledger_v2.csv",
+      "status": "outcome_free_dry_run"
+    },
+    {
+      "path": "experiments/dry_run/dry_run_log_v2.txt",
+      "sha256": "b15b3f32da6369e0c284f54096abe1d00987a5ddb37f0df0e1da07060700f23f",
+      "generator": "experiments/dry_run/run_dry_run_v2.py",
+      "output_pattern": "dry_run_log_v2.txt",
+      "status": "outcome_free_dry_run"
+    },
+    {
+      "path": "experiments/design_checks/readout_ratio_log.txt",
+      "sha256": "fbc53370557902a9082fd9c39ee7d4d552a7b44b547c1b7135acc63876da2a9b",
+      "generator": "experiments/design_checks/readout_ratio_check.py",
+      "output_pattern": "readout_ratio_log.txt",
+      "status": "design_check_noiseless_software_test_split"
+    },
+    {
+      "path": "experiments/design_checks/gate_ratio_log.txt",
+      "sha256": "a775851193cb2b6b61e6d27898d2c30f06f8aace4c4f1fdc5525e98d7a7b2839",
+      "generator": "experiments/design_checks/gate_ratio_check.py",
+      "output_pattern": "gate_ratio_log.txt",
+      "status": "design_check_noiseless_software_test_split"
     }
   ]
 }

@@ -7,12 +7,16 @@ checks.  It does not construct noisy circuits or draw shot outcomes.
 from __future__ import annotations
 
 import csv
-import hashlib
 import math
+import sys
 from collections import Counter
 from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Iterable, Mapping, Sequence
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from hashing import canonical_sha256  # noqa: E402
 
 
 ROOT_SEED = 20261111
@@ -39,7 +43,14 @@ MAX_PROBABILITY_SOLVES = 2_000_000
 MAX_AGGREGATE_ROWS = 5_000_000
 MAX_RAW_BYTES = 20 * 1024**3
 
-SPLIT_CODES = {"development": 10, "holdout": 20, "prop1_pilot": 30, "prop1_scoring": 31}
+SPLIT_CODES = {
+    "development": 10,
+    "holdout": 20,
+    "prop1_pilot": 30,
+    "prop1_scoring": 31,
+    "e7_exploratory": 40,
+    "software_test": 99,
+}
 
 
 @dataclass(frozen=True)
@@ -66,7 +77,7 @@ class ResourceEstimate:
 
 
 def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    return canonical_sha256(path)
 
 
 def validate_matrix(path: Path) -> Counter[str]:

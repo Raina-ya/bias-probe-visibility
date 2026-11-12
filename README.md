@@ -15,17 +15,21 @@ QEM is unreliable. This project asks whether that unreliability can be detected 
 
 ## Status
 
-**Planning stage. There are no results in this repository.** The research plan is a draft and
-has not been frozen. Nothing here has an independent timestamp yet; when the analytic
-predictions and the protocol are frozen, they will be committed here and registered on OSF or
-AsPredicted before any noisy simulation is run.
+**Part 1 (analytic) is complete; nothing has been preregistered and there are no simulation
+results.** The derivations are in [docs/theory/](docs/theory/). The pre-development review
+([docs/freeze/freeze_review_v2.md](docs/freeze/freeze_review_v2.md)) showed that protocol v2's
+primary endpoint could not succeed. Protocol v3
+([docs/freeze/frozen_protocol_v3.md](docs/freeze/frozen_protocol_v3.md)) is the current freeze
+candidate. It must be committed and registered on OSF or AsPredicted
+([docs/freeze/registration_draft_v3.md](docs/freeze/registration_draft_v3.md)) before any noisy
+simulation is run.
 
 - Plan: [docs/project_plan_v0.md](docs/project_plan_v0.md) (in Chinese)
 - Literature review and research anchors: [docs/literature_review.md](docs/literature_review.md)
   (in Chinese); library with verification status and notes:
   [docs/literature/library.csv](docs/literature/library.csv); verified bibliography (Zotero-importable):
-  [paper/references.bib](paper/references.bib). Full texts have not been read yet; notes are based on
-  abstracts or are marked as unconfirmed.
+  [paper/references.bib](paper/references.bib). Reading depth is recorded per entry in
+  library.csv.
 - Contributor rules: [AGENTS.md](AGENTS.md)
 
 ## Scope

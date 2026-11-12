@@ -4,16 +4,22 @@ from __future__ import annotations
 
 import argparse
 import fnmatch
-import hashlib
 import json
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from hashing import canonical_sha256  # noqa: E402
 
 
 REGISTRY = "artifact_registry_v1.yaml"
 
 
 def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    """Return the line-ending-independent hash used by the registry."""
+
+    return canonical_sha256(path)
 
 
 def load_registry(repo: Path) -> dict[str, object]:

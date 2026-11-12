@@ -1,0 +1,9 @@
+# Store and check out every text file with LF line endings on every platform.
+# Content hashes in this repository are computed on LF-normalized text
+# (src/hashing.py), so a Windows checkout and a Linux checkout hash identically.
+* text=auto eol=lf
+
+*.png binary
+*.pdf binary
+*.npz binary
+*.npy binary

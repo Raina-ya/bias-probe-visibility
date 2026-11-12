@@ -1,0 +1,11 @@
+Readout ratio design check (noiseless simulation; software_test split 99 only)
+graphs=50 exact_ideal_ties=0
+max_abs_single_qubit_Z=1.943e-16
+E4: min=-0.3600 median=-0.3600 max=-0.3600 fraction_le_minus1=0.0000 fraction_le_minus1.25=0.0000
+E5: min=-0.2938 median=-0.1600 max=0.6747 fraction_le_minus1=0.0000 fraction_le_minus1.25=0.0000
+E5-prime: min=-1.9237 median=-0.5104 max=2.3714 fraction_le_minus1=0.0200 fraction_le_minus1.25=0.0200
+E6: min=-0.1900 median=-0.1900 max=-0.1900 fraction_le_minus1=0.0000 fraction_le_minus1.25=0.0000
+manifest_sha256=b93abe7292735353fe4c6d9f092c20adc62acabde0ca7465aa578115e1d0d311
+python=3.13.18
+platform=Linux-6.18.44-fc-v378-x86_64-with-glibc2.39
+numpy=2.5.3

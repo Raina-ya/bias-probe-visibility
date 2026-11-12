@@ -42,13 +42,32 @@ declared operating scenarios. The assumed class means already encode whether a
 cell is near a classification boundary; the result cannot validate those means
 or the physical visibility predictions.
 
+**How to read the 1.0000 power.** Every scenario reached the ceiling (250/250),
+so the design-power column cannot show how close the design is to failing; a
+Wilson lower bound of 0.9849 is a property of 250/250, not of the design. The
+informative quantity is the minimum dataset-level bootstrap lower endpoint:
+0.8929 in upper-boundary stress, a margin of +0.0929 above the frozen 0.80
+endpoint. A ceiling result also means the scenarios did not include an
+operating point near failure; this analysis therefore provides no evidence
+about designs that are less favourable than the three declared scenarios,
+including unattainable operating points (see `freeze_review_v2.md`). Any text
+that cites this analysis must report the minimum lower endpoint and this
+ceiling caveat, not the power value alone.
+
 ## Artifacts
 
-| Artifact | SHA-256 |
+| Artifact | SHA-256 (LF-normalized, `src/hashing.py`) |
 |---|---|
-| `experiments/power/power_analysis_raw_v4.csv` | `b61b86c9e10378a19ecf30ad04996a23f53a951ebc575492485019b2a5d2d2d2` |
-| `experiments/power/power_analysis_summary_v4.csv` | `df95709306a3fd4030f48fec7bbabfdaf8455a7f6f6babf15b66542d44a644d6` |
-| `experiments/power/run_log_v4.txt` | `74901ee6d078a5fa89f6ea74be167b1d6f4a76a0f4f59f217c7cbc72a934ea64` |
+| `experiments/power/power_analysis_raw_v4.csv` | `457c095bd811d492647b846b4bda95842e16d77f5a2961c249bba0fd1da2f8f9` |
+| `experiments/power/power_analysis_summary_v4.csv` | `dcf47ddfd2e6b0847e74a2d74b28f474192538387c771b4661b9820c711fd715` |
+| `experiments/power/run_log_v4.txt` | `096bee823243be6a6707050c782a9b856e34c529c63faecc0429140354c0d6df` |
+
+The hashes originally listed here were computed on Windows CRLF working copies
+(`b61b86c9...`, `df957093...`, `74901ee6...`), while Git stores LF text, so a
+clean Linux checkout failed the provenance check. Hashes are now computed on
+LF-normalized text. Regenerating power v4 on Linux (Python 3.13, NumPy 2.5.3)
+reproduced the raw and summary files exactly after line-ending normalization,
+so the original mismatch was a line-ending convention only.
 
 The raw file has 750 rows: 250 datasets for each of three scenarios. The
 summary is independently recomputed by
