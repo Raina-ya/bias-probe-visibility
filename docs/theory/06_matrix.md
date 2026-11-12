@@ -12,7 +12,14 @@ Let the target's observed decision gap under noise parameter (e) be (g(e)=\Delta
 b_r=\frac{\partial g(e)}{\partial e_r}.
 \]
 
-A nonzero (\kappa_{j,r}) is not enough. A cell is called **visible** only when the probe has a known reference, constrains the same decision-relevant component for which (b_r\ne0), and the transfer from probe to target is identified under the stated model. This is **this project's quantum condition, by analogy with the U-comparability of Lipsitch et al. 2010**. It is this project's condition, not a condition stated by Lipsitch et al.
+A nonzero (\kappa_{j,r}) is not enough. A cell can be predicted **visible** only when the probe has a known reference, constrains the same decision-relevant component for which (b_r\ne0), and the transfer from probe to target is identified under the stated model. This is **this project's quantum condition, by analogy with the U-comparability of Lipsitch et al. 2010**. It is this project's condition, not a condition stated by Lipsitch et al.
+
+The matrix is a set of falsifiable, finite-budget predictions for the operational
+statistics in the frozen protocol. The analytic sensitivity argument is a
+necessary justification for a visible prediction, not evidence that the frozen
+budget will achieve the required power. That claim is tested only on the
+confirmatory holdout. Thus the word *visible* below has the definition in
+`01_definitions.md`; it does not mean merely "structurally sensitive."
 
 Predictions mean:
 
@@ -69,7 +76,7 @@ this project's derivation for E3.1.
 | P4b | blind | blind | blind | blind | visible | visible | blind | partial |
 | P1b | blind | partial | partial | ? | blind | blind | blind | ? |
 | GVS | blind | blind | blind | blind | blind | blind | blind | blind |
-| P5 | blind | partial | partial | partial | partial | partial | partial | partial |
+| P5 | blind | blind | blind | blind | partial | blind | blind | partial |
 
 ## P0: confidence-interval-only baseline
 
@@ -313,11 +320,20 @@ Invariance: the frozen statistic characterizes terminal pair readout, not target
 
 ### P4b / E4 — visible (high)
 
-Sensitivity: four preparations per pair contain the single-qubit assignment rates. Failure condition: context or time mismatch. Matching blind cells for P4b are E0, E1, E2, E3, and E5'.
+Sensitivity: the frozen P4b score is the maximum of a marginal-assignment
+component and a pair-correlation component. Four preparations per pair contain
+the single-qubit assignment rates, so the marginal component responds to E4.
+Failure condition: context or time mismatch. Matching blind cells for P4b are
+E0, E1, E2, E3, and E5'.
 
 ### P4b / E5 — visible (high)
 
-Sensitivity: pair output distributions have nonzero derivative with respect to correlation parameters that preserve one-body marginals. Failure condition: the relevant pair is unmeasured or changes after calibration. Matching blind cells for P4b are E0, E1, E2, E3, and E5'.
+Sensitivity: the pair-correlation component is the total-variation distance
+between a pair output distribution and the product of its observed marginals.
+It has nonzero derivative with respect to correlation parameters that preserve
+one-body marginals. Failure condition: the relevant pair is unmeasured or
+changes after calibration. Matching blind cells for P4b are E0, E1, E2, E3,
+and E5'.
 
 ### P4b / E5' — blind (high)
 
@@ -419,106 +435,89 @@ Invariance: deterministic drift moves means at fixed within-block covariance. Fa
 
 The blind spot is not new. Bonet-Monroig et al. (2018) introduced symmetry verification, including a zero-cost post-processing protocol. Scavino Alfaro, arXiv:2606.15464v1--v2, explicitly called the remaining term the “residual undetectable-sector bias”; the current v3 states equivalently that the residual bias comes from symmetry-preserving errors that postselection cannot detect. That work computes the residual coefficient from an assumed noise model, ideal state, and observable; it is not a runtime detector of that residual. This project therefore does **not** claim to discover the P5 blind spot. Its narrower contribution is to place the blind spot on the same probe-by-structure boundary map as the other probes, charge all probes to one fixed total budget, evaluate the target decision rather than estimator MSE, and use the global sign criterion from 01_definitions.md.
 
-### Derivation of the blind sector
+### Derivation for the operational statistic
 
-Let \(P\) project onto the valid symmetry sector and let the ideal state satisfy
-
-\[
-P\rho_\star P=\rho_\star .
-\]
-
-P5 reuses the target counts to estimate a symmetry statistic, which can be written as the acceptance probability
+The protocol does not measure a symmetry-sector projector. It measures the
+computational-basis distribution. Let \(J\) be the bitwise-complement
+permutation, \((Jp)(z)=p(\bar z)\), and define the population statistic
 
 \[
-t_5(\rho)=\operatorname{Tr}(P\rho)
-\]
-
-or an affine equivalent such as the expectation of a two-sector symmetry operator. For a differentiable noise path
-
-\[
-\rho_\epsilon=\rho_\star+\epsilon\,\dot\rho+O(\epsilon^2),
-\qquad \operatorname{Tr}(\dot\rho)=0,
-\]
-
-the probe sensitivity is
-
-\[
-\kappa_5=\left.\frac{d}{d\epsilon}t_5(\rho_\epsilon)\right|_{\epsilon=0}
-=\operatorname{Tr}(P\dot\rho).
+t_5(p)=\tfrac12\lVert p-Jp\rVert_1.
 \tag{P5.1}
 \]
 
-Decompose the tangent perturbation into an in-sector component and the remainder:
+The frozen QAOA MaxCut construction starts in
+\(\lvert+\rangle^{\otimes w}\); its cost and mixer unitaries commute with the
+global bit flip \(X^{\otimes w}\). Therefore the ideal output satisfies
+\(p=Jp\), so \(t_5=0\). If a noisy channel \(K\) commutes with \(J\), then
 
 \[
-\dot\rho_{\mathrm{in}}=P\dot\rho P,
-\qquad
-\dot\rho_{\mathrm{out}}=\dot\rho-\dot\rho_{\mathrm{in}}.
-\]
-
-If the perturbation is trace preserving and entirely in the valid sector, then
-
-\[
-\dot\rho=P\dot\rho P
+p=Jp,\quad KJ=JK
 \quad\Longrightarrow\quad
-\kappa_5=\operatorname{Tr}(\dot\rho)=0.
+Kp=JKp\quad\Longrightarrow\quad t_5(Kp)=0.
 \tag{P5.2}
 \]
 
-For a target decision contrast \(C=O_A-O_B\), however,
+This invariance does not protect the decision value. The normalized MaxCut
+score obeys \(c(z)=c(\bar z)\), but two complement-symmetric distributions can
+have different expectations of \(c\). A channel may therefore change the two
+candidate scores by different amounts while both candidate distributions still
+satisfy (P5.2). P5 is blind along that direction.
 
-\[
-b_{\mathrm{in}}
-=\left.\frac{d}{d\epsilon}\operatorname{Tr}(C\rho_\epsilon)\right|_{\epsilon=0}
-=\operatorname{Tr}(C\dot\rho_{\mathrm{in}})
-\tag{P5.3}
-\]
-
-need not vanish. Thus there can be two admissible in-sector perturbations with identical P5 population statistic but decision gaps on opposite sides of zero. Equations (P5.2)--(P5.3) give the invariance proof required by this project's definition of blind in principle. They are the decision-level counterpart of the residual undetectable sector, not a claim made by the cited papers.
-
-For a symmetry-preserving coherent generator \(H\), \([H,P]=0\) and
-
-\[
-\dot\rho=-i[H,\rho_\star]=P\dot\rho P.
-\]
-
-Therefore P5 is exactly invariant along this direction even though
-\(\operatorname{Tr}(C\dot\rho)\) may be nonzero. For a symmetry-breaking
-unitary generator, acceptance loss from an ideal symmetry eigenstate is
-generally \(O(\epsilon^2)\), not necessarily first order; it can be visible
-in principle but much harder to resolve within a fixed shot budget.
+The distinction matters for the frozen structures. The E1 depolarizing
+channel, the E2 cost-angle over-rotation, the E3 ZZ insertion, and the E5/E5'
+input-independent correlated bit-flip channels all commute with global
+complement in their frozen forms. They therefore leave (P5.1) exactly zero even
+when their decision bias is nonzero. Asymmetric assignment error E4 does not in
+general commute with \(J\), and E6 can change that asymmetry over time; P5 is
+only partial for those structures because a zero or nonzero asymmetry does not
+by itself bound the decision bias.
 
 ### Prediction and failure conditions
 
-The row-level prediction is **partial** for every broad structure that contains both symmetry-breaking and symmetry-preserving components, and **blind** for E0. “Partial” does not certify the target decision: it says only that some components can change the checked statistic.
+These predictions apply to the concrete frozen structures, not to broader
+families that might also contain symmetry-breaking components. “Partial” does
+not certify the target decision: it says only that a frozen component can
+change the checked statistic.
 
 ### P5 / E0 — blind (high)
 
 Invariance: a common-mode shift preserves the checked symmetry and cannot flip the contrast. Failure condition: the nominal common mode contains a symmetry-breaking differential component.
 
-### P5 / E1 — partial (medium)
+### P5 / E1 — blind (high)
 
-Sensitivity: stochastic Pauli components that move population outside the valid sector change \(t_5\), typically at first order in their probability. Failure condition: symmetry-preserving Pauli mixtures satisfy (P5.2) and may still change the decision gap.
+Invariance: the frozen two-qubit depolarizing channel is covariant under the
+global bit flip, so (P5.2) holds. The extra identity pairs can still create a
+differential attenuation. Failure condition: E1 is widened to include a
+symmetry-breaking Pauli channel.
 
-### P5 / E2 — partial (high)
+### P5 / E2 — blind (high)
 
-Sensitivity: symmetry-breaking coherent rotations can create detectable leakage, but from an ideal symmetry eigenstate the acceptance loss is generally second order in the rotation angle. Failure condition: \([H,P]=0\) gives exact invariance while (P5.3) can remain nonzero.
+Invariance: every frozen RZZ cost over-rotation commutes with
+\(X^{\otimes w}\), so the output remains complement symmetric. Failure
+condition: the coherent error generator breaks global-complement symmetry.
 
-### P5 / E3 — partial (medium)
+### P5 / E3 — blind (high)
 
-Sensitivity: a ZZ term is visible only through a component that leaves the chosen sector. Failure condition: for the global bit-flip symmetry used by QAOA MaxCut, a ZZ generator commutes with that symmetry and lies in P5's blind sector.
+Invariance: the frozen ZZ insertion commutes with \(X^{\otimes w}\), so the
+operational statistic remains zero. Failure condition: E3 contains an
+unmodelled symmetry-breaking crosstalk term.
 
 ### P5 / E4 — partial (medium)
 
 Sensitivity: asymmetric assignment can change the observed sector probability. Failure condition: a readout channel covariant under the symmetry action preserves \(t_5\) while still potentially biasing the decision observable.
 
-### P5 / E5 — partial (medium)
+### P5 / E5 — blind (high)
 
-Sensitivity: only the symmetry-breaking projection of pair-correlated readout changes the checked statistic. Failure condition: symmetry-preserving pair correlations remain in the residual blind sector.
+Invariance: the frozen E5 channel is an input-independent convolution by a
+correlated flip pattern and commutes with complement. Failure condition: the
+pair channel depends asymmetrically on the prepared bit values.
 
-### P5 / E5' — partial (medium)
+### P5 / E5' — blind (high)
 
-Sensitivity: only the projection of higher-order readout onto the checked symmetry component is visible. Failure condition: a higher-order channel can preserve the checked sector while changing the decision contrast.
+Invariance: the frozen three-body flip-pattern channel is also an
+input-independent convolution and commutes with complement. Failure condition:
+the higher-order channel contains a complement-breaking component.
 
 ### P5 / E6 — partial (low)
 
