@@ -6,7 +6,7 @@ The order of tasks matters; there is no calendar. If a task takes longer, later 
 
 ## Basis of this task list
 
-Plan settings: the local-versus-global proposition, the repositioning of P5, the four-condition novelty statement, the narrow-evidence limitation and the treatment of the limits literature are adopted, and the primary endpoint is unchanged. Adding W_neg as probe P1b is optional and is adopted only if decided before Part 1a starts.
+Plan settings: the local-versus-global proposition, the repositioning of P5, the four-condition novelty statement, the narrow-evidence limitation, the treatment of the limits literature, and W_neg as probe P1b with GVS as a reference baseline are adopted; the primary endpoint is unchanged.
 Research facets: F1 visibility boundary (primary endpoint), F2 certificate with a data-driven bias bound (secondary), F3 comparison with existing diagnostics (exploratory).
 Pain points are numbered as in docs/inventory_20_step2_painpoints.md: pain points 1 to 6, minor pain points 1 and 2.
 Part 2 can start only after Part 1d is frozen and the previous project (adaptive-qem-benchmark) is closed.
@@ -43,6 +43,7 @@ Prompt. None; the task is complete.
 What to do. Determine from the original text whether theta in Scavino's primitive laws includes noise parameters.
 Purpose. The exact relation between Corollary C.1 and this project's definition of blindness depends on it, and the local-versus-global proposition (task 1a-4) cannot be finalized without it.
 Basis. Scavino (2026), arXiv 2607.02888, Appendix C and Section 9; Corollary C.1.
+Status. Complete. Result: not stated in what we read; see section 4.6 of docs/reading_notes_key_sources.md.
 Expected output. An addendum to section 4 of docs/reading_notes_key_sources.md, or a separate notes file.
 Acceptance criteria. The question "does theta include noise parameters?" is answered with verbatim quotes. If the paper does not say, the answer is "not stated in what we read", with the range of text read.
 Pain points and facets served. F1, pain point 5, local-versus-global proposition.
@@ -59,11 +60,12 @@ Prompt:
 
 ### Task W0-3: Decide on W_neg as probe P1b (decision by the project owner)
 
-What to do. Obtain a decision on the optional extension that adds W_neg to the probe set as P1b, with GVS as a reference baseline.
+What to do. Obtain a decision on the extension that adds W_neg to the probe set as P1b, with GVS as a reference baseline.
 Purpose. Part content cannot change after Part 1a begins, so the option must be settled before then; it determines whether F3 is compared by simulation or as text.
 Basis. Koster and Mauerer (2026), arXiv 2607.09360; Scavino (2026), Section 10; docs/inventory_20_step3_facets.md, section 2.
 Expected output. One line recording the decision in section 11 of the plan.
 Acceptance criteria. The project owner answers "adopt" or "reject". No answer before Part 1a starts counts as reject.
+Status. Complete. Result: adopted; recorded in section 11 of docs/project_plan_v0.md.
 Pain points and facets served. F3, pain point 6.
 Prompt:
 
@@ -169,9 +171,9 @@ Prompt:
 
 ## Part 1b: the probe by error-structure matrix (analytic only)
 
-### Task 1b-1: Probe by error-structure matrix, P0 to P5 against E0 to E6
+### Task 1b-1: Probe by error-structure matrix, P0 to P5, P1b and GVS against E0 to E6
 
-What to do. Derive the visibility prediction for probes P0 to P5 under error structures E0 to E6.
+What to do. Derive the visibility prediction for probes P0 to P5, P1b (W_neg) and the GVS baseline under error structures E0 to E6.
 Purpose. Failure conditions of existing methods are only partly stated (pain point 1); the matrix states them for every probe and structure in advance.
 Basis. Research plan, section 4; Lipsitch et al. (2010), original wording, as the source of the analogy; limitations stated by Giurgica-Tiron et al. (2020) and Wallman and Emerson (2016).
 Expected output. Docs/theory/06_matrix.md and docs/theory/06_matrix.csv (columns: probe, structure, prediction, derivation_summary, failure_condition, confidence).
@@ -181,8 +183,8 @@ Acceptance criteria.   every cell has an invariance proof, a sensitivity (kappa)
 Pain points and facets served. F1, pain point 1.
 Prompt:
 
-    Task: Derive the visibility prediction for probes P0 to P5 under error structures E0 to E6. Analytic work only.
-    Inputs: section 4 of docs/project_plan_v0.md; docs/theory/01 to 05; section 1 of docs/reading_notes_key_sources.md (the original wording of Lipsitch et al. 2010); the limitations admitted by the authors of Giurgica-Tiron et al. 2020 and Wallman and Emerson 2016 (see docs/inventory_20_step1.md).
+    Task: Derive the visibility prediction for probes P0 to P5, P1b (W_neg) and the GVS reference baseline under error structures E0 to E6. Analytic work only. P1b and GVS cells belong to facet F3 and are exploratory.
+    Inputs: section 4 of docs/project_plan_v0.md; docs/theory/01 to 05; section 1 of docs/reading_notes_key_sources.md (the original wording of Lipsitch et al. 2010); the limitations admitted by the authors of Giurgica-Tiron et al. 2020 and Wallman and Emerson 2016 (see docs/inventory_20_step1.md); for P1b and GVS, Koster and Mauerer 2026 (arXiv 2607.09360) and Section 10 of Scavino 2026 (arXiv 2607.02888).
     Output format:
       (1) 06_matrix.md, one subsection per cell, with the prediction (visible, blind, partial, or ?), the derivation, and the failure condition;
       (2) 06_matrix.csv with columns probe, structure, prediction, derivation_summary, failure_condition, confidence.
@@ -208,7 +210,8 @@ Prompt:
 
 ### Task 1b-3: Text-level comparison of existing diagnostics (only if the W_neg extension is not adopted)
 
-What to do. Build a text-level comparison of existing runtime diagnostics. This task applies only if the optional W_neg extension is not adopted.
+Status. Not applicable: the W_neg extension was adopted, so existing diagnostics are compared by simulation in tasks 1b-1 and 4-1. The task is kept for reference.
+What to do. Build a text-level comparison of existing runtime diagnostics. This task applies only if the W_neg extension is not adopted.
 Purpose. Diagnostics in the literature lack formal, falsifiable thresholds (pain point 6); a comparison with traceable cells supports the restated novelty (F3).
 Basis. Koster and Mauerer (2026), arXiv 2607.09360; Scavino (2026), arXiv 2607.02888; Scavino Alfaro (2026), arXiv 2606.15464.
 Expected output. Docs/related_work_table.md
@@ -303,7 +306,7 @@ Prompt:
 What to do. Run a power analysis by simulation to set the holdout size and the number of repeats.
 Purpose. The design must have enough power for the primary endpoint (F1), and the power analysis must not influence the predictions.
 Basis. docs/theory/06_matrix.csv; research plan, sections 5 and 6.
-Expected output. Experiments/power/ (code, raw rows, run log) and docs/freeze/power_analysis.md
+Expected output. Experiments/power/ (code, raw rows, run log) and docs/freeze/power_analysis_v4.md
 Acceptance criteria.   it runs only after 06_matrix has been committed;
   it sets a holdout of at least 100 circuits, at least 50 QAOA graphs from at least 3 graph families, and at least 2 circuits for each width and depth;
   the run log records the numpy version and BLAS configuration;
@@ -314,7 +317,7 @@ Prompt:
     Task: Run a power analysis by simulation to set the holdout size and number of repeats.
     Precondition: confirm that docs/theory/06_matrix.csv has been committed by the user. If not, stop and report.
     Inputs: docs/theory/06_matrix.csv; sections 5 and 6 of docs/project_plan_v0.md (endpoints and thresholds).
-    Output format: code under experiments/power/ (all seeds derived from ROOT_SEED), raw rows as CSV, a run log (including the numpy version and the output of np.show_config()); docs/freeze/power_analysis.md stating each design parameter chosen and its power, and for every value-versus-threshold decision, how far the value is from the threshold.
+    Output format: code under experiments/power/ (all seeds derived from ROOT_SEED), raw rows as CSV, a run log (including the numpy version and the output of np.show_config()); docs/freeze/power_analysis_v4.md stating each design parameter chosen and its power, and for every value-versus-threshold decision, how far the value is from the threshold.
     Do not: change any prediction in 06_matrix after seeing the power results; use machine learning; run hardware; overwrite raw rows; commit or push.
     Write the result into the repository. Report in the eight-item format, with the full experiment grid.
 
@@ -322,15 +325,15 @@ Prompt:
 
 What to do. Assemble the frozen protocol.
 Purpose. Without a threshold frozen in advance, results can be interpreted after the fact (pain point 6); every facet depends on the frozen protocol.
-Basis. docs/theory/01 to 09; docs/freeze/power_analysis.md; research plan.
-Expected output. Docs/freeze/frozen_protocol_v1.md (with its content hash)
+Basis. docs/theory/01 to 09; docs/freeze/power_analysis_v4.md; research plan.
+Expected output. Docs/freeze/frozen_protocol_v2.md (with its content hash)
 Acceptance criteria. The structures and parameter grid, probe specifications and cost formulas, thresholds and sensitivity table, development and holdout seed split, primary endpoint, scope-cutting rule, and the pilot procedure and decision rule for the Proposition 1 test are all fixed in writing; items that may be adjusted but must be logged are listed separately.
 Pain points and facets served. Pain point 6 and all facets.
 Prompt:
 
     Task: Assemble the frozen protocol.
-    Inputs: docs/theory/01 to 09, 06_matrix.csv, docs/freeze/power_analysis.md, docs/project_plan_v0.md.
-    Output format: docs/freeze/frozen_protocol_v1.md with these sections in order: scope; definitions; prediction matrix (cite the hash of 06_matrix.csv); probe specifications and costs; thresholds and sensitivity table; data split and seeds; primary and secondary endpoints; scope-cutting rule; Proposition 1 prediction procedure; items that may be adjusted but must be logged; change rules (delays only move later). End with the command that computes the file's content hash.
+    Inputs: docs/theory/01 to 09, 06_matrix.csv, docs/freeze/power_analysis_v4.md, docs/project_plan_v0.md.
+    Output format: docs/freeze/frozen_protocol_v2.md with these sections in order: scope; definitions; prediction matrix (cite the hash of 06_matrix.csv); probe specifications and costs; thresholds and sensitivity table; data split and seeds; primary and secondary endpoints; scope-cutting rule; Proposition 1 prediction procedure; items that may be adjusted but must be logged; change rules (delays only move later). End with the command that computes the file's content hash.
     Do not: add probes or endpoints the user has not approved; include any simulation result as the basis for a prediction; commit or push.
     Write the result into the repository. Report in the eight-item format.
 
@@ -338,13 +341,13 @@ Prompt:
 
 What to do. Write the draft registration form for OSF or AsPredicted.
 Purpose. An independent timestamp is required before the word preregistration can be used.
-Basis. docs/freeze/frozen_protocol_v1.md.
+Basis. docs/freeze/frozen_protocol_v2.md.
 Expected output. Docs/freeze/registration_draft.md
 Acceptance criteria. The draft matches the frozen protocol; the user submits it personally and records the timestamp in the repository.
 Pain points and facets served. The registration requirement of the specification.
 Prompt:
 
-    Task: Write a draft of the OSF (or AsPredicted) registration form based on docs/freeze/frozen_protocol_v1.md.
+    Task: Write a draft of the OSF (or AsPredicted) registration form based on docs/freeze/frozen_protocol_v2.md.
     Output format: fill in the platform's fields in their order; for each field, note the matching section of the frozen protocol.
     Do not: submit on the user's behalf; use the word "preregistration" before an independent timestamp exists (write "frozen and committed in this repository" instead).
     Report in the eight-item format, and remind the user to record the timestamp in the repository after submitting.
@@ -356,15 +359,15 @@ Starts only after Part 1d is frozen and the previous project is closed.
 
 What to do. Implement the probes and the cost ledger exactly as specified in the frozen protocol.
 Purpose. F1 and F2 require every probe's cost to be charged to the same total budget, and no probe may read ideal values.
-Basis. docs/freeze/frozen_protocol_v1.md, probe specifications and cost formulas.
-Expected output. Src/probes/ and tests/test_probes.py
-Acceptance criteria. P0 to P5 are implemented (plus P1b and GVS if the W_neg extension was adopted); tests confirm that total shots in every run equal the budget; a test enforces that probes never receive ideal values.
+Basis. docs/freeze/frozen_protocol_v2.md, probe specifications and cost formulas.
+Expected output. Src/probes/, the manifest and analysis-contract implementation required by section 10.1 of the frozen protocol, and their tests.
+Acceptance criteria. P0 to P5, P1b and GVS are implemented; tests confirm that total shots in every run equal the budget; a test enforces that probes never receive ideal values; manifest generation, strength-map selection, E0 alarm calibration, analysis skeleton and split guards are complete and tested before split 10 can be instantiated.
 Pain points and facets served. F1, F2.
 Prompt:
 
     Task: Implement the probes and the cost ledger exactly as specified in the frozen protocol.
-    Input: the probe specifications and cost formulas in docs/freeze/frozen_protocol_v1.md.
-    Output format: a src/probes/ module (one function per probe, returning its statistic and the number of circuits and shots it actually used); tests/test_probes.py with at least these tests: total shots equal the budget; probe functions take no ideal-value argument; results are reproducible from the seed.
+    Input: the probe specifications and cost formulas in docs/freeze/frozen_protocol_v2.md.
+    Output format: a src/probes/ module (one function per probe, returning its statistic and the number of circuits and shots it actually used); manifest generation, strength-map selection, E0 alarm calibration, analysis skeleton and split guards required by section 10.1; tests covering exact budgets, no ideal-value probe argument, deterministic seeds, immutable manifests and refusal to instantiate split 10 before the before-development lock.
     Do not: change any specification in the frozen protocol; use machine learning; run ruff format on the whole repository (format new files only); commit or push; run git on the user's computer.
     Write the result into the repository. Report in the eight-item format, and give the pytest command (on Windows add --basetemp="$env:TEMP\qem-pytest").
 
@@ -372,14 +375,15 @@ Prompt:
 
 What to do. Run positive and negative controls and cross-checks with independent code on the development set.
 Purpose. Alarms must be shown to fire on known bias and stay quiet under E0 before thresholds are set (pain point 6); key numbers must be cross-checked with different code.
-Basis. docs/freeze/frozen_protocol_v1.md; Mitiq; two stabilizer simulators.
+Basis. docs/freeze/frozen_protocol_v2.md; Mitiq; two stabilizer simulators.
 Expected output. Experiments/dev_controls/ and docs/dev/controls_report.md
-Acceptance criteria. Cases with an analytically known bias trigger the alarm; the false-alarm rate under E0 is close to alpha; P1 is cross-checked with Mitiq's folding; the Clifford ideal values used by P2 are cross-checked with two different stabilizer simulators.
+Acceptance criteria. Before split 10 is instantiated, the protocol and section-10.1 implementation are committed and independently timestamped; cases with an analytically known bias trigger the alarm; the false-alarm rate under E0 is close to alpha; P1 is cross-checked with Mitiq's folding; the Clifford ideal values used by P2 are cross-checked with two different stabilizer simulators.
 Pain points and facets served. Pain point 6, the cross-validation requirement of the specification.
 Prompt:
 
     Task: Run positive and negative controls and cross-checks on the development set.
-    Inputs: docs/freeze/frozen_protocol_v1.md; src/probes/.
+    Precondition: confirm that the protocol and the complete section-10.1 implementation have been committed and independently timestamped, and that split 10 has never been instantiated. If not, stop and report.
+    Inputs: docs/freeze/frozen_protocol_v2.md; src/probes/.
     Output format: code, raw rows and run log under experiments/dev_controls/; docs/dev/controls_report.md listing each check as passed or failed, with its value and its distance from the threshold.
     Do not: read any data from holdout seeds; change probe specifications or loosen tolerances when a check fails; delete failed runs; commit or push.
     Write the result into the repository. Report in the eight-item format, grouping failures by cause (method, resources, model, design).
@@ -388,17 +392,17 @@ Prompt:
 
 What to do. Calibrate the alarm thresholds from the E0 null distribution only, and list the cells where development data disagree with the predictions.
 Purpose. Thresholds must be fixed by a procedure set in advance, not chosen after seeing results (pain point 6, F1).
-Basis. docs/freeze/frozen_protocol_v1.md; raw rows in experiments/dev_controls/.
-Expected output. Docs/dev/thresholds_v1.md and a list of development-set mismatches.
-Acceptance criteria. Thresholds are calibrated from the E0 null distribution following the frozen procedure; every cell where the development data disagree with the prediction is listed; the theory is not changed.
+Basis. docs/freeze/frozen_protocol_v2.md; raw rows in experiments/dev_controls/.
+Expected output. Docs/freeze/strength_map_v2.csv, docs/dev/thresholds_v2.md, docs/dev/dev_mismatch_v2.md, and docs/freeze/confirmatory_lock_v2.json.
+Acceptance criteria. The strength map and thresholds are produced only by the frozen algorithms; thresholds are calibrated from the E0 null distribution; every cell where development data disagree with the prediction is listed; the 1% timing pilot and all input/output hashes are recorded; the theory is not changed; the owner commits and independently timestamps the confirmatory lock before any holdout seed is instantiated.
 Pain points and facets served. Pain point 6, F1.
 Prompt:
 
     Task: Following the frozen procedure, calibrate the alarm thresholds using only the E0 (common-mode) null distribution, and list the cells where the development data disagree with the predictions.
-    Inputs: docs/freeze/frozen_protocol_v1.md; raw rows in experiments/dev_controls/.
-    Output format: docs/dev/thresholds_v1.md (threshold, calibration sample size and sensitivity for each probe); docs/dev/dev_mismatch.md (for each mismatched cell: prediction, observation, possible cause).
+    Inputs: docs/freeze/frozen_protocol_v2.md; raw rows in experiments/dev_controls/.
+    Output format: docs/freeze/strength_map_v2.csv; docs/dev/thresholds_v2.md (threshold, calibration sample size and sensitivity for each probe); docs/dev/dev_mismatch_v2.md (for each mismatched cell: prediction, observation, possible cause); docs/freeze/confirmatory_lock_v2.json containing their hashes, the implementation-error log, the 1% timing-pilot result, and proof that split 20 was never instantiated.
     Do not: change predictions in 06_matrix or any theory document because of mismatches; read the holdout; commit or push.
-    Write the result into the repository. Report in the eight-item format, and remind the user to commit the threshold file before Part 3.
+    Write the result into the repository. Report in the eight-item format, and remind the user to commit and independently timestamp the confirmatory lock before Part 3.
 
 ## Part 3: confirmatory holdout
 
@@ -406,16 +410,16 @@ Prompt:
 
 What to do. Compute the primary endpoint on the holdout, exactly once.
 Purpose. This is the confirmatory test of F1.
-Basis. docs/freeze/frozen_protocol_v1.md; docs/dev/thresholds_v1.md.
+Basis. docs/freeze/frozen_protocol_v2.md; docs/freeze/confirmatory_lock_v2.json.
 Expected output. Results/holdout/ (raw rows, summary, run log) and docs/results/primary_endpoint.md
-Acceptance criteria. It runs exactly once; the agreement rate between predicted and observed visibility is reported with a Wilson interval; it can be recomputed independently from the raw rows; it is run on both Windows and Linux and the two are compared.
+Acceptance criteria. It runs exactly once; the agreement rate between predicted and observed visibility is reported with the prespecified shared-graph cluster-bootstrap interval; it can be recomputed independently from the raw rows; it is run on both Windows and Linux and the two are compared.
 Pain points and facets served. F1 (primary).
 Prompt:
 
     Task: Compute the primary endpoint on the holdout. Run it exactly once.
-    Precondition: confirm that the threshold file and the frozen protocol have been committed. If not, stop and report.
-    Inputs: docs/freeze/frozen_protocol_v1.md; docs/dev/thresholds_v1.md; src/probes/.
-    Output format: raw rows in results/holdout/ (never overwritten); a summary script that recomputes everything from the raw rows; a run log (numpy version and BLAS configuration); docs/results/primary_endpoint.md (agreement rate, Wilson interval, result for every cell, distance from each threshold).
+    Precondition: confirm that the frozen protocol and confirmatory_lock_v2.json have been committed and independently timestamped, and that split 20 has never been instantiated. If not, stop and report.
+    Inputs: docs/freeze/frozen_protocol_v2.md; docs/freeze/confirmatory_lock_v2.json; src/probes/.
+    Output format: raw rows in results/holdout/ (never overwritten); a summary script that recomputes everything from the raw rows; a run log (numpy version and BLAS configuration); docs/results/primary_endpoint.md (agreement rate, shared-graph cluster-bootstrap interval, result for every cell, distance from each threshold).
     Do not: change any rule or threshold after seeing results; rerun the holdout; delete rows that fail checks; commit or push.
     Write the result into the repository. Report in the eight-item format, and report unfavourable results plainly.
 
@@ -431,7 +435,7 @@ Prompt:
 
     Task: On the holdout data, compare the bias-aware certificate with the confidence-interval-only certificate. This is a secondary endpoint.
     Inputs: raw rows in results/holdout/; the frozen rule in docs/theory/07_certificate.md.
-    Output format: docs/results/secondary_certificate.md with the false-certification rate, unresolved rate and Wilson intervals for both rules, clearly labelled as a secondary endpoint.
+    Output format: docs/results/secondary_certificate.md with the false-certification rate, unresolved rate and shared-graph cluster-bootstrap intervals for both rules, clearly labelled as a secondary endpoint.
     Do not: change the certificate rule; present secondary results as the main conclusion; commit or push.
     Write the result into the repository. Report in the eight-item format.
 
@@ -457,10 +461,10 @@ Prompt:
 ### Task 4-1: Boundary map and failure causes
 
 What to do. Produce the visibility boundary map and classify every failure by cause.
-Purpose. This is the central result of F1, with F3 included as the optional extension allows.
+Purpose. This is the central result of F1, with the F3 comparison included.
 Basis. results/holdout/; docs/results/*.md; docs/theory/06_matrix.csv.
 Expected output. Figures/boundary_map.* and docs/results/boundary_synthesis.md
-Acceptance criteria. The boundary map (structure by bias-to-gap ratio by required probe fraction) is drawn; every failure is grouped by cause (method, resources, model, design); the F3 comparison is done by simulation or as text, depending on whether the W_neg extension was adopted.
+Acceptance criteria. The boundary map (structure by bias-to-gap ratio by required probe fraction) is drawn; every failure is grouped by cause (method, resources, model, design); the F3 comparison (P1b and GVS) is done by simulation and labelled exploratory.
 Pain points and facets served. F1, F3.
 Prompt:
 
@@ -534,8 +538,6 @@ Narrow evidence base and unclear generalization (former pain point 7). This proj
 Pain point 4 (benchmarks stop at estimator accuracy) gets no facet of its own. Scavino 2026 already addresses "accuracy is not the same as a good decision". It stays as background and is covered by the secondary endpoint for Proposition 1.
 
 Minor pain point 1 (limits theory has no decision-level counterpart). Only two sources support it. It is addressed only when writing, to answer the expected examiner question about limits of error mitigation.
-
-W_neg as a probe is an optional extension, adopted only if decided before Part 1a starts. Otherwise F3 is a text-level comparison only (task 1b-3), because comparing existing diagnostics by simulation widens the scope without affecting the primary endpoint.
 
 Full readout-correlation correction. This project detects bias; it does not mitigate it.
 

@@ -1,0 +1,106 @@
+Power analysis v4 run log
+command=experiments/power/run_power_analysis_v4.py --matrix-committed-confirmed
+matrix_commit_confirmation=user supplied; Git history not inspected
+matrix_sha256=7a8e3a56e6f48d8a29c3643c1c2e24f46bce6a54c674d6b1937dbdcd041d8995
+class_counts={np.str_('blind'): 35, np.str_('visible'): 6, np.str_('partial'): 15}
+root_seed=20261111
+graph_count=100
+repeats=32
+dataset_simulations=250
+bootstrap_resamples=1000
+shared_graph_scale=0.2
+cell_graph_scale=0.3
+scenarios=({'name': 'baseline', 'visible_mean': 0.85, 'partial_mean': 0.45, 'blind_mean': 0.05, 'false_alarm_mean': 0.05, 'target': 0.9}, {'name': 'lower_boundary_stress', 'visible_mean': 0.82, 'partial_mean': 0.12, 'blind_mean': 0.08, 'false_alarm_mean': 0.08, 'target': 0.8}, {'name': 'upper_boundary_stress', 'visible_mean': 0.82, 'partial_mean': 0.78, 'blind_mean': 0.08, 'false_alarm_mean': 0.08, 'target': 0.8})
+python=3.12.14 (main, Aug 25 2026, 14:01:42) [MSC v.1944 64 bit (AMD64)]
+platform=Windows-11-10.0.26300-SP0
+numpy=2.3.5
+elapsed_seconds=16.475238
+
+np.show_config()
+{
+  "Compilers": {
+    "c": {
+      "name": "msvc",
+      "linker": "link",
+      "version": "19.44.35219",
+      "commands": "cl"
+    },
+    "cython": {
+      "name": "cython",
+      "linker": "cython",
+      "version": "3.2.1",
+      "commands": "cython"
+    },
+    "c++": {
+      "name": "msvc",
+      "linker": "link",
+      "version": "19.44.35219",
+      "commands": "cl"
+    }
+  },
+  "Machine Information": {
+    "host": {
+      "cpu": "x86_64",
+      "family": "x86_64",
+      "endian": "little",
+      "system": "windows"
+    },
+    "build": {
+      "cpu": "x86_64",
+      "family": "x86_64",
+      "endian": "little",
+      "system": "windows"
+    }
+  },
+  "Build Dependencies": {
+    "blas": {
+      "name": "scipy-openblas",
+      "found": true,
+      "version": "0.3.30",
+      "detection method": "pkgconfig",
+      "include directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-q7k2ejt3/cp312-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/include",
+      "lib directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-q7k2ejt3/cp312-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/lib",
+      "openblas configuration": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=24",
+      "pc file directory": "D:/a/numpy-release/numpy-release/.openblas"
+    },
+    "lapack": {
+      "name": "scipy-openblas",
+      "found": true,
+      "version": "0.3.30",
+      "detection method": "pkgconfig",
+      "include directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-q7k2ejt3/cp312-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/include",
+      "lib directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-q7k2ejt3/cp312-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/lib",
+      "openblas configuration": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=24",
+      "pc file directory": "D:/a/numpy-release/numpy-release/.openblas"
+    }
+  },
+  "Python Information": {
+    "path": "C:\\Users\\runneradmin\\AppData\\Local\\Temp\\build-env-fls87aak\\Scripts\\python.exe",
+    "version": "3.12"
+  },
+  "SIMD Extensions": {
+    "baseline": [
+      "SSE",
+      "SSE2",
+      "SSE3"
+    ],
+    "found": [
+      "SSSE3",
+      "SSE41",
+      "POPCNT",
+      "SSE42",
+      "AVX",
+      "F16C",
+      "FMA3",
+      "AVX2"
+    ],
+    "not found": [
+      "AVX512F",
+      "AVX512CD",
+      "AVX512_SKX",
+      "AVX512_CLX",
+      "AVX512_CNL",
+      "AVX512_ICL"
+    ]
+  }
+}

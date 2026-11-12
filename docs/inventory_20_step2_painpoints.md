@@ -128,7 +128,7 @@ Conclusions
     2. charges the probe cost to a fixed total budget;
     3. uses an alarm threshold frozen in advance and open to falsification;
     4. determines under which error structures every probe is blind in principle.
-  W_neg could serve as a ready-made probe in the P1 family or as a reference baseline evaluated in the same matrix; this option is set out in the research facets.
+  W_neg is included as probe P1b in the P1 family, and GVS as a reference baseline, both evaluated in the same matrix (research facets, F3).
 
 Positioning of arXiv 2606.15464
   It does not detect residual bias at runtime; the residual bias is computed from a model and the ideal state. It is therefore not a precedent for runtime detection by P5.
@@ -145,7 +145,7 @@ Assessment (an inference, to be written as a formal proposition with counterexam
   1. Locally identifiable but globally blind: near the true parameter the gap is identifiable, but a distant, observationally equivalent parameter may give a gap of opposite sign. A local condition cannot see this.
   2. Not locally identifiable but globally not blind: the gap is not uniquely determined locally, but if the margin is large enough, every observationally equivalent parameter gives a gap of the same sign, so the direction of the decision is still determined.
   3. Only in the small-margin limit do the two come close, and the scope of Corollary C.1 is exactly the small-margin case.
-Open point. What Scavino's theta contains is not clear in what we read. If theta includes noise parameters, Corollary C.1 is a local, point-value version of our "visible" condition, and the paper must cite it and explain the difference.
+Open point, now settled as far as the text allows. Whether Scavino's theta includes noise parameters is not stated in what we read: theta is described as an "ideal-landscape instance", and Remark C.4 treats a converse at the level of channel parameters as a different formulation (reading notes, section 4.6). Corollary C.1 is therefore not presented as a local version of our "visible" condition; the comparison covers both locality and the level of the unknown.
 
 ### C.3 Estimator-level limits versus decision-level consequences: are two sources enough for a main pain point?
 

@@ -122,3 +122,28 @@ Overlap with Proposition 1 of the previous project: the effective margin mu_m = 
 In what we read, Scavino treats bias as a given input and does not state how it is obtained at runtime; its identifiability condition is local and concerns the efficiency of gap estimation.
 This project's question, whether probes within the same budget and without reading ideal values can see differential bias, and when they are blind in principle in the global sense, lies outside that scope.
 The paper may not write "it does not perform runtime detection"; it may write only "in what we read, it does not state how the bias estimate is obtained".
+
+### 4.6 What does theta contain? (task W0-2)
+
+Scope of reading: Section 9.1 and Appendix C (Corollary C.1, Remarks C.2 and C.4) of the arXiv HTML version, plus Appendix B for the definition of w. The reading tool extracts passages; quotations are to be checked against the PDF before use in the paper.
+
+Verbatim passages
+  Section 9.1: "Let $\Theta_{\text{phys}}$ denote the model class over which the primitive per-shot laws $p_{s,\theta}$ are defined."
+  Section 9.1: theta is introduced as "an ideal-landscape instance $\theta \in \Theta_{\text{phys}}$."
+  Section 9.1, the full record law: $P_{\theta}^{(B)} = \bigotimes_{s} p_{s,\theta}^{\otimes B_s}$, "the law of the full shot record", with primitive settings introduced as "Fix primitive settings $s \in \mathcal{T}$".
+  Eq. (159): $g_i(\theta) = F_{\theta}(x_i) - F_{\theta}(x_0)$, "the decision-relevant target gap map".
+  Corollary C.1: "let $G = D_{\theta}g(\theta)$ be its Jacobian"; "Assume the primitive laws $p_{s,\theta}$ are smooth, and define the total Fisher information under allocation $B_s$ by" Eq. (197), $\overline{\mathcal{I}}(w, \theta) = \sum_{s \in \mathcal{T}} w_s \mathcal{I}_s(\theta)$.
+  Appendix B, Eq. (193): "with $w_{\ell} = B_{\ell}/B$" (w is the vector of allocation fractions).
+  Remark C.4: "The result is deliberately local-minimax, not pointwise." and "A channel-level decision converse would instead place the two alternatives at the level of noisy quantum states, primitive measurements, or channel parameters".
+  Remark C.2: "Theorem 9.1 is the fixed-allocation decision analogue:" and a measurement-independent quantum converse is "a stronger sequel rather than a claim of this paper."
+  Remark C.4 (found in a second, independent reading of Appendix C): "while keeping the physical device-noise covariance and mitigation map fixed."
+  Section 6.2 (Eq. 79) models primitive means for Pauli observables as $\operatorname{tr}[O_x \mathcal{N}_{p,s}(\rho_x)]$ with a noise parameter p, but Section 9 does not connect p to theta.
+
+Conclusion: not stated in what we read.
+
+Theta is described as "an ideal-landscape instance" in the model class Theta_phys, and it also indexes the primitive laws p_{s,theta}. The text read does not say whether noise or channel parameters are components of theta.
+
+Meaning for Corollary C.1 and this project's definition of "blind"
+  Because the paper does not state that theta includes noise parameters, Corollary C.1 cannot be described as a local version of this project's "visible" condition.
+  What the text does state: the alternatives in its converse are ideal-landscape instances under a fixed primitive measurement family and allocation, and a converse at the level of "noisy quantum states, primitive measurements, or channel parameters" is described as a different ("instead") formulation, not as a claim of the paper.
+  This project's identification region treats the noise e as the unknown quantity, which places it at the level Remark C.4 calls channel level. In the local-versus-global proposition (task 1a-4), Corollary C.1 should be described as a local identifiability condition over ideal-landscape instances under fixed primitive measurements, and the relation to this project should be stated as a difference in the level of the unknown (landscape instance versus noise) as well as in locality (local versus global sign). This last sentence is our inference from the quoted remarks.

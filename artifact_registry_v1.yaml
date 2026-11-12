@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "artifacts": [
+    {
+      "path": "experiments/power/power_analysis_raw_v4.csv",
+      "sha256": "b61b86c9e10378a19ecf30ad04996a23f53a951ebc575492485019b2a5d2d2d2",
+      "generator": "experiments/power/run_power_analysis_v4.py",
+      "output_pattern": "power_analysis_raw_v4.csv",
+      "status": "current_design_only"
+    },
+    {
+      "path": "experiments/power/power_analysis_summary_v4.csv",
+      "sha256": "df95709306a3fd4030f48fec7bbabfdaf8455a7f6f6babf15b66542d44a644d6",
+      "generator": "experiments/power/run_power_analysis_v4.py",
+      "output_pattern": "power_analysis_summary_v4.csv",
+      "status": "current_design_only"
+    },
+    {
+      "path": "experiments/power/run_log_v4.txt",
+      "sha256": "74901ee6d078a5fa89f6ea74be167b1d6f4a76a0f4f59f217c7cbc72a934ea64",
+      "generator": "experiments/power/run_power_analysis_v4.py",
+      "output_pattern": "run_log_v4.txt",
+      "status": "current_design_only"
+    }
+  ]
+}

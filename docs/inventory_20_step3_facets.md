@@ -43,7 +43,7 @@ Minor pain point 2 (detection cost is not charged to a budget; two sources, infe
 
 ## 2. Settings adopted in the research plan
 
-The order and content of the Parts are fixed before Part 1a begins and are not changed afterwards. The settings below are therefore made before Part 1a starts.
+The order and content of the Parts are fixed before Part 1a begins and are not changed afterwards. All settings below, including the W_neg extension, are made before Part 1a starts.
 
 ### Local-versus-global proposition in Part 1a (adopted)
 
@@ -87,14 +87,14 @@ What. F1 corresponds to the existing primary endpoint; F2 and the Proposition 1 
 Purpose. The project keeps a single primary endpoint, and the Proposition 1 test remains a secondary endpoint run once.
 Cost. None.
 
-### W_neg as probe P1b, with GVS as a reference baseline (optional)
+### W_neg as probe P1b, with GVS as a reference baseline (adopted)
 
 What. Add W_neg to the probe set as P1b in the P1 family and use GVS as a reference baseline (F3).
 Purpose. It most directly supports the restated novelty, because existing diagnostics would be compared on the same map.
 Cost. Two more rows in the matrix. Part 1b must derive the visibility of W_neg and GVS under each structure; Part 2 implements two more statistics (W_neg uses existing counts and needs no extra shots); Part 3 needs more computation. The probe set grows from seven to nine, and the priority order of the scope-cutting rule (research plan, section 9, item 4) must be rewritten, with the F3 diagnostics cut first.
 Affected Parts: 1b, 2 and 3.
 Effect on frozen rules: none.
-Condition. Because Part content cannot change after Part 1a begins, this option is adopted only if it is decided before Part 1a starts. Otherwise F3 remains a text-level comparison (a related-work table) with no simulation.
+Consequence. F3 is compared by simulation on the same matrix, and the text-level comparison task (task 1b-3) does not apply. P1b and GVS cells are exploratory and excluded from the primary endpoint.
 
 ### Consequence for the schedule
 

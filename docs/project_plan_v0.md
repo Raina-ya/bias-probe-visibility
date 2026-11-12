@@ -139,7 +139,10 @@ Each structure is swept over bias size beta/Delta in {0, -0.5, -1.0, -1.5}, plus
 | P5 | Symmetry check: compute, from the target's own counts, a symmetry component whose ideal value is known (for example the global bit-flip symmetry of QAOA MaxCut); no extra circuits (Bonet-Monroig et al. 2018) | No extra circuits, no extra shots |
 
 Positioning of P5. A symmetry check leaves a residual bias it cannot see. Scavino Alfaro (2026, arXiv 2606.15464) has already stated this as "residual undetectable-sector bias"; that residual bias is computed from a noise model and the ideal state, not detected at runtime. This project does not claim to have discovered the blind spot of P5. It claims only to place it on the same boundary map as the other probes, under a fixed budget, at the decision level, and with a global sign criterion.
-Expected blind spot of P5: errors that preserve the symmetry. Hypothesis: partial for the symmetry-breaking part of E1, blind for symmetry-preserving rotations in E2, partial for readout under E4. These predictions are frozen only after the Part 1 derivation, as for every other probe.
+Expected blind spot of P5: errors that preserve global bitwise-complement
+symmetry. For the concrete operational statistic and structures derived in Part
+1, P5 is blind for E1, E2, E3, E5, and E5', and partial for E4 and E6. These
+predictions concern the frozen models, not broader error families.
 
 P1b and GVS form facet F3, the comparison with existing diagnostics. Hypotheses: by its definition, W_neg targets the failure of Richardson ZNE when the signal reaches the floor, so it is expected to be blind away from the floor and under readout structures; GVS contains no margins, so by its definition it carries no bias information. Both are derived in Part 1b.
 
@@ -157,6 +160,7 @@ Legend: V visible, B blind in principle, Pt partial or parameter dependent, ? to
 | P4b | B | B | B | V | V | B (pairwise marginals unchanged) | Pt |
 | P1b | ? | ? | ? | B (folding does not amplify readout error) | B | B | ? |
 | GVS | B (no margins) | B | B | B | B | B | B |
+| P5 | B | B | B | Pt | B | B | Pt |
 
 ### 4.4 Failure conditions written in advance
 
@@ -169,9 +173,13 @@ GVS: it contains no margin information, so it cannot respond to bias by construc
 
 ## 5. Endpoints
 
-Primary endpoint (the only one). On the holdout, the proportion of cells where the visibility prediction frozen in Part 1 (visible, partial, blind) agrees with the observed classification, with a Wilson interval.
+Primary endpoint (the only one). On the holdout, the proportion of cells where
+the visibility prediction frozen in Part 1 (visible, partial, blind) agrees with
+the observed classification. Because cells reuse graph instances, uncertainty
+uses the stratified shared-graph cluster bootstrap specified in the protocol,
+not a binomial Wilson interval over cells.
   Observed classification: "visible" means power >= 0.8 at beta/Delta = -1.5 within the frozen probe budget, with false alarms <= 0.10 under the matching E0 control; "blind" means power <= alpha + 0.05; everything else is "partial".
-  Success threshold: Wilson lower bound of the agreement rate >= 0.8.
+  Success threshold: lower endpoint of the prespecified shared-graph cluster-bootstrap interval >= 0.8.
 
 Secondary endpoints.
   False-certification rate and unresolved rate of the bias-aware certificate versus the confidence-interval-only certificate, under the same total budget.
