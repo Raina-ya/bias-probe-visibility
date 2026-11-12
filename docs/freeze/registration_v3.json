@@ -1,0 +1,20 @@
+{
+  "registry": "OSF",
+  "url": "https://osf.io/j67wy/",
+  "timestamp_utc": "2026-11-12T08:46:30Z",
+  "commit": "e8b5300da1c04382ff31428acc4ebafd4550dcff",
+  "files": {
+    "docs/freeze/frozen_protocol_v3.md": "50f68ae3455f544140f0bba114fef8b02feee7677eb676986f0efe0cf41ca513",
+    "docs/theory/06_matrix.csv": "7a8e3a56e6f48d8a29c3643c1c2e24f46bce6a54c674d6b1937dbdcd041d8995",
+    "artifact_registry_v1.yaml": "c45a49dce800f112dca06a06c9733776c352ae17cc2d8bc8d1c916a40d052ee9",
+    "src/hashing.py": "265a1c4f037e871eb09698d899dbe5a7d3c329ffd2c6c1b393f9bc0a1865e68c",
+    "src/protocol_contract.py": "fefe74173178fb3c6cd27016eab7536e5e533505470324b1e02bd0105ab52bea",
+    "src/split_guard.py": "8c3533dd96dbe34cfbb20fdccd4a8343cae0ffbd58c0f79c325d5b0b6095662c",
+    "src/manifest.py": "fe659495ab5e32682d24b9af451d108f563b898990f3d7e8f34735e55bedb21b",
+    "src/strength_map.py": "bd31f0d40f472621d34bddf6169eaa750d35f0bf49b96a34014641859f8b816a",
+    "src/alarm_calibration.py": "eca0cba5ae09c7da80811b4111a92aa333f4244d92bb33c99235845052cd8d86",
+    "src/analysis.py": "15d009ed84125ec6b98223b0292e446729937abe3d2b42142d899b57f4bee9c4",
+    "tests/test_freeze_v3.py": "2cf68bb196e5496e72fd05e5de17b46991d8cdd351877f85cee070f4bf2466ad",
+    "tests/test_protocol_v3.py": "ab9c5e9f2d75945c80009c30a4f9ad845f8e9334a4946d11918bfbaf1ba88274"
+  }
+}
