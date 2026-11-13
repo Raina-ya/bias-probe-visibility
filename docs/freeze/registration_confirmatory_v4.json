@@ -1,0 +1,11 @@
+{
+  "registry": "OSF",
+  "url": "https://osf.io/j597k/",
+  "timestamp_utc": "2026-11-13T06:12:07Z",
+  "commit": "5e2edde0a337f815088618108a0feaa1e5898e45",
+  "development_registration": "OSF r63vn (protocol v4, commit e3908db)",
+  "approved": "2026-11-13, public, no embargo",
+  "files": {
+    "docs/freeze/confirmatory_lock_v4.json": "2fe8be28ebc77c983a8aee0eecc5451f3b4103f0a05a429e09a1967ca0fa918b"
+  }
+}

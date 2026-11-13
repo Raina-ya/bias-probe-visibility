@@ -1,0 +1,69 @@
+Artifact: paper/main_v4_stage1.pdf
+Source: paper/main_v4_stage1.tex
+Bibliography: paper/references.bib (unchanged), style abbrv
+Build date: 2026-11-13 (Asia/Taipei)
+Manuscript status: pre-results draft, Protocol v4
+Repository evidence snapshot: bdfeb5a
+
+Build history
+-------------
+1. First version (tex sha256 28cb9224eb23...b5707): the PDF (sha256 ca74a4d1fc7e...dbbec)
+   was an offline ReportLab preview, not a TeX compilation. It is superseded by build 2.
+2. This version: the source was revised and compiled with a TeX engine.
+
+Revisions in build 2
+--------------------
+- documentclass 9pt -> 10pt (article ignores 9pt; spec requires 10pt).
+- Author line: "Affiliation: TODO" added.
+- Abstract: required sentence "No development or confirmatory holdout result is
+  reported in this manuscript snapshot." added.
+- Eq. (readout scaling): ",qquad" typo -> ",\qquad".
+- "no decision problem" rule: "upper 95th percentile" -> "97.5th bootstrap percentile"
+  (frozen_protocol_v4.md, Section 11.1).
+- Probe table: extra cost, physical target, and predicted-blind structures added
+  (from frozen_protocol_v3.md Section 6.2, frozen_protocol_v4.md Section 6.2, and
+  docs/theory/06_matrix_v4.csv).
+- Error-structure table: frozen strength grid column added (frozen_protocol_v4.md Section 3).
+- New matrix summary table: invariant 23 blind; sensitive 4 visible, 13 partial,
+  2 blind (P1/E6, P3/E6), computed from docs/theory/06_matrix_v4.csv.
+- P1b and GVS described as exploratory, no prediction.
+- Discussion: "Hypotheses and possible explanations" subsection added; limitations add
+  matched-null model dependence, reliance on established statistics, and hardware
+  validation not authorized.
+- Appendix D: fixed-budget Proposition 2 (docs/theory/08_prop2.md).
+- Task 2-2 status: "executed; not yet validated or committed; excluded".
+- Two internal section references made automatic (\ref).
+
+Evidence boundary
+-----------------
+- Included: registered Protocol v4 and v3 records, analytic derivations, split-99
+  software/design checks, the pre-data v3 defect audit, power analysis v5.
+- Excluded: all Task 2-2 development outputs under results/development_v4/ (not opened
+  for this manuscript), all split-20 holdout data, fake-backend and hardware data.
+- Not cited: russo2023 (library status partial) and scavino2026 (status string outside
+  the allowed set).
+
+Build command
+-------------
+latexmk -xelatex -interaction=nonstopmode -halt-on-error main_v4_stage1.tex
+Engine: XeTeX 3.141592653-2.6-0.999995 (TeX Live 2023/Debian); BibTeX 0.99d.
+Environment: Linux cloud workspace (no TeX engine on the Windows workstation).
+Result: exit 0; 0 undefined citations; 0 undefined references; 0 BibTeX warnings;
+0 overfull boxes; 7 pages; PDF producer xdvipdfmx.
+
+Checks
+------
+- Extracted text contains the title, "Affiliation: TODO", the required abstract
+  sentence, all tables, References, and Appendices A-E.
+- Cited keys: bravyi2021 chen2023learnability czarnik2021 endo2018 farhi2014
+  imbens2004 li2017 lipsitch2010 maciejewski2021 temme2017 wallman2016; all present in
+  paper/references.bib and marked verified or verified (previous project) in
+  docs/literature/library.csv.
+- All seven pages visually inspected.
+
+SHA-256 (LF-normalized text; PDF byte hash)
+-------------------------------------------
+paper/main_v4_stage1.tex
+98cefd6cb0cc3fd4730a4f18d1bdc62de647c1899f2c3923052a69d92ab8bb21
+paper/main_v4_stage1.pdf
+45258243d8737a8aab3e1cfe079902ecea674a994961f88d02c755a7dfd778e6

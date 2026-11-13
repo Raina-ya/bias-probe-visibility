@@ -9,6 +9,15 @@ too, so this hook lives in a new root-level ``conftest.py``.  Once the full v4
 development-lock check passes, the two tests are marked xfail(strict=True);
 ``tests/test_registration_state_v4.py`` asserts the post-registration state.
 Logged as implementation error 1 in docs/freeze/implementation_error_log_v4.md.
+
+Two further registered tests assert that the holdout is refused, which holds
+only before the confirmatory registration:
+``tests/test_execution.py::LockTests::test_runner_refuses_holdout`` and
+``tests/test_v4.py::LockV4Tests::test_v4_registration_admits_development_only``.
+Once the full confirmatory-lock check passes, they are marked
+xfail(strict=True); ``tests/test_registration_state_v4.py`` asserts the
+post-confirmatory state.  Logged as implementation error 4 in
+docs/freeze/implementation_error_log_v4_post_lock.md.
 """
 
 from __future__ import annotations
@@ -31,6 +40,22 @@ PRE_REGISTRATION_TESTS_V4 = frozenset(
 )
 
 
+PRE_CONFIRMATORY_TESTS_V4 = frozenset(
+    {
+        "tests/test_execution.py::LockTests::test_runner_refuses_holdout",
+        "tests/test_v4.py::LockV4Tests::test_v4_registration_admits_development_only",
+    }
+)
+
+
+def _confirmatory_v4() -> bool:
+    try:
+        split_guard_v4.require_confirmatory_lock(REPO)
+    except (split_guard_v4.LockError, FileNotFoundError):
+        return False
+    return True
+
+
 def _registered_v4() -> bool:
     try:
         split_guard_v4.require_development_lock(REPO)
@@ -46,6 +71,14 @@ def pytest_collection_modifyitems(config, items):
         strict=True,
         reason="asserts the pre-v4-registration state; superseded by test_registration_state_v4.py",
     )
+    confirmatory = _confirmatory_v4()
+    confirmatory_marker = pytest.mark.xfail(
+        strict=True,
+        reason="asserts the pre-confirmatory state; superseded by test_registration_state_v4.py",
+    )
     for item in items:
-        if item.nodeid.replace("\\", "/") in PRE_REGISTRATION_TESTS_V4:
+        nodeid = item.nodeid.replace("\\", "/")
+        if nodeid in PRE_REGISTRATION_TESTS_V4:
             item.add_marker(marker)
+        elif confirmatory and nodeid in PRE_CONFIRMATORY_TESTS_V4:
+            item.add_marker(confirmatory_marker)
