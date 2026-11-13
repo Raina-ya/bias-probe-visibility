@@ -1,0 +1,16 @@
+{
+ "pilot_units_ok": 327,
+ "pilot_units_failed": 0,
+ "pilot_seconds": 353.8,
+ "full_units": 7000,
+ "projected_seconds_single_process": 5758.3,
+ "projected_days_single_process": 0.067,
+ "cap_days": 14,
+ "within_cap_single_process": true,
+ "conservative_bound_seconds": 83482.2,
+ "conservative_bound_days": 0.966,
+ "within_cap_by_bound": true,
+ "pilot_dir": "pilot-stratified",
+ "distinct_width_depth_cells": 25,
+ "slowest_pilot_unit_seconds": 63.15
+}

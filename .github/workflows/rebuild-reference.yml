@@ -1,0 +1,44 @@
+# Manual clean rebuild of the development reference phase and strength map
+# (exact computation, no shots), compared with the committed files on Linux
+# and Windows.  No tolerance: every difference is reported (spec item 38).
+# The job fails only if a decision changes (row set, tie or flip flag, or a
+# chosen strength-map setting).  Requires the reference CSV and strength map
+# to be committed under results/development_v4/.
+name: rebuild-reference
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rebuild:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - name: Install pinned dependencies
+        run: python -m pip install numpy==2.3.4 scipy==1.16.3 qiskit==2.2.3
+      - name: Record environment
+        run: |
+          python -m pip freeze
+          python -c "import numpy; numpy.show_config()"
+      - name: Rebuild reference and strength map
+        run: |
+          python experiments/development/run_development_v4.py reference --commit ${{ github.sha }} --previous-project-closed --out "${{ runner.temp }}/rebuild"
+          python experiments/development/run_development_v4.py strength-map --commit ${{ github.sha }} --previous-project-closed --out "${{ runner.temp }}/rebuild"
+      - name: Compare with committed files
+        run: python experiments/development/compare_reference_v4.py results/development_v4 "${{ runner.temp }}/rebuild" --report "${{ runner.temp }}/rebuild/compare_report.json"
+      - name: Upload rebuild and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rebuild-reference-${{ matrix.os }}
+          path: ${{ runner.temp }}/rebuild

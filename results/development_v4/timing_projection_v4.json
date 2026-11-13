@@ -1,0 +1,10 @@
+{
+ "pilot_units_ok": 70,
+ "pilot_units_failed": 0,
+ "pilot_seconds": 14.6,
+ "full_units": 7000,
+ "projected_seconds_single_process": 1467.9,
+ "projected_days_single_process": 0.017,
+ "cap_days": 14,
+ "within_cap_single_process": true
+}
