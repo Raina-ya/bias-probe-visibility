@@ -1,0 +1,28 @@
+{
+ "commit": "6fc66370215e6497d4fea4a3082124ecef1385d6",
+ "complete": true,
+ "duplicated": 0,
+ "expected_units": 13300,
+ "extra": 0,
+ "failed_units": 0,
+ "missing": 0,
+ "row_splits": [
+  "holdout"
+ ],
+ "rows": 425600,
+ "shards": {
+  "main/shard_0000_of_0004.jsonl.gz": "0d0c83b13a3196b9bb7bf52beddb0b7fd60d768869b2276b1c285d8909fd5e83",
+  "main/shard_0001_of_0004.jsonl.gz": "9036593f7b8c908eb62ca289285592e50e28e55101661ca6d024b27514629411",
+  "main/shard_0002_of_0004.jsonl.gz": "73228f854024a7174cbce348618e13a9eac7d2c6e8c995e9d126e16052820bc5",
+  "main/shard_0003_of_0004.jsonl.gz": "6b99c311e98742489e69d238bc424f4ae730bf7ec8c2f9a588b504241078eb7c",
+  "nulls/shard_0000_of_0004.jsonl.gz": "07536e2b640debf93e8d3a14bf8844fe0f692aa8bcb3ed44bb21eddf1498d1c2",
+  "nulls/shard_0001_of_0004.jsonl.gz": "f3aee305a72851108014f431ac44cd2047fb52fd729ad259aac0fb295e17b69a",
+  "nulls/shard_0002_of_0004.jsonl.gz": "44b2328a362c9d523e74b4391e0b663f7cf425ffb349d86e24c4b4ee662e9de9",
+  "nulls/shard_0003_of_0004.jsonl.gz": "ce21ba19b011c320aa4158cd23716723c65461efbf8e2e760d0b03c8a0136d4b",
+  "sensitivity/shard_0000_of_0004.jsonl.gz": "935d096d3777d25ea4242b20cfe7f46906a8d9db2f8174ff9d1a592103843fd2",
+  "sensitivity/shard_0001_of_0004.jsonl.gz": "d1562e9f883ed1e94b3b7eceec01a93f6b1e970bcb098a931f791c193b260cf8",
+  "sensitivity/shard_0002_of_0004.jsonl.gz": "aae6f19544c3f26dc0eb7a28e5fb9f2d793482ac335b2c40a62066b57832dc94",
+  "sensitivity/shard_0003_of_0004.jsonl.gz": "0ecf1d4082cb9599d33f00bf2856264e36fdf91c2a59ffead1f5979cc3af8fe3"
+ },
+ "units_recorded": 13300
+}
