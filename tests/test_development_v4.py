@@ -53,6 +53,38 @@ class WorkListTests(unittest.TestCase):
             [u[1:] for u in pilot], [u[1:] for u in full[:: dev.PILOT_STRIDE]]
         )
 
+    def test_first_pilot_defect_is_reproduced(self) -> None:
+        # Implementation error 2: the stride-100 pilot hits one graph only.
+        self.assertEqual(len({u[5] for u in dev.pilot_units(RECORDS, CHOSEN)}), 1)
+
+    def test_stratified_pilot_covers_every_stratum(self) -> None:
+        pilot = dev.pilot_stratified_units(RECORDS, CHOSEN)
+        full = {
+            u[1:] for u in dev.null_units(RECORDS) + dev.main_units(RECORDS, CHOSEN)
+        }
+        self.assertEqual(len(pilot), len(set(pilot)))
+        self.assertTrue(
+            all(u[0] == "pilot-stratified" and u[1:] in full for u in pilot)
+        )
+        structures = ["E0"] + list(cells_v4.STRUCTURES)
+        seen = {(u[1], u[2], dev._width_depth(u[5])) for u in pilot}
+        for probe in dev.PROBES:
+            for structure in structures:
+                cells = {wd for p, s, wd in seen if p == probe and s == structure}
+                self.assertEqual({w for w, _ in cells}, {4, 5, 6, 7, 8})
+                self.assertEqual({d for _, d in cells}, {1, 2, 3, 4, 5})
+                self.assertIn(dev.LARGEST_CELL, cells)
+        self.assertEqual(
+            {dev._width_depth(u[5]) for u in pilot},
+            {(w, d) for w in range(4, 9) for d in range(1, 6)},
+        )
+
+    def test_stratified_pilot_is_deterministic(self) -> None:
+        self.assertEqual(
+            dev.pilot_stratified_units(RECORDS, CHOSEN),
+            dev.pilot_stratified_units(RECORDS, CHOSEN),
+        )
+
     def test_shards_partition_the_work_list(self) -> None:
         units = dev.main_units(RECORDS, CHOSEN)
         parts = [dev.shard(units, k, 7) for k in range(7)]

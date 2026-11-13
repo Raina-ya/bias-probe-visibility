@@ -32,3 +32,38 @@ Entries are appended, never edited. Each entry enters the v4 confirmatory lock
 - **Rule adopted from now on:** every lock or registration test is written
   state-aware from the start. It must check the pre-registration state only
   while no record exists, and the post-registration state once one does.
+
+## 2. Timing pilot sampled one graph only (2026-11-13)
+
+- **Found:** the first Task 2-2 timing pilot (`pilot` phase, commit `847fc2e`,
+  Windows reference workstation) wrote 70 units, and all 70 were graph
+  `development-w4-p1-g0`, the smallest width and depth. Its projection,
+  `results/development_v4/timing_projection_v4.json` (1,467.9 s, 0.017 days),
+  therefore priced every unit at the cheapest graph.
+- **Cause:** the pilot took every 100th unit of the canonical work list, and
+  the list is built from blocks of 50 graphs. Because 100 is a multiple of 50,
+  every pick had graph index 0. This is a sampling-design error in a
+  resource-check script. It changes no probe, threshold, tolerance, split, or
+  analysis, and it used no outcome.
+- **Evidence of size (split 99, not development):** on the Linux sandbox,
+  units cost 0.19–0.74 s on `software_test-w4-p1-g0` and 0.39–16.8 s on
+  `software_test-w8-p5-g0` (the slowest was P3 under E1). The first
+  projection could therefore understate the full run by more than an order of
+  magnitude.
+- **Fix:**
+  - The first pilot shard and its projection are kept unchanged and are not
+    used.
+  - A new `pilot-stratified` phase writes to
+    `results/development_v4/pilot-stratified/`. It times every probe ×
+    structure (E0 and the seven structures) at every width, rotates depth as a
+    Latin square so every depth appears, and adds every probe × structure at
+    the largest cell (w8, p5). This gives 327 units after removing duplicates.
+    The choice is deterministic and uses no outcome.
+  - `project_timing_v4.py` reads the stratified pilot by default and writes
+    `timing_projection_stratified_v4.json`. It adds a conservative bound,
+    which prices each full unit at the slowest pilot unit of its probe. The
+    14-day cap decision uses this bound.
+  - New tests reproduce the defect (stride 100 hits one graph) and check that
+    the stratified pilot covers every width, depth, probe, structure, and the
+    largest cell, and that it is deterministic.
+- **Split 20 has not been instantiated.**
