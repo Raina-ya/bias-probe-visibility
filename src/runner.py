@@ -1,4 +1,4 @@
-"""Command-line runner for Part 2 raw rows (protocol v3).
+"""Command-line runner for Part 2 raw rows (protocol v4; admitted by the v4 lock).
 
 The runner refuses to start unless ``split_guard`` admits the split.  For any
 split other than the software-test namespace (99) it also requires that HEAD
@@ -22,8 +22,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import execution  # noqa: E402
-import manifest  # noqa: E402
-import split_guard  # noqa: E402
+import manifest_v4 as manifest  # noqa: E402
+import split_guard_v4 as split_guard  # noqa: E402
 from hashing import canonical_sha256  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[1]

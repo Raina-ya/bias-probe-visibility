@@ -32,7 +32,7 @@ class Condition:
     structure: str
     setting: str
     gate: GateNoise
-    epsilon: float  # E2 logical RZZ scale error
+    epsilon: float  # E2 epsilon (recorded; applied through GateNoise.over_rotation)
     offset: float  # E0 common-mode offset
     readout_kind: str  # "none", "e4", "e5", "e5p", "e6"
     readout_params: tuple[float, ...]
@@ -47,7 +47,15 @@ def parse_condition(structure: str, setting: str) -> Condition:
             "E1", value, GateNoise(depolarizing=float(value)), 0.0, 0.0, "none", ()
         )
     if structure == "E2":
-        return Condition("E2", value, GateNoise(), float(value), 0.0, "none", ())
+        return Condition(
+            "E2",
+            value,
+            GateNoise(over_rotation=float(value)),
+            float(value),
+            0.0,
+            "none",
+            (),
+        )
     if structure == "E3":
         return Condition("E3", value, GateNoise(zz=float(value)), 0.0, 0.0, "none", ())
     if structure == "E4":

@@ -130,7 +130,6 @@ def target_circuits(
             record.edges,
             candidate,
             transpiler_seed(split, record, index),
-            epsilon=condition.epsilon,
         )
         if candidate["identity_pairs"]:
             circuits.assert_identity_pairs(compiled, record.edges[0], record.depth)
@@ -292,7 +291,11 @@ def run_row(
     cache: SolveCache | None = None,
     commit: str = "",
     protocol_sha256: str = "",
+    population: bool = False,
 ) -> Row:
+    """One raw row.  ``population=True`` replaces multinomial counts by their
+    expected values (floats); it is used only by split-99 semantic tests."""
+
     started = time.perf_counter()
     cache = cache if cache is not None else SolveCache()
     before = len(cache)
@@ -334,7 +337,14 @@ def run_row(
             block_time(block) if block >= 0 else None,
         )
         post = channels.apply_readout(pre, w, readout)
-        counts = _counts(np.random.default_rng(child), post, n, w) if n else {}
+        if population:
+            counts = (
+                {format(k, f"0{w}b"): float(n * q) for k, q in enumerate(post) if q > 0}
+                if n
+                else {}
+            )
+        else:
+            counts = _counts(np.random.default_rng(child), post, n, w) if n else {}
         measured[label].append(counts)
         by_block[label][block] = counts
         ledger.append(
@@ -411,6 +421,13 @@ def run_row(
         )
     elif probe == "P4a":
         row.statistic = probes.p4a_score(pooled["prep0"], pooled["prep1"], w)
+        row.components["assignment"] = row.statistic
+        if structure == "E6":
+            row.components["temporal_contrast"] = probes.p4a_temporal_contrast(
+                [by_block["prep0"][0], by_block["prep1"][0]],
+                [by_block["prep0"][7], by_block["prep1"][7]],
+                w,
+            )
     elif probe == "P4b":
         pair_preps = {}
         for i in range(w):
@@ -421,6 +438,21 @@ def run_row(
                     for b in (0, 1)
                 }
         row.statistic = probes.p4b_score(pair_preps)
+        row.components["t_marg"], row.components["t_corr"] = probes.p4b_components(
+            pair_preps
+        )
+        if structure == "E6":
+            early, late = {}, {}
+            for (i, j), preps in pair_preps.items():
+                early[(i, j)] = {
+                    k: by_block[f"pair{i}{j}_prep{k[0]}{k[1]}"][0] for k in preps
+                }
+                late[(i, j)] = {
+                    k: by_block[f"pair{i}{j}_prep{k[0]}{k[1]}"][7] for k in preps
+                }
+            row.components["temporal_contrast"] = probes.p4b_temporal_contrast(
+                early, late
+            )
     elif probe == "P5":
         halves = None
         if structure == "E6":

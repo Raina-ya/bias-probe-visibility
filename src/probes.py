@@ -96,7 +96,7 @@ def p4a_score(prep0: Counts, prep1: Counts, width: int) -> float:
 
 
 def _pair_counts(counts: Counts, i: int, j: int) -> dict[str, int]:
-    out = {"00": 0, "01": 0, "10": 0, "11": 0}
+    out = {"00": 0.0, "01": 0.0, "10": 0.0, "11": 0.0}
     for z, n in counts.items():
         out[z[i] + z[j]] += n
     return out
@@ -112,6 +112,41 @@ def p4b_score(
         observations = {prep: _pair_counts(c, i, j) for prep, c in preps.items()}
         scores.append(contract.p4b_score(observations))
     return max(scores)
+
+
+def p4a_temporal_contrast(
+    early: Sequence[Counts], late: Sequence[Counts], width: int
+) -> float:
+    """E6 component: max |early - late| one-rate over qubits and both preparations."""
+
+    return max(
+        abs(_one_rate(e, q) - _one_rate(l_, q))
+        for e, l_ in zip(early, late, strict=True)
+        for q in range(width)
+    )
+
+
+def p4b_components(pair_preps) -> tuple[float, float]:
+    """``(T_marg, T_corr)`` maxima over all pairs (protocol v4 component scores)."""
+
+    marg, corr = 0.0, 0.0
+    for (i, j), preps in pair_preps.items():
+        observations = {prep: _pair_counts(c, i, j) for prep, c in preps.items()}
+        m, c = contract.p4b_components(observations)
+        marg, corr = max(marg, m), max(corr, c)
+    return marg, corr
+
+
+def p4b_temporal_contrast(early, late) -> float:
+    """E6 component: max |early - late| one-rate of the prepared pair qubits."""
+
+    worst = 0.0
+    for (i, j), preps in early.items():
+        for prep, counts in preps.items():
+            other = late[(i, j)][prep]
+            for q in (i, j):
+                worst = max(worst, abs(_one_rate(counts, q) - _one_rate(other, q)))
+    return worst
 
 
 def complement_score(counts: Counts) -> float:

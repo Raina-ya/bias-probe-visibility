@@ -15,7 +15,7 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from circuits import HARD, Compiled
+from circuits import COST_RZ, HARD, Compiled
 
 SX = 0.5 * np.array([[1 + 1j, 1 - 1j], [1 - 1j, 1 + 1j]])
 SXDG = SX.conj().T
@@ -42,6 +42,7 @@ def single_qubit_matrix(name: str, params) -> np.ndarray:
 class GateNoise:
     depolarizing: float = 0.0  # E1 p
     zz: float = 0.0  # E3 zeta (radians)
+    over_rotation: float = 0.0  # E2 epsilon on every cost rotation
 
     @property
     def mixed(self) -> bool:
@@ -142,6 +143,9 @@ def probabilities(circuit: Compiled, noise: GateNoise = NO_GATE_NOISE) -> np.nda
                 engine.depolarize(c, t, noise.depolarizing)
             if noise.zz:
                 engine.zz_phase(c, t, noise.zz)
+            continue
+        if name == COST_RZ:
+            engine.single(_rz((1.0 + noise.over_rotation) * params[0]), qubits[0])
             continue
         engine.single(single_qubit_matrix(name, params), qubits[0])
     return engine.probabilities()

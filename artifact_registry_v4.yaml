@@ -1,0 +1,75 @@
+{
+  "version": 4,
+  "artifacts": [
+    {
+      "path": "experiments/audit/p0_unresolved_log.txt",
+      "sha256": "f174ebfd22eb9ae99442d6fc6ca004df69bf9c012a0f21fc566b20b6b50cb1a5",
+      "generator": "experiments/audit/p0_unresolved_audit.py",
+      "output_pattern": "p0_unresolved_log.txt",
+      "status": "pre_data_audit_population_split99"
+    },
+    {
+      "path": "experiments/audit/p4_construction_log.txt",
+      "sha256": "1873f26d78536d8480e9e9963a3e0ca1e04ce49c27cac3f428b1ba3c3b92812a",
+      "generator": "experiments/audit/p4_construction_audit.py",
+      "output_pattern": "p4_construction_log.txt",
+      "status": "pre_data_audit_analytic"
+    },
+    {
+      "path": "experiments/semantic/semantic_tests_v4_first_pass.csv",
+      "sha256": "110aaa1f2e8c0e8da79ffa16fbb641f0bbfbf833d5ccf340328602afedc9f946",
+      "generator": "experiments/semantic/semantic_tests_v4.py",
+      "output_pattern": "semantic_tests_v4*.csv",
+      "status": "semantic_test_first_pass_retained"
+    },
+    {
+      "path": "experiments/semantic/semantic_tests_v4_first_pass_log.txt",
+      "sha256": "2c653dd00fb31e74f9b343713377ed8ff7456c56ae8c6fe4b9ba7f043f69d035",
+      "generator": "experiments/semantic/semantic_tests_v4.py",
+      "output_pattern": "semantic_tests_v4*_log.txt",
+      "status": "semantic_test_first_pass_retained"
+    },
+    {
+      "path": "experiments/semantic/semantic_tests_v4.csv",
+      "sha256": "ae3340f023f77db9e80647ebf39f140c8ab7b38f6a747d39eaeb97463d50fca6",
+      "generator": "experiments/semantic/semantic_tests_v4.py",
+      "output_pattern": "semantic_tests_v4*.csv",
+      "status": "semantic_test_population_split99"
+    },
+    {
+      "path": "experiments/semantic/semantic_tests_v4_log.txt",
+      "sha256": "cf5a33b158c8a0413c90875a682c62b2118066b3f738699dc6a8f41133dff476",
+      "generator": "experiments/semantic/semantic_tests_v4.py",
+      "output_pattern": "semantic_tests_v4*_log.txt",
+      "status": "semantic_test_population_split99"
+    },
+    {
+      "path": "experiments/power/decision_design_inputs_v5.csv",
+      "sha256": "9deea18b81716c7456787c8ec9738d8c041320ecabfc58dea1a0fe0ac7a51125",
+      "generator": "experiments/power/decision_design_inputs_v5.py",
+      "output_pattern": "decision_design_inputs_v5.csv",
+      "status": "design_inputs_population_split99"
+    },
+    {
+      "path": "experiments/power/power_analysis_raw_v5.csv",
+      "sha256": "6eceed85e99d0c6df39859d524c3cd97dc862a1a38159fc518620b369b031d51",
+      "generator": "experiments/power/run_power_analysis_v5.py",
+      "output_pattern": "power_analysis_raw_v5.csv",
+      "status": "current_design_only"
+    },
+    {
+      "path": "experiments/power/power_analysis_summary_v5.csv",
+      "sha256": "75df9d07d2ccf52d6a6cc689d8146b34dbed8d3a9b3cb76e0de53899849fb6c8",
+      "generator": "experiments/power/run_power_analysis_v5.py",
+      "output_pattern": "power_analysis_summary_v5.csv",
+      "status": "current_design_only"
+    },
+    {
+      "path": "experiments/power/run_log_v5.txt",
+      "sha256": "ee5a8e23003dc96324d947cb060329e67062aa1cf1dbace4f01cd300a1156dbc",
+      "generator": "experiments/power/run_power_analysis_v5.py",
+      "output_pattern": "run_log_v5.txt",
+      "status": "current_design_only"
+    }
+  ]
+}

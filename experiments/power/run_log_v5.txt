@@ -1,0 +1,5 @@
+Power analysis v5 (non-circular; split-99 design inputs)
+graphs=100 repeats=32 datasets=200 bootstrap=1000
+python=3.13.18
+platform=Linux-6.18.44-fc-v378-x86_64-with-glibc2.39
+numpy=2.5.3

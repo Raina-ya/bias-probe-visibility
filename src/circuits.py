@@ -9,6 +9,10 @@ used here is listed in ``docs/part2/execution_contract_v3.md``.
 Logical QAOA layer convention: cost layer ``RZZ(gamma)`` on every edge in
 lexicographic order, then mixer ``RX(2*beta)`` on every qubit.  The initial
 state is ``H`` on every qubit.
+
+Protocol v4: the ``RZ`` that implements each cost ``RZZ`` (between its two
+``CX`` gates) is tagged ``rzc``.  E2 over-rotation acts on every ``rzc`` at
+execution time, in target and probe circuits alike (``simulate.py``).
 """
 
 from __future__ import annotations
@@ -23,6 +27,24 @@ Op = tuple[str, tuple[int, ...], tuple[float, ...]]
 
 BASIS = ("rz", "sx", "x", "cx")
 HARD = "cx"
+COST_RZ = "rzc"
+
+
+def tag_cost_rotations(ops):
+    """Rename the RZ in every consecutive ``CX(c,t) RZ(t) CX(c,t)`` to ``rzc``."""
+
+    out = list(ops)
+    for k in range(1, len(out) - 1):
+        a, b, c = out[k - 1], out[k], out[k + 1]
+        if (
+            a[0] == HARD
+            and c[0] == HARD
+            and a[1] == c[1]
+            and b[0] == "rz"
+            and b[1] == (a[1][1],)
+        ):
+            out[k] = (COST_RZ, b[1], b[2])
+    return out
 
 
 @dataclass(frozen=True)
@@ -40,14 +62,14 @@ class Compiled:
         return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
-def _logical(width, edges, gammas, betas, epsilon=0.0):
+def _logical(width, edges, gammas, betas):
     from qiskit import QuantumCircuit
 
     qc = QuantumCircuit(width)
     qc.h(range(width))
     for layer, (gamma, beta) in enumerate(zip(gammas, betas, strict=True)):
         for i, j in edges:
-            qc.rzz((1.0 + epsilon) * gamma, i, j)
+            qc.rzz(gamma, i, j)
         qc.barrier(label=f"cost{layer}")
         for q in range(width):
             qc.rx(2.0 * beta, q)
@@ -74,13 +96,12 @@ def compile_target(
     edges: Sequence[tuple[int, int]],
     candidate: dict,
     seed_transpiler: int,
-    epsilon: float = 0.0,
 ) -> Compiled:
-    """Compile one candidate.  ``epsilon`` implements E2 at the logical RZZ level."""
+    """Compile one candidate and tag its cost rotations."""
 
     from qiskit import transpile
 
-    logical = _logical(width, edges, candidate["gamma"], candidate["beta"], epsilon)
+    logical = _logical(width, edges, candidate["gamma"], candidate["beta"])
     compiled = transpile(
         logical,
         basis_gates=list(BASIS),
@@ -89,7 +110,10 @@ def compile_target(
         optimization_level=0,
         seed_transpiler=seed_transpiler,
     )
-    ops = _ops_from_qiskit(compiled)
+    ops = tag_cost_rotations(_ops_from_qiskit(compiled))
+    expected = len(edges) * len(candidate["gamma"])
+    if sum(op[0] == COST_RZ for op in ops) != expected:
+        raise AssertionError("every cost RZZ must compile to CX-RZ-CX")
     if candidate.get("identity_pairs"):
         ops = insert_identity_pairs(ops, edges[0])
     barriers = sum(op[0] == "barrier" for op in ops)
@@ -135,8 +159,8 @@ def assert_identity_pairs(
 
 def _inverse(op: Op) -> list[Op]:
     name, qubits, params = op
-    if name == "rz":
-        return [("rz", qubits, (-params[0],))]
+    if name in ("rz", COST_RZ):
+        return [(name, qubits, (-params[0],))]
     if name in ("x", "cx"):
         return [op]
     if name == "sx":
@@ -172,7 +196,9 @@ def nearest_clifford_angle(theta: float) -> float:
 
 def clifford_twin(compiled: Compiled) -> Compiled:
     ops = [
-        ("rz", op[1], (nearest_clifford_angle(op[2][0]),)) if op[0] == "rz" else op
+        (op[0], op[1], (nearest_clifford_angle(op[2][0]),))
+        if op[0] in ("rz", COST_RZ)
+        else op
         for op in compiled.ops
     ]
     return Compiled("twin", compiled.width, tuple(ops))

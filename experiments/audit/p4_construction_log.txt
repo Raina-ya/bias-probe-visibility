@@ -1,0 +1,11 @@
+width cell log10_P(no_alarm)_upper_bound
+4 P4a/E5 (pair flips 0.10) -149.9
+4 P4a/E5' (triple flips 0.25) -613.9
+4 P4b/E5' (triple flips 0.25) -611.7
+4 P4a/E6 (rates >= 0.04/0.03) -101.4
+4 P4b/E6 (rates >= 0.04/0.03) -86.4
+8 P4a/E5 (pair flips 0.10) -149.9
+8 P4a/E5' (triple flips 0.25) -613.9
+8 P4b/E5' (triple flips 0.25) -587.7
+8 P4a/E6 (rates >= 0.04/0.03) -202.8
+8 P4b/E6 (rates >= 0.04/0.03) -165.9

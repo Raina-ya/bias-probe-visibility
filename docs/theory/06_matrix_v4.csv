@@ -1,0 +1,43 @@
+probe,structure,component,matched_null,prediction,stratum,basis
+P1,E1,statistic,p=0,visible,sensitive,Folding triples CX count; depolarizing attenuation differs between candidates (identity pairs) and between scales.
+P1,E2,statistic,epsilon=0,blind,invariant,Over-rotation acts on every cost rotation including inverses; G G^dag G = G exactly so g3 = g1.
+P1,E3,statistic,zeta=0,partial,sensitive,ZZ insertion follows every physical CX including folded inverses; accumulation changes with scale but may cancel.
+P1,E4,statistic,clean,blind,invariant,Readout acts after logically equivalent folding; both scales scale by lambda^2.
+P1,E5,statistic,tau=0,blind,invariant,As E4; tau changes readout only.
+P1,E5',statistic,tau=0,blind,invariant,As E4; tau leaves pair marginals unchanged.
+P1,E6,statistic,delta=0,blind,sensitive,The schedule puts the candidates' shots in different blocks so the delta(t)^2 assignment term does not cancel; population effect about 2.5e-4 is far below sampling noise.
+P2,E1,statistic,p=0,partial,sensitive,Twin keeps every CX so depolarizing moves the twin gap; transfer to the target is not guaranteed.
+P2,E2,statistic,epsilon=0,partial,sensitive,Over-rotation of the twin's Clifford cost rotations moves the twin gap; zero-angle rotations are unaffected.
+P2,E3,statistic,zeta=0,partial,sensitive,ZZ after every twin CX moves the twin gap.
+P2,E4,statistic,clean,partial,sensitive,Twin outputs need not be flip symmetric so readout moves the twin gap by more than lambda^2 scaling.
+P2,E5,statistic,tau=0,partial,sensitive,tau changes the first-edge pair correlation that enters the twin gap when the twin populates that edge.
+P2,E5',statistic,tau=0,blind,invariant,The cut score depends only on pair marginals which tau preserves.
+P2,E6,statistic,delta=0,partial,sensitive,Twin outputs need not be flip symmetric; the mean assignment shift delta/2 moves the twin gap.
+P3,E1,statistic,p=0,blind,invariant,Depolarizing is Pauli covariant so framed and plain noisy circuits are identical.
+P3,E2,statistic,epsilon=0,blind,invariant,X frames act only around each CX (P CX P' = CX); the non-Clifford cost rotation between the two CX gates is not twirled; randomized compiling tailors hard-gate errors only.
+P3,E3,statistic,zeta=0,visible,sensitive,X frames reverse ZZ-error signs; balanced frames change the coherent accumulation.
+P3,E4,statistic,clean,blind,invariant,Framed and plain circuits have identical output states; readout acts last.
+P3,E5,statistic,tau=0,blind,invariant,As E4.
+P3,E5',statistic,tau=0,blind,invariant,As E4.
+P3,E6,statistic,delta=0,blind,sensitive,As P1/E6: block-dependent delta(t)^2 term; population effect about 2.5e-4.
+P4a,E1,assignment,p=0,blind,invariant,Preparations contain no hard gate; statistic is identically 0.
+P4a,E2,assignment,epsilon=0,blind,invariant,Preparations contain no cost rotation; statistic is identically 0.
+P4a,E3,assignment,zeta=0,blind,invariant,Preparations contain no hard gate; statistic is identically 0.
+P4a,E4,assignment,clean,visible,sensitive,Assignment deviation equals the readout rates (>=0.01) against an exact-zero null.
+P4a,E5,assignment,tau=0,blind,invariant,tau preserves every one-qubit marginal.
+P4a,E5',assignment,tau=0,blind,invariant,tau preserves every one-qubit marginal.
+P4a,E6,temporal_contrast,delta=0,partial,sensitive,Early-late rate contrast is about 0.875*|delta|; budget limited at about 410 shots per preparation and block.
+P4b,E1,t_marg,p=0,blind,invariant,Preparations contain no hard gate; statistic is identically 0.
+P4b,E2,t_marg,epsilon=0,blind,invariant,Preparations contain no cost rotation; statistic is identically 0.
+P4b,E3,t_marg,zeta=0,blind,invariant,Preparations contain no hard gate; statistic is identically 0.
+P4b,E4,t_marg,clean,visible,sensitive,Marginal assignment deviation equals the readout rates against an exact-zero null.
+P4b,E5,t_corr,tau=0,partial,sensitive,Pair TV deviation is about 2|tau| = 0.02 with 14-68 shots per pair preparation; budget limited.
+P4b,E5',t_corr,tau=0,blind,invariant,tau preserves every pair marginal.
+P4b,E6,temporal_contrast,delta=0,partial,sensitive,Early-late contrast of pair one-rates; budget limited.
+P5,E1,statistic,p=0,blind,invariant,Depolarizing commutes with the global flip; outputs stay flip symmetric.
+P5,E2,statistic,epsilon=0,blind,invariant,Diagonal over-rotation commutes with the global flip.
+P5,E3,statistic,zeta=0,partial,sensitive,ZZ inserted between the two CX gates of a cost RZZ acts as a single-qubit Z rotation in the logical frame and breaks global-flip symmetry; budget limited.
+P5,E4,statistic,clean,partial,sensitive,Asymmetric assignment breaks flip symmetry; size depends on asymmetry and width.
+P5,E5,statistic,tau=0,blind,invariant,Symmetric correlated flips commute with complement.
+P5,E5',statistic,tau=0,blind,invariant,Symmetric correlated flips commute with complement.
+P5,E6,statistic,delta=0,partial,sensitive,Half-score difference sees the change of asymmetry over time; budget limited.

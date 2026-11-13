@@ -15,14 +15,15 @@ QEM is unreliable. This project asks whether that unreliability can be detected 
 
 ## Status
 
-**Part 1 (analytic) is complete; nothing has been preregistered and there are no simulation
-results.** The derivations are in [docs/theory/](docs/theory/). The pre-development review
-([docs/freeze/freeze_review_v2.md](docs/freeze/freeze_review_v2.md)) showed that protocol v2's
-primary endpoint could not succeed. Protocol v3
-([docs/freeze/frozen_protocol_v3.md](docs/freeze/frozen_protocol_v3.md)) is the current freeze
-candidate. It must be committed and registered on OSF or AsPredicted
-([docs/freeze/registration_draft_v3.md](docs/freeze/registration_draft_v3.md)) before any noisy
-simulation is run.
+**No simulation results exist; nothing has been run on development or holdout data.**
+Protocol v3 was registered on OSF (`j67wy`). A pre-data audit
+([docs/freeze/pre_data_defect_audit_v3.md](docs/freeze/pre_data_defect_audit_v3.md)) then found
+definition conflicts that made its primary endpoint uninterpretable. Protocol v4
+([docs/freeze/frozen_protocol_v4.md](docs/freeze/frozen_protocol_v4.md)) repairs the design: a
+decision-level primary endpoint, matched nulls, component-level P4 cells, and a 42-cell
+stratified matrix. It is the current freeze candidate and must be committed and registered,
+with its complete execution code, before any noisy simulation. v3 stays registered and
+unchanged as the record.
 
 - Plan: [docs/project_plan_v0.md](docs/project_plan_v0.md) (in Chinese)
 - Literature review and research anchors: [docs/literature_review.md](docs/literature_review.md)

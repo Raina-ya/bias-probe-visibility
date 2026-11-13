@@ -205,11 +205,11 @@ class LockTests(unittest.TestCase):
             runner.preflight("holdout", "anything", True)
 
     def test_runner_refuses_development_without_owner_confirmation(self) -> None:
-        with self.assertRaises(runner.RunRefused):
+        with self.assertRaises((runner.RunRefused, split_guard.LockError)):
             runner.preflight("development", "anything", False)
 
     def test_runner_refuses_development_at_wrong_commit(self) -> None:
-        with self.assertRaises(runner.RunRefused):
+        with self.assertRaises((runner.RunRefused, split_guard.LockError)):
             runner.preflight("development", "0" * 40, True)
 
     def test_runner_refuses_development_and_holdout_without_registration(self) -> None:
@@ -270,7 +270,8 @@ class CircuitCorrectnessTests(unittest.TestCase):
     def test_compiled_targets_use_only_basis_and_keep_identity_pairs(self) -> None:
         for compiled in self.targets:
             self.assertTrue(
-                {op[0] for op in compiled.ops} <= set(circuits.BASIS) | {"barrier"}
+                {op[0] for op in compiled.ops}
+                <= set(circuits.BASIS) | {"barrier", circuits.COST_RZ}
             )
         circuits.assert_identity_pairs(
             self.targets[1], self.record.edges[0], self.record.depth
@@ -305,7 +306,7 @@ class CircuitCorrectnessTests(unittest.TestCase):
             )
         twin = circuits.clifford_twin(self.targets[0])
         for op in twin.ops:
-            if op[0] == "rz":
+            if op[0] in ("rz", circuits.COST_RZ):
                 self.assertAlmostEqual((op[2][0] / (math.pi / 2)) % 1, 0.0, places=12)
 
     def test_frame_rows_are_strength_two_balanced(self) -> None:
