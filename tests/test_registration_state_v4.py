@@ -48,11 +48,16 @@ class RegistrationStateV4Tests(unittest.TestCase):
                 hashing.canonical_sha256(REPO / relative), digest, relative
             )
 
-    def test_development_admitted_and_confirmatory_splits_refused(self) -> None:
+    def test_development_admitted_and_confirmatory_splits_state_aware(self) -> None:
+        # Implementation error 3: confirmatory splits are refused only until the
+        # confirmatory registration record exists.
         split_guard_v4.require_split(REPO, "development")
-        for split in ("holdout", "prop1_pilot", "prop1_scoring"):
-            with self.assertRaises(split_guard_v4.LockError):
-                split_guard_v4.require_split(REPO, split)
+        if not (REPO / split_guard_v4.CONFIRMATORY_REGISTRATION).exists():
+            for split in ("holdout", "prop1_pilot", "prop1_scoring"):
+                with self.assertRaises(split_guard_v4.LockError):
+                    split_guard_v4.require_split(REPO, split)
+        else:
+            split_guard_v4.require_confirmatory_lock(REPO)
 
     def test_runner_still_requires_previous_project_closure_and_clean_commit(
         self,
@@ -62,9 +67,23 @@ class RegistrationStateV4Tests(unittest.TestCase):
         with self.assertRaises(runner.RunRefused):
             runner.preflight("development", "0" * 40, True)
 
-    def test_no_v4_confirmatory_lock_yet(self) -> None:
-        self.assertFalse((REPO / split_guard_v4.CONFIRMATORY_LOCK).exists())
-        self.assertFalse((REPO / split_guard_v4.CONFIRMATORY_REGISTRATION).exists())
+    def test_confirmatory_lock_state(self) -> None:
+        # State-aware (implementation error 3): before the lock exists, no
+        # confirmatory registration may exist either; once it exists, it must
+        # record split-20 non-instantiation and every hashed product unchanged.
+        lock_path = REPO / split_guard_v4.CONFIRMATORY_LOCK
+        registration = REPO / split_guard_v4.CONFIRMATORY_REGISTRATION
+        if not lock_path.exists():
+            self.assertFalse(registration.exists())
+            return
+        lock = json.loads(lock_path.read_text(encoding="utf-8"))
+        self.assertTrue(lock["split_20_evidence"]["split_20_never_instantiated"])
+        for item in lock["products"].values():
+            self.assertEqual(
+                hashing.canonical_sha256(REPO / item["path"]),
+                item["sha256"],
+                item["path"],
+            )
 
     def test_v3_record_unchanged(self) -> None:
         split_guard.require_development_lock(REPO)

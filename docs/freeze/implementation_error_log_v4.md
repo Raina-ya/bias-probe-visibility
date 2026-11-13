@@ -67,3 +67,24 @@ Entries are appended, never edited. Each entry enters the v4 confirmatory lock
     the stratified pilot covers every width, depth, probe, structure, and the
     largest cell, and that it is deterministic.
 - **Split 20 has not been instantiated.**
+
+## 3. Registration-state test not state-aware for the confirmatory lock (2026-11-13)
+
+- **Found:** while writing the Task 2-3 lock builder, before any confirmatory
+  lock existed. `tests/test_registration_state_v4.py` asserted
+  `test_no_v4_confirmatory_lock_yet` and that holdout is always refused. Both
+  would fail by construction once `confirmatory_lock_v4.json` and, later,
+  `registration_confirmatory_v4.json` are written.
+- **Cause:** the rule adopted in entry 1 (write lock tests state-aware from the
+  start) was not applied to this file's confirmatory checks. Test-design
+  error; no protocol, matrix, probe, threshold, or analysis change.
+- **Fix:** the file is not registered, so it is edited directly.
+  - Holdout and Proposition-1 splits must be refused while no confirmatory
+    registration exists, and the full confirmatory lock check must pass once
+    it does.
+  - Before the lock exists, no confirmatory registration may exist. Once it
+    exists, the lock must record split-20 non-instantiation, and every hashed
+    product must be unchanged.
+- **Before/after:** no test had failed yet; the suite passes before and after
+  (146 passed, 5 xfailed on the Linux workspace with the new Task 2-3 tests).
+- **Split 20 has not been instantiated.**
