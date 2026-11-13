@@ -48,6 +48,9 @@ PRE_CONFIRMATORY_TESTS_V4 = frozenset(
 )
 
 
+RUNNER_HOLDOUT_TEST = "tests/test_execution.py::LockTests::test_runner_refuses_holdout"
+
+
 def _confirmatory_v4() -> bool:
     try:
         split_guard_v4.require_confirmatory_lock(REPO)
@@ -72,6 +75,7 @@ def pytest_collection_modifyitems(config, items):
         reason="asserts the pre-v4-registration state; superseded by test_registration_state_v4.py",
     )
     confirmatory = _confirmatory_v4()
+    holdout_done = split_guard_v4.marker_path(REPO, "holdout").exists()
     confirmatory_marker = pytest.mark.xfail(
         strict=True,
         reason="asserts the pre-confirmatory state; superseded by test_registration_state_v4.py",
@@ -81,4 +85,10 @@ def pytest_collection_modifyitems(config, items):
         if nodeid in PRE_REGISTRATION_TESTS_V4:
             item.add_marker(marker)
         elif confirmatory and nodeid in PRE_CONFIRMATORY_TESTS_V4:
+            # After the single holdout run, the split guard refuses the
+            # holdout again (marker present), so the runner test passes once
+            # more and must not be marked (post-lock entry 5).  The copied-repo
+            # test excludes results/ and therefore still sees an open holdout.
+            if holdout_done and nodeid == RUNNER_HOLDOUT_TEST:
+                continue
             item.add_marker(confirmatory_marker)

@@ -26,3 +26,24 @@ analysis rule.
 - **Before/after:** with the record present, 144 passed, 7 xfailed; without
   it, 146 passed, 5 xfailed (Linux workspace).
 - **Split 20 has not been instantiated.**
+
+## 5. Test states after the single holdout run (2026-11-13, before split 20)
+
+- **Found:** while writing the Task 3-1 holdout driver, before split 20 was
+  instantiated. After the run writes `results/run_markers_v4/holdout.success`,
+  the split guard refuses the holdout again. Then
+  `tests/test_execution.py::LockTests::test_runner_refuses_holdout`, which
+  entry 4 marks xfail(strict=True), would pass, and strict xfail would report
+  an error. Two new tests in `tests/test_holdout_v4.py` assumed the marker was
+  absent.
+- **Cause:** test-design error of the same class as entries 1, 3, and 4: tests
+  not written for every registration state. No protocol, matrix, probe,
+  threshold, or analysis change.
+- **Fix:** the root `conftest.py` stops marking that runner test once the
+  marker exists. The copied-repository test excludes `results/`, so it still
+  sees an open holdout and stays xfail. The two new tests branch on the marker.
+- **Before/after:** before the run, 160 passed and 7 xfailed on the Linux
+  workspace. The post-run branches are not exercised before the run, because
+  exercising them would build the split-20 manifest; they are checked by the
+  first test run after `finalize`, and that result is reported.
+- **Split 20 has not been instantiated.**

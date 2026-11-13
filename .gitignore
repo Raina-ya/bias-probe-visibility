@@ -37,3 +37,6 @@ experiments/power/run_log_v3.txt
 # Development raw shards (many GB). Their SHA-256 hashes are recorded in
 # results/development_v4/run_log_v4.jsonl, which is committed.
 results/development_v4/**/*.jsonl.gz
+
+# Holdout raw shards (hashes are recorded in the run log and the marker)
+results/holdout_v4/**/*.jsonl.gz
