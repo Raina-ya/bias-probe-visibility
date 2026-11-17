@@ -1,0 +1,12 @@
+{
+  "registry": "OSF",
+  "url": "https://osf.io/abuct/",
+  "timestamp_utc": "2026-11-17T03:19:45Z",
+  "commit": "1e8396f9e2a0e04f55ae9d0b27c1a0b92d4f929d",
+  "approved": "2026-11-17, public, no embargo",
+  "note": "Registered files are listed by hash in the OSF summary; the attachment upload did not complete, so OSF holds no file copies.",
+  "files": {
+    "results/prop1/predictions.csv": "2a6007c7b08fe38fe1a3067eaee083dd040d508a46678250270586ce31e74a12",
+    "docs/part3/prop1_plan_v4.md": "3639d8b40b0930098f133209b58618af5daca8e1a10464483e3739b8dff749be"
+  }
+}
