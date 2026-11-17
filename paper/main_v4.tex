@@ -1,0 +1,706 @@
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage[margin=0.67in,columnsep=0.22in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,tabularx,array,multirow}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{graphicx}
+\input{numbers_v4}
+
+\definecolor{linkblue}{RGB}{28,78,121}
+\hypersetup{colorlinks=true,allcolors=linkblue,pdfauthor={Raina-ya},
+  pdftitle={Runtime Visibility Limits of Bias Probes for Quantum Error-Mitigated Selection}}
+\setlist{nosep,leftmargin=*}
+\setlength{\parindent}{0.8em}
+\setlength{\parskip}{0pt}
+\setlength{\tabcolsep}{3.5pt}
+\renewcommand{\arraystretch}{1.08}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prb}{\mathbb{P}}
+\newcommand{\ind}{\mathbb{1}}
+\newcommand{\code}[1]{\texttt{#1}}
+
+\title{\textbf{Runtime Visibility Limits of Bias Probes for\\
+Quantum Error-Mitigated Selection}\vspace{0.35em}\\
+\large A Preregistered Fixed-Budget Study}
+\author{Raina-ya}
+\date{17 November 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Confidence intervals quantify sampling uncertainty but do not bound
+differential systematic bias, so a quantum decision can be reported with high
+confidence while selecting the wrong candidate. We ask when runtime bias probes
+can detect a bias large enough to reverse a QAOA--MaxCut top-1 decision under a
+fixed budget of 16,384 shots per decision. Six probes were evaluated against
+seven gate and readout error structures (42 cells) in a protocol whose
+predictions, thresholds, and endpoints were registered before a single
+100-graph holdout was run once in noisy simulation. Reserving 10\% of the
+shots for a structure-matched probe and abstaining on alarm lowered the pooled
+false-certification rate by $\numdFC$ (95\% interval $[\numdFClo,\numdFChi]$),
+the registered ``improvement'' outcome, but at a pooled coverage loss of
+$\numCovLoss$, and the gain came from two coherent gate structures in
+$\numFCGraphs$ graphs. A registered test of when zero-noise extrapolation beats raw
+estimation predicted raw for every graph and scored $\numPoneHits/100$ hits,
+with ties counted as misses. Probe visibility is therefore mechanism-specific
+and expensive: a probe helps a decision only where the error both reverses
+decisions and leaves a signature the probe can see within its shot share.
+\end{abstract}
+
+\section{Introduction}
+
+
+Quantum error mitigation (QEM) trades additional circuits, shots, or model
+assumptions for reduced estimator error, without implementing full fault
+tolerance. Canonical examples include zero-noise extrapolation and related
+near-term mitigation methods\cite{temme2017,li2017,endo2018}. Their performance
+is commonly summarized by estimator bias, variance, or mean-squared error.
+Selection tasks impose a different requirement: only the sign of a contrast
+between candidates determines the action. Improved average accuracy need not
+imply a more reliable decision, particularly when the two candidates acquire
+different systematic biases.
+
+Let the ideal candidate values be $\mu_A$ and $\mu_B$, with ideal gap
+$g=\mu_A-\mu_B$ and margin $\Delta=|g|$. Under an error process, let the
+population gap be $g_{\mathrm n}=g+b_A-b_B$. The decision-relevant bias is
+therefore
+\begin{equation}
+  \beta=(b_A-b_B)\operatorname{sign}(g).
+  \label{eq:beta}
+\end{equation}
+The ideal decision is reversed whenever $\Delta+\beta<0$. A narrow interval
+around $g_{\mathrm n}$ can exclude zero and still certify the wrong sign,
+because the interval controls finite-shot variation around a biased center.
+
+This study asks whether runtime probes can reveal such harmful differential
+bias under a fixed shot budget. The question is deliberately narrower than
+general device characterization. A useful probe must satisfy three conditions:
+it must respond to the harmful direction, retain adequate finite-shot power,
+and intercept enough wrong certifications to compensate for the target shots
+it consumes. A probe that fails the first condition is blind in principle; a
+probe that fails the second is visible only at the population level; and a
+probe that fails the third can be diagnostically informative but harmful to
+the deployed decision rule.
+
+The framework draws on partial identification, where observations may define a
+set rather than a point\cite{imbens2004}; negative controls, whose validity
+requires a shared bias mechanism\cite{lipsitch2010}; and known learnability
+limits for quantum noise\cite{chen2023learnability}. It also connects to
+established gate, readout, and randomized-compiling tools
+\cite{bravyi2021,maciejewski2021,wallman2016,czarnik2021}. The novelty claim is
+not that any individual probe or concentration bound is new. It is the
+preregistered joint test of analytic visibility, finite budget, and
+decision-level false certification across a common QAOA selection task.
+
+All evidence is noisy simulation. No hardware experiment was run: a
+go/no-go review before the end of the study returned no-go
+(Section~\ref{sec:hw}). The synthetic three-body readout structure has no
+asserted hardware provenance. The contribution is therefore a precise,
+falsifiable map of where runtime probes can and cannot certify a decision under
+one budget, together with a record of how the registered predictions fared.
+
+\section{Methodology}
+
+\subsection{Decision, identification, and visibility}
+
+For QAOA--MaxCut\cite{farhi2014}, a bit string $z$ on graph $G=(V,E)$ receives
+the normalized score
+\begin{equation}
+  s_G(z)=\frac{1}{|E|}\sum_{(i,j)\in E}\ind\{z_i\neq z_j\}\in[0,1].
+\end{equation}
+Each graph has two frozen candidate parameter vectors. Their expected scores
+define $g$; the sign of an observed sample gap defines the selected candidate.
+
+Let $D$ denote all target and probe observations and $\mathcal M(D)$ the
+admissible error mechanisms compatible with them. A generic identification
+region for the ideal gap is
+\begin{equation}
+  \mathcal I_g(D)=\{g(M):M\in\mathcal M(D)\}.
+  \label{eq:idregion}
+\end{equation}
+If the region contains both positive and non-positive values, the decision is
+not sign-identified. This is a population concept, distinct from a confidence
+interval for shot noise. The project uses it to state blindness, not to claim
+that all 42 cells require explicit optimization of Eq.~\eqref{eq:idregion}.
+
+For each probe--structure cell, Protocol v4 freezes a component statistic and
+a matched null. A cell is \emph{invariant} if the population statistic is
+identical under the structure and its matched null; no threshold can then
+recover mechanism-specific power. A \emph{sensitive} cell has a nonzero
+population contrast, but may remain underpowered at the frozen budget. The
+visible/partial/blind label combines this analytic relation with the frozen
+power and false-alarm rules. Invariant and sensitive cells are reported
+separately so that construction-driven agreements cannot mask finite-budget
+failures.
+
+\subsection{Probes}
+
+Table~\ref{tab:probes} summarizes the six primary probes. P0, the target-only
+confidence-interval comparator, is intentionally excluded from the visibility
+matrix because an unresolved target interval is not a bias alarm. Two further
+statistics are recorded but are exploratory and carry no prediction: P1b, the
+negative quasi-probability weight of the scale-1/3 Richardson distribution
+built from P1 counts, and GVS, a covariance-survival ratio computed from target
+counts. Both reuse existing counts at no extra shot cost. Positive-cost
+probes receive $n_P=1{,}638$ shots and the targets receive $n_T=14{,}746$;
+zero-extra-shot P5 retains all $N=16{,}384$ target shots.
+
+\begin{table*}[t]
+\centering
+\caption{Each probe targets one projection of the error process, and the
+preregistered matrix predicts it to be blind to most structures; no probe is
+treated as an omnibus detector. Positive-cost probes take $n_P=1{,}638$ of the
+$N=16{,}384$ shots; P5 reuses target counts. The last column lists the
+structures whose cells are predicted blind (Table~\ref{tab:matrix}).}
+\label{tab:probes}
+\begin{tabularx}{\textwidth}{@{}lXlXl@{}}
+\toprule
+Probe & Frozen statistic & Extra cost & Physical target & Predicted blind under \\
+\midrule
+P1 & $|(g_3-g_1)/2|$ from local unitary folding at scales 1 and 3 & 2 circuits, $n_P$ & Noise that scales with gate count & E2, E4, E5, E5$'$, E6 \\
+P2 & $|g_{\rm twin,obs}-g_{\rm twin,ideal}|$ for a deterministic nearest-Clifford twin & 2 circuits, $n_P$ & Gate bias transferable to the twin & E5$'$ \\
+P3 & $|g_{\rm plain}-\overline{g}_{\rm frame}|$ over 16 Pauli-frame versions per candidate & 32 circuits, $n_P$ & Coherent error around two-qubit gates & E1, E2, E4, E5, E5$'$, E6 \\
+P4a & Single-qubit assignment deviation from all-zero/all-one preparations; temporal contrast for E6 & 2 circuits, $n_P$ & Readout marginals and drift & E1, E2, E3, E5, E5$'$ \\
+P4b & One frozen component per cell: marginal, pair-correlation, or temporal contrast from pair preparations & $4\binom{w}{2}$ circuits, $n_P$ & Pairwise readout correlation & E1, E2, E3, E5$'$ \\
+P5 & Bit-complement symmetry distance of target counts & none & Flip-symmetry-breaking error & E1, E2, E5, E5$'$ \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+Within each width--depth stratum and cell component, development matched-null
+scores $T_{(1)}\le\cdots\le T_{(n)}$ determine
+\begin{equation}
+  \tau=T_{\min\{n,\lceil(n+1)(1-\alpha)\rceil\}},\qquad \alpha=0.05,
+\end{equation}
+and the alarm is strict: $T>\tau$. Decision endpoints instead calibrate alarms
+against clean E0, reflecting deployment without knowledge of the active error
+structure. This separation prevents a structure-specific null from leaking
+oracle information into the operational rule.
+
+\subsection{Fixed-budget decision rules}\label{sec:rules}
+
+R0 is the CI-only comparator. It certifies when the target gap interval excludes
+zero. R1 allocates 10\% of the budget to the structure-designated probe and
+certifies only when the target interval excludes zero and the probe does not
+alarm. Let $W_f$ be the event that the reduced-shot target decision is wrong
+and $A_f$ the alarm event. Define
+\begin{equation}
+  q_f=\Prb(W_f),\quad d_f=\Prb(A_f\cap W_f),\quad R_f=q_f-d_f.
+\end{equation}
+Against an all-target error probability $q_0$, the probe lowers wrong-decision
+risk if and only if
+\begin{equation}
+  d_f>q_f-q_0.
+  \label{eq:worth}
+\end{equation}
+The left side is useful interception; the right side is the error cost of
+removing target shots. Equation~\eqref{eq:worth} is exact for the abstaining
+policy and requires no independence assumption. Because abstention can
+mechanically reduce recorded errors, the study reports false certification and
+coverage separately rather than selecting a post hoc scalar loss.
+
+\section{Experiment Setup}
+
+\subsection{Graphs, candidates, and error structures}
+
+The confirmatory holdout contains 100 independently generated graphs, four in
+each width--depth stratum for widths 4--8 and depths 1--5. Graph families are
+34 Erd\H{o}s--R\'enyi, 33 Watts--Strogatz, and 33 Barab\'asi--Albert. Each graph
+has two frozen QAOA candidates and 32 scoring repeats per structure, probe, and
+parameter condition. Candidates are compiled to \code{rz,sx,x,cx} with identity
+layout, no routing, and optimization level zero. One candidate receives a
+logically cancelling CX--CX pair after each cost layer, creating a frozen gate
+count contrast without changing its ideal unitary.
+
+Table~\ref{tab:errors} lists the seven non-null structures. E5 and E5$'$ retain
+their independent marginal flips in the matched null; E6 retains its baseline
+assignment rates. These matched nulls repair a v3 defect in which probes could
+alarm on the baseline construction rather than on the tested correlation or
+drift component.
+
+\begin{table*}[t]
+\centering
+\caption{Each non-null structure is paired with a matched null that keeps its
+baseline features and sets only the tested component to zero, so a probe
+cannot score visibility by reacting to the baseline. E5$'$ is a synthetic
+stress test, not a hardware-derived model.}
+\label{tab:errors}
+\begin{tabularx}{\textwidth}{@{}lXXl@{}}
+\toprule
+Code & Physical interpretation & Frozen strength grid & Matched null \\
+\midrule
+E1 & Two-qubit depolarization after every hard CX & $p\in\{0.0025,0.005,0.01,0.02,0.04\}$ & $p=0$ \\
+E2 & Every tagged cost rotation runs as $R_Z((1+\epsilon)\theta)$ & $\epsilon\in\{\pm0.005,\pm0.01,\pm0.02,\pm0.04\}$ & $\epsilon=0$ \\
+E3 & Coherent $R_{ZZ}(\zeta)$ immediately after every hard CX & $\zeta\in\{\pm0.005,\pm0.01,\pm0.02,\pm0.04\}$ & $\zeta=0$ \\
+E4 & Independent asymmetric assignment error on every qubit & $(\Pr(1|0),\Pr(0|1))$: $(0.01,0.02)$, $(0.02,0.04)$, $(0.04,0.08)$, $(0.08,0.12)$, and the four swapped pairs & $(0,0)$ \\
+E5 & Correlated pair flips on the first edge, marginal rate 0.10 & $\tau\in\{\pm0.0025,\pm0.005,\pm0.0075,\pm0.01\}$ & $\tau=0$, marginal flips kept \\
+E5$'$ & Synthetic three-body flips on the first connected triple, marginal rate 0.25 & $\tau\in\{\pm0.00390625,\ldots,\pm0.015625\}$ & $\tau=0$, marginal flips kept \\
+E6 & Eight-block assignment drift, $e_0=0.04+\delta t$, $e_1=0.06-\delta t$ & $\delta\in\{\pm0.005,\pm0.01,\pm0.02,\pm0.03\}$ & $\delta=0$, baseline kept \\
+\bottomrule
+\end{tabularx}
+\end{table*}
+
+E0 is a clean global null with equal deterministic offsets added to both
+candidates. It cannot change a decision contrast. E7, fake-backend snapshots,
+probe combinations, and additional diagnostics are exploratory and outside the
+42-cell primary matrix.
+
+\subsection{Preregistered matrix and endpoints}
+
+The primary matrix comprises six probes by seven structures: 42 cells with 4
+visible, 13 partial, and 25 blind predictions. Analytic classification yields
+23 invariant and 19 sensitive cells (Table~\ref{tab:matrix}). The strata are
+never pooled into one headline agreement score. All 23 invariant cells are
+predicted blind; the sensitive stratum contains every visible and partial
+prediction and two blind cells, P1/E6 and P3/E6, whose small block-dependent
+population contrast is predicted to stay below the finite-budget power
+boundary.
+
+\begin{table}[t]
+\centering
+\caption{The preregistered matrix predicts blindness for most cells, and every
+non-blind prediction lies in the budget-sensitive stratum. These are
+predictions, not observations.}
+\label{tab:matrix}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Stratum & Visible & Partial & Blind & Total \\
+\midrule
+Invariant & 0 & 0 & 23 & 23 \\
+Sensitive & 4 & 13 & 2 & 19 \\
+\midrule
+Total & 4 & 13 & 25 & 42 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The primary estimand is
+\begin{equation}
+ \Delta_{\rm FC}=\frac{1}{7}\sum_{s=1}^{7}
+ \{\mathrm{FC}_s(R0)-\mathrm{FC}_s(R1)\},
+ \label{eq:dfc}
+\end{equation}
+where false certification means certifying the wrong ideal winner. A 95\%
+interval is obtained from 10,000 stratified graph-cluster bootstrap resamples
+with shared graph indices across rules and structures. The prespecified outcome
+is ``improvement'' when the lower endpoint is positive, ``no decision problem''
+when the 97.5th bootstrap percentile of pooled CI-only false certification is
+below 0.01, and ``inconclusive'' otherwise.
+
+Secondary endpoints include coverage loss, interception among CI-only false
+certifications, behavior on flip and non-flip subsets, a structure-agnostic P2
+rule, and visibility agreement within each analytic stratum. Readout
+certificates are restricted to cells whose probe measurements address the
+modeled readout component; they are not interpreted as certificates against
+gate or state-preparation noise.
+
+\subsection{Reproducibility, registrations, and evidence separation}
+
+All stochastic artifacts derive from a single NumPy \code{SeedSequence} key
+containing split, artifact, structure, probe, width, depth, graph, candidate,
+repeat, and parameter indices. Split 10 is development, split 20 the holdout,
+splits 30 and 31 the Proposition-1 pilot and scoring, and split 99 software
+tests and design checks, never reported as evidence. Raw and failed rows are
+append-only and every result is recomputed from them.
+
+Four public OSF records fix the order of events. Protocol v3 (\code{j67wy},
+commit \code{e8b5300}) is superseded but preserved after a pre-data defect
+audit. Protocol v4 and its execution code (\url{https://osf.io/r63vn/}, commit
+\code{e3908db}, 2026-11-13 01:45:49 UTC) precede all noisy data. The
+confirmatory lock (\url{https://osf.io/j597k/}, 06:12:07 UTC the same day)
+hashes the development thresholds, operating points, mismatch report, and
+evidence that split 20 was never instantiated. The Proposition-1 predictions
+(\url{https://osf.io/abuct/}, 2026-11-17 03:19:45 UTC) precede the scoring
+split. The holdout and the Proposition-1 scoring each wrote a single-run
+marker that refuses a second run.
+
+\section{Results}
+
+Unless stated otherwise, results are noisy-simulation evidence on the holdout
+(split 20), read once; Sections~\ref{sec:pre} and~\ref{sec:dev} are pre-holdout.
+Every result number is generated from the committed result files.
+
+\subsection{Pre-holdout: analytic, design, and development results}\label{sec:pre}
+
+\paragraph{Uniform readout cannot reverse a decision (analytic).}
+QAOA--MaxCut has global bit-complement symmetry under the frozen ideal model,
+so $\langle Z_i\rangle=0$. For uniform independent assignment noise with
+$\widetilde Z_i=\lambda Z_i+\delta$, each edge contrast scales by $\lambda^2$;
+hence
+\begin{equation}
+  g_{\rm noisy}=\lambda^2 g,\qquad
+  \frac{\beta}{\Delta}=-(1-\lambda^2)\in(-1,0].
+  \label{eq:readoutscale}
+\end{equation}
+Uniform E4-type readout noise therefore shrinks the gap but cannot reverse its
+sign in the population limit. The same bound applies to the frozen E6 mixture.
+This result limits what decision-flip evidence these structures can supply; it
+does not establish that their probes are ineffective for detecting readout
+change.
+
+A noiseless density-matrix split-99 check over 50 graphs found no exact ideal
+ties. At the strongest selected signs, median $\beta/\Delta$ values were
+$-0.7358$ for E1, $-0.0912$ for E2, and $-0.0781$ for E3. The largest observed
+fraction with $\beta/\Delta\le-1$ over the frozen gate grids was 0.12 (E2).
+These are deterministic design diagnostics used to select and stress the
+protocol; they are not estimates of holdout prevalence.
+
+
+\paragraph{A registered defect was found before data.} After v3 registration
+and before any noisy row existed, an audit proved that five P4 cells were
+visible by construction, because they were calibrated against a perfectly
+clean null while the structures carried baseline flips. It also flagged eight
+P0 cells as high-risk projections. Protocol v4 repaired the design with matched
+nulls, one frozen P4 component per cell, and P0 as a comparator only. Before v4
+registration, semantic checks on split~99 corrected four stratum derivations
+(P3/E2, P5/E3, P1/E6, P3/E6); the second pass is a consistency check, not an
+independent validation.
+
+\paragraph{Design power warned against a positive result.} Power analysis v5,
+on split-99 population inputs only, gave a probability of 0.685--0.775 for a
+``no decision problem'' outcome and at most 0.15 for ``improvement'', because
+CI-only false certifications were rare in the design population.
+
+\paragraph{Development (split 10)\label{sec:dev}.} Thresholds were calibrated
+on 50 development graphs, two per stratum. Development labels agreed with the
+matrix in $\numDevAgInv/23$ invariant and $\numDevAgSen/19$ sensitive cells.
+The one invariant disagreement, P5/E1, was investigated before the lock. E1
+counts remain complement-symmetric (5\% of 100 pooled symmetry tests below
+$p=0.05$), and re-sampling symmetrized counts reproduces 96\% of the alarm
+shift. The cause is finite-shot plug-in bias of the nonlinear P5 statistic,
+whose expectation under a symmetric law depends on the law's shape. The
+registered label was kept.
+
+\subsection{Primary endpoint: improvement at a large coverage cost}
+
+The bias-aware rule lowered pooled false certification by $\Delta_{\rm FC}=
+\numdFC$ with 95\% interval $[\numdFClo,\numdFChi]$, so the registered outcome
+is \emph{improvement}. The CI-only rule false-certified at a pooled rate of
+$\numFCzero$ (97.5th percentile $\numFCzeroUp>0.01$), so a decision problem
+exists at this budget. The outcome is unchanged when the no-problem bound is
+set to 0.005 or 0.02. Table~\ref{tab:primary} locates the effect. Under E2,
+R0 false-certified $\numEtwoCerts$ times across $\numEtwoGraphs$ graphs, and R1
+intercepted $\numEtwoInter$ of them. Under E3, all $\numEthreeCerts$ false
+certifications, in $\numEthreeGraphs$ graphs, were intercepted. Under E1, E4,
+E5, E5$'$, and E6, R0 made no false certification at all. The pooled coverage
+loss was $\numCovLoss$ ($[\numCovLossLo,\numCovLossHi]$): R1 never certified
+under E4--E6, because P4a's clean-E0 threshold is zero and every readout flip
+alarms, and certified only $\numEoneCone$ of E1 runs against $\numEoneCzero$
+for R0.
+
+\begin{table}[t]
+\centering
+\caption{The improvement comes entirely from E2 and E3, and it is bought with
+coverage. FC is false certification; C is coverage; Int. is the fraction of
+R0 false certifications that R1 does not certify. E4--E6 rows (FC 0 for both
+rules, C(R1)$=0$) are omitted.}
+\label{tab:primary}
+\begin{tabular}{@{}lllllll@{}}
+\toprule
+ & Probe & FC(R0) & FC(R1) & C(R0) & C(R1) & Int. \\
+\midrule
+E1 & P1 & \numEoneFCzero & \numEoneFCone & \numEoneCzero & \numEoneCone & -- \\
+E2 & P2 & \numEtwoFCzero & \numEtwoFCone & \numEtwoCzero & \numEtwoCone & \numEtwoInter \\
+E3 & P3 & \numEthreeFCzero & \numEthreeFCone & \numEthreeCzero & \numEthreeCone & \numEthreeInter \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Secondary endpoints}
+
+\paragraph{A single structure-agnostic probe trades better.} Using P2 for every
+structure also gave improvement ($\numPtwodFC$, $[\numPtwodFClo,\numPtwodFChi]$)
+with a coverage loss of only $\numPtwoLoss$ ($[\numPtwoLossLo,\numPtwoLossHi]$)
+and pooled interception $\numPtwoInter$, against $\numInterPooled$ for the
+designated probes. It intercepted only $\numEthreePtwoInter$ of the E3 false
+certifications.
+
+\paragraph{Alarms track decision flips only for E3.} On graphs whose noisy
+population gap reverses the ideal decision, P3 alarmed at $\numEthreeFlipAlarm$
+(E3, $\numEthreeFlipped$ graphs) versus $\numEthreeNoFlipAlarm$ elsewhere. For
+P2 under E2 the rates were $\numEtwoFlipAlarm$ versus $\numEtwoNoFlipAlarm$. For
+P1 under E1 they were $\numEoneFlipAlarm$ on $\numEoneFlipped$ flipped graphs
+versus $\numEoneNoFlipAlarm$ elsewhere: P1 was least alarmed exactly where the
+decision was wrong in the population, although R0 never certified those graphs.
+
+\paragraph{Visibility agreement.} The holdout labels agreed with the
+registered matrix in $\numAgInvN/23$ invariant cells ($\numAgInv$,
+$[\numAgInvLo,\numAgInvHi]$) and $\numAgSenN/19$ sensitive cells ($\numAgSen$,
+$[\numAgSenLo,\numAgSenHi]$). The strata are not pooled. Development and holdout
+labels coincided in $\numDevHoldSame$ of 42 cells. Figure~\ref{fig:map} shows the
+boundary. The two invariant disagreements are P5/E1 (power
+$\numPfiveEonePower$), the cell investigated before the lock, and P2/E5$'$,
+whose power $\numPtwoEfpPower$ equals its matched-null alarm rate
+$\numPtwoEfpFA$. P2/E5$'$ is therefore a threshold-transfer failure, not a
+response to the structure. At the smallest frozen strength, agreement was
+$\numAgInvSmall/23$ and $\numAgSenSmall/19$.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/boundary_map_v4.pdf}
+\caption{\textbf{Only readout probes on readout structures and the symmetry
+probe on symmetry-breaking structures reach visibility; most cells stay blind
+as predicted, and disagreements concentrate in the budget-sensitive stratum.}
+Each cell gives the holdout alarm rate against the matched-null threshold at the
+smallest (left) and main (right) frozen strength, with predicted$\to$observed
+labels. Red outlines mark disagreements; hatching marks the invariant stratum.
+Column headers give the median $\beta/\Delta$ at the main point over the 100
+holdout graphs.}
+\label{fig:map}
+\end{figure*}
+
+\paragraph{The readout certificate gives no benefit at this budget.} Requiring
+$L_T$ to exceed a bound over all readout channels consistent with the P4
+probe intervals left $\numCertEfourUnres$ of E4 runs unresolved, against
+$\numCertEfourRzero$ for R0, and $\numCertEfiveUnres$ of P4b/E5 runs, against
+$\numCertEfiveRzero$. Neither rule false-certified. P4b spreads its probe
+shots over $4\binom{w}{2}$ circuits, so the simultaneous intervals stay wide.
+
+\paragraph{The probe-fraction endpoint $f^\ast$ is not evaluable.} Development
+calibrated thresholds only at $f=0.10$. No frozen threshold exists at 0.05 or
+0.25, and calibrating one after the lock would alter it.
+
+\subsection{Failure causes (exploratory)}
+
+Every disagreement was classified by a fixed rule (Appendix~\ref{app:causes}).
+The disagreements split into $\numCauseResources$ resource failures, where a
+real contrast was underpowered at $n_P=1{,}638$ (P1/E1 power $\numPoneEonePower$
+and P3/E3 power $\numPthreeEthreePower$ predicted visible; P2/E5 and P4b/E5,
+P4b/E5 at $\numPfourbEfivePower$, predicted partial). There are also
+$\numCauseModel$ conservative model errors, where P5 was visible under E3, E4,
+and E6 although predicted partial, $\numCauseMethod$ method failure (P5/E1), and
+$\numCauseDesign$ design failure (P2/E5$'$). At the decision level, the zero E4--E6
+coverage of R1 and the unevaluable $f^\ast$ are design consequences, and the
+unresolved certificate is a resource consequence. As an exploratory
+comparison, P1b on P1 counts, with an in-sample threshold, alarmed at
+$\numPonebEone$ under E1 and $\numPonebEthree$ under E3. GVS was not
+implemented, because its definitions were never frozen, and was not run.
+
+\subsection{Proposition-1 prediction test}
+
+For each holdout graph identity, a split-30 pilot with four QAOA candidates
+under E1 depolarizing noise ($p=0.04$) predicted whether raw estimation or
+linear zero-noise extrapolation (ZNE) would give lower top-1 error on split-31
+scoring data at equal budget. The noise model was not stated in the registered
+text. It was fixed after the holdout results were known and before splits 30
+and 31 existed, and this was disclosed in the registration. The rule predicted
+raw for all 100 graphs: $\numPoneSep$ certified, $\numPoneUnc$ by default with
+overlapping risk intervals, and $\numPoneUnr$ with an unresolved anchor. The
+registered hit rate was $\numPoneHits/100=\numPoneRate$ (Wilson
+$[\numPoneLo,\numPoneHi]$). Of the misses, $\numPoneTies$ were exact ties,
+$\numPoneTieZero$ of them with zero errors for both methods. In the other
+$\numPoneZneBetter$, ZNE was strictly better, and all of these were
+unresolved-anchor graphs. ZNE was never strictly better where the pilot had
+certified raw or found overlapping risks. Mean top-1 error was $\numPoneErrRaw$
+for raw and $\numPoneErrZne$ for ZNE. Because the rule never predicted ZNE,
+the test cannot assess recognition of ZNE-favourable graphs.
+
+\subsection{Hardware go/no-go review}\label{sec:hw}
+
+A review on 2026-11-17 returned \emph{no-go}. There was no run authorization
+and no registered hardware prediction. The time per shot had not been
+measured, and the protocol forbids assuming one. Simulated P4b power for the
+pair-correlation effect of interest was low at the probe budget, and no
+registered conclusion would change. The provider's Open Plan then offered the
+resource-unit equivalent of 10 QPU minutes per 28 days, inside which the
+protocol's 360-second cap fits.
+
+\begin{table}[t]
+\centering
+\caption{Every claim is noisy simulation; nothing is hardware evidence.}
+\label{tab:status}
+\begin{tabularx}{\columnwidth}{@{}p{0.34\columnwidth}X@{}}
+\toprule
+Evidence & Status \\
+\midrule
+Analytic theory & Stated with assumptions \\
+Split-99 checks & Design and software evidence only \\
+Development (split 10) & Descriptive; thresholds locked (OSF j597k) \\
+Holdout (split 20) & Confirmatory primary endpoint; secondary endpoints \\
+Prop.~1 (splits 30/31) & Registered (OSF abuct); secondary \\
+Failure causes, P1b & Exploratory interpretation \\
+Hardware & Not run; review returned no-go \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Conclusion}
+
+At a fixed budget of 16,384 shots per decision, runtime bias probes can lower
+the rate at which a confident QAOA selection is wrong, but only for error
+mechanisms that both reverse decisions and leave a signature the probe can
+detect with its shot share. In this study those were coherent over-rotation and
+ZZ crosstalk. The gain was small, concentrated in a few graphs, and bought with
+substantial abstention. A single structure-agnostic probe offered a better
+trade than structure-matched probes. Readout structures produced no
+decision errors to intercept, and the matched readout certificate abstained
+almost always. Most predicted blind cells were blind, and the failed predictions
+lay mostly in the budget-sensitive stratum. Null, negative, and mismatched outcomes were
+admissible under the registration and are reported as such.
+
+\section{Discussion}
+
+\subsection{Supported claims}
+
+Sampling confidence and differential-bias control are distinct, and the
+holdout shows the gap at this budget: CI-only false certification was
+$\numFCzero$ pooled and $\numEtwoFCzero$ under E2. Visibility is
+mechanism-specific: $\numAgInvN$ of 23 cells predicted invariant behaved as blind, while
+the same probe could be visible, partial, or blind across structures.
+Decision value requires interception to exceed the cost of the removed shots
+(Eq.~\eqref{eq:worth}), and the coverage cost dominates when a probe's null
+threshold is degenerate.
+
+\subsection{Possible explanations}
+
+The design calculation favoured ``no decision problem''. The holdout instead
+contained CI-only false certifications in $\numFCGraphs$ of 100 graphs, more than the
+split-99 design population suggested. This is the most direct explanation of the
+different outcome; it was not anticipated, and the design numbers were not
+revised. The P5/E1 and P2/E5$'$ disagreements point to two limits of a
+population-level invariance argument: the finite-shot expectation of a
+nonlinear statistic, and thresholds calibrated on two development graphs per
+stratum. Both are hypotheses for future protocols, not demonstrated
+mechanisms beyond these cells.
+
+\subsection{Limitations}
+
+The error classes are structured simulations, not a sample of real devices;
+E5$'$ is synthetic. E4 and E6 cannot reverse the population decision under the
+symmetry of Eq.~\eqref{eq:readoutscale}. Candidate generation, graph families,
+depths, and the deliberate CX--CX contrast limit generalization. The matched
+nulls live inside the simulated error model. The theoretical lemmas rest on
+established statistics and information theory. The $f^\ast$ endpoint was not
+evaluable, GVS was not run, and the Proposition-1 noise model was fixed late,
+as disclosed. All verification was internal. Results were reproduced
+byte-identically on Windows and Linux and independently recomputed from raw
+rows, but no third party has recomputed them. No hardware run was authorized.
+
+\subsection{Reproducibility}
+
+Code, registered protocols, thresholds, result files, and the claim-ledger
+macros behind every number in this paper are public at
+\url{https://github.com/Raina-ya/bias-probe-visibility}. Continuous integration
+runs the tests and a clean rebuild of the development reference on Windows and
+Linux. The primary and secondary scorers reproduce byte-identical output on
+both platforms. Raw shards are listed by SHA-256 in the run logs and markers.
+
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+\appendix
+
+\section{Blindness lemma}
+
+Let $M$ denote an admissible noise mechanism, $Q_M$ the joint population law
+of all target and probe observations, and $d(M)\in\{-1,+1\}$ the ideal decision.
+If two admissible mechanisms $M_+$ and $M_-$ satisfy
+\begin{equation}
+  Q_{M_+}=Q_{M_-},\qquad d(M_+)\neq d(M_-),
+\end{equation}
+then no rule measurable with respect to the recorded observations can be
+uniformly correct over the model class. Indeed, any rule has the same output
+distribution under the identical laws, so its error probabilities under the
+opposite decisions sum to one. At least one is therefore at least $1/2$. This
+is an identification statement, not a finite-sample approximation.
+
+\section{Finite-shot necessary condition}
+
+For two data-generating states $P_0$ and $P_1$ that require opposite binary
+decisions, any test based on $N$ independent observations obeys
+\begin{equation}
+  P_0(\text{error})+P_1(\text{error})
+  \ge 1-\operatorname{TV}(P_0^{N},P_1^{N}).
+\end{equation}
+Using $\operatorname{TV}(P,Q)\le H(P,Q)$ and
+$H^2(P_0^N,P_1^N)\le N H^2(P_0,P_1)$ under the convention
+$H^2(P,Q)=\int(\sqrt p-\sqrt q)^2$, a necessary condition for both errors to
+be at most $\alpha<1/2$ is
+\begin{equation}
+  N\,H^2(P_0,P_1)\ge (1-2\alpha)^2.
+\end{equation}
+The bound is pairwise and necessary; it neither constructs an optimal probe nor
+replaces the exact protocol calibration.
+
+\section{Local information is not global sign identification}
+
+Two analytic counterexamples separate a local Fisher null-space condition from
+global sign identification. For $X\mid\theta\sim\mathcal N(\theta^2,1)$ and
+$g(\theta)=\theta$, Fisher information is positive at every $\theta\neq0$, yet
+$P_a=P_{-a}$ and the two equivalent points have opposite decisions. Conversely,
+for $X\mid(u,v)\sim\mathcal N(u,1)$ with $v\in(-1/2,1/2)$ and
+$g_m(u,v)=m(1+v)$, the unobserved $v$ direction changes the gap magnitude and
+violates the local null-space condition, but the full identification region
+$(m/2,3m/2)$ remains positive. Local sensitivity and global decision blindness
+therefore do not imply one another without additional regularity and
+localization assumptions.
+
+\section{Fixed-budget Proposition 2}
+
+Fix a total budget $N$, give a fraction $f\in[0,1)$ to the probe and
+$(1-f)N$ to the target, and return \emph{unresolved} whenever the probe alarms.
+With $W_f$, $A_f$, $q_f$, and $d_f$ as in Section~\ref{sec:rules}, the wrong-decision
+probability is exactly
+\begin{equation}
+  R_f=\Prb(W_f\cap A_f^{c})=q_f-d_f,
+\end{equation}
+and the all-target baseline is $R_0=q_0$. Hence $R_f<R_0$ if and only if
+$d_f>q_f-q_0$, which is Eq.~\eqref{eq:worth}. Writing
+$\eta_f=\Prb(A_f\mid W_f)$ for $q_f>0$ gives the equivalent condition
+\begin{equation}
+  \eta_f>1-q_0/q_f.
+\end{equation}
+No Gaussian or independence assumption is used. Under an additional Gaussian
+model with independent probe and target data, $q_f=\Phi(-m\sqrt{(1-f)N}/\sigma)$
+for noisy gap $m=\Delta+\beta>0$, and $\eta_f$ equals the probe's alarm
+probability; this approximation does not apply to P5, P1b, or GVS, which reuse
+target counts. If unresolved outcomes carry loss $\lambda$, the probe lowers
+$R_f+\lambda\Prb(A_f)$ if and only if $d_f>q_f-q_0+\lambda\Prb(A_f)$. The study
+reports false certification and coverage separately instead of fixing
+$\lambda$ post hoc. When $m<0$, removing target shots moves $q_f$ toward $1/2$
+and can lower $q_f$ mechanically; that reduction is not evidence of
+visibility.
+
+\section{Failure-cause rules}\label{app:causes}
+
+Each holdout disagreement receives one cause, assigned mechanically.
+\emph{Design}: a protocol choice made before data produces the outcome. For an
+invariant cell this applies when power is within 0.02 of the matched-null alarm
+rate. \emph{Method}: the probe statistic or rule behaves differently from its
+derivation at finite shots. \emph{Resources}: a real contrast is underpowered at
+the frozen budget (predicted visible, observed partial; or predicted partial,
+observed blind). \emph{Model}: the derivation underestimated the effect
+(predicted partial, observed visible). The per-cell table is in
+\code{docs/results/boundary\_synthesis\_v4.md}.
+
+\section{Protocol and evidence chronology}
+
+\begin{table}[h]
+\centering
+\caption{Each stage was publicly recorded before the data it governs existed;
+earlier records are preserved.}
+\begin{tabularx}{\columnwidth}{@{}p{0.22\columnwidth}X@{}}
+\toprule
+Stage & Record and role \\
+\midrule
+v2 review & Uniform readout shrinks but cannot reverse the decision; motivated structure-specific operating points. \\
+v3 & OSF \code{j67wy}, commit \code{e8b5300}; superseded after a pre-data defect audit. \\
+v4 & OSF \code{r63vn}, commit \code{e3908db}; matched nulls, 42-cell strata, decision endpoint, execution code. \\
+Development & 7,000 units, no failures; thresholds and mismatch report. \\
+Lock & OSF \code{j597k}, commit \code{5e2edde}; split 20 never instantiated. \\
+Holdout & 13,300 units, no failures, single run at commit \code{6fc6637}. \\
+Prop.~1 & Plan \code{bd3e29a}; predictions \code{1e8396f}, OSF \code{abuct}; scoring at \code{0956527}, single run. \\
+Synthesis & Boundary map, failure causes, hardware no-go review. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\end{document}
