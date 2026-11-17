@@ -1,0 +1,663 @@
+{
+ "beta_over_delta": {
+  "E1|main": {
+   "flipped_graphs": 13,
+   "median": -0.6879095196971688
+  },
+  "E1|sensitivity": {
+   "flipped_graphs": 1,
+   "median": -0.06923181871988826
+  },
+  "E2|main": {
+   "flipped_graphs": 20,
+   "median": -0.22860209818145855
+  },
+  "E2|sensitivity": {
+   "flipped_graphs": 3,
+   "median": 0.0018151264479687144
+  },
+  "E3|main": {
+   "flipped_graphs": 8,
+   "median": -0.022934821953887824
+  },
+  "E3|sensitivity": {
+   "flipped_graphs": 2,
+   "median": -0.000974906871047282
+  },
+  "E4|main": {
+   "flipped_graphs": 0,
+   "median": -0.36
+  },
+  "E4|sensitivity": {
+   "flipped_graphs": 0,
+   "median": -0.05910000000000003
+  },
+  "E5'|main": {
+   "flipped_graphs": 10,
+   "median": -0.5249999999999992
+  },
+  "E5'|sensitivity": {
+   "flipped_graphs": 10,
+   "median": -0.5249999999999991
+  },
+  "E5|main": {
+   "flipped_graphs": 1,
+   "median": -0.15999999999999986
+  },
+  "E5|sensitivity": {
+   "flipped_graphs": 1,
+   "median": -0.15699999999999986
+  },
+  "E6|main": {
+   "flipped_graphs": 0,
+   "median": -0.18999999999999992
+  },
+  "E6|sensitivity": {
+   "flipped_graphs": 0,
+   "median": -0.18999999999999995
+  }
+ },
+ "cause_rules": {
+  "design": "a protocol choice made before data (calibration sample, degenerate threshold, endpoint definition) produces the outcome",
+  "method": "the probe statistic or decision rule behaves differently from its derivation at finite shots",
+  "model": "the derivation's effect-size assessment was wrong in the conservative direction (more power than predicted)",
+  "resources": "the population contrast exists but the fixed budget gives power below the label threshold"
+ },
+ "cells": [
+  {
+   "agree": false,
+   "cause": "resources",
+   "cell": "P1/E1",
+   "development": "partial",
+   "evidence": "power 0.400 is above 0.10 but below 0.80 at n_P = 1,638",
+   "false_alarm": 0.0578125,
+   "holdout": "partial",
+   "power": 0.4,
+   "predicted": "visible",
+   "smallest_strength": "partial",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P1/E2",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.03875,
+   "holdout": "blind",
+   "power": 0.038125,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P1/E3",
+   "development": "partial",
+   "evidence": "",
+   "false_alarm": 0.06125,
+   "holdout": "partial",
+   "power": 0.6128125,
+   "predicted": "partial",
+   "smallest_strength": "blind",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P1/E4",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0453125,
+   "holdout": "blind",
+   "power": 0.0475,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P1/E5",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0546875,
+   "holdout": "blind",
+   "power": 0.049375,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P1/E5'",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.051875,
+   "holdout": "blind",
+   "power": 0.054375,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P1/E6",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0471875,
+   "holdout": "blind",
+   "power": 0.0559375,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P2/E1",
+   "development": "partial",
+   "evidence": "",
+   "false_alarm": 0.053125,
+   "holdout": "partial",
+   "power": 0.1834375,
+   "predicted": "partial",
+   "smallest_strength": "partial",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P2/E2",
+   "development": "partial",
+   "evidence": "",
+   "false_alarm": 0.0490625,
+   "holdout": "partial",
+   "power": 0.41625,
+   "predicted": "partial",
+   "smallest_strength": "blind",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P2/E3",
+   "development": "partial",
+   "evidence": "",
+   "false_alarm": 0.049375,
+   "holdout": "partial",
+   "power": 0.2475,
+   "predicted": "partial",
+   "smallest_strength": "blind",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P2/E4",
+   "development": "partial",
+   "evidence": "",
+   "false_alarm": 0.05875,
+   "holdout": "partial",
+   "power": 0.1696875,
+   "predicted": "partial",
+   "smallest_strength": "blind",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": false,
+   "cause": "resources",
+   "cell": "P2/E5",
+   "development": "blind",
+   "evidence": "power 0.086 does not exceed 0.10: the contrast is below what the budget can detect",
+   "false_alarm": 0.0925,
+   "holdout": "blind",
+   "power": 0.08625,
+   "predicted": "partial",
+   "smallest_strength": "blind",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": false,
+   "cause": "design",
+   "cell": "P2/E5'",
+   "development": "blind",
+   "evidence": "power 0.132 equals the matched-null alarm rate 0.133: the statistic does not respond; the label comes from a null alarm rate above alpha against development thresholds calibrated on two graphs per stratum",
+   "false_alarm": 0.133125,
+   "holdout": "partial",
+   "power": 0.1315625,
+   "predicted": "blind",
+   "smallest_strength": "partial",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P2/E6",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.1128125,
+   "holdout": "partial",
+   "power": 0.113125,
+   "predicted": "partial",
+   "smallest_strength": "partial",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P3/E1",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.050625,
+   "holdout": "blind",
+   "power": 0.045625,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P3/E2",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0509375,
+   "holdout": "blind",
+   "power": 0.036875,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": false,
+   "cause": "resources",
+   "cell": "P3/E3",
+   "development": "partial",
+   "evidence": "power 0.379 is above 0.10 but below 0.80 at n_P = 1,638",
+   "false_alarm": 0.0521875,
+   "holdout": "partial",
+   "power": 0.379375,
+   "predicted": "visible",
+   "smallest_strength": "blind",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P3/E4",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.04875,
+   "holdout": "blind",
+   "power": 0.0434375,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P3/E5",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.040625,
+   "holdout": "blind",
+   "power": 0.0475,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P3/E5'",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0534375,
+   "holdout": "blind",
+   "power": 0.06,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P3/E6",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0365625,
+   "holdout": "blind",
+   "power": 0.0384375,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4a/E1",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0,
+   "holdout": "blind",
+   "power": 0.0,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4a/E2",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0,
+   "holdout": "blind",
+   "power": 0.0,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4a/E3",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0,
+   "holdout": "blind",
+   "power": 0.0,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4a/E4",
+   "development": "visible",
+   "evidence": "",
+   "false_alarm": 0.0,
+   "holdout": "visible",
+   "power": 1.0,
+   "predicted": "visible",
+   "smallest_strength": "visible",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4a/E5",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.044375,
+   "holdout": "blind",
+   "power": 0.049375,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4a/E5'",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.041875,
+   "holdout": "blind",
+   "power": 0.0546875,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4a/E6",
+   "development": "partial",
+   "evidence": "",
+   "false_alarm": 0.0471875,
+   "holdout": "partial",
+   "power": 0.7153125,
+   "predicted": "partial",
+   "smallest_strength": "blind",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4b/E1",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0,
+   "holdout": "blind",
+   "power": 0.0,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4b/E2",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0,
+   "holdout": "blind",
+   "power": 0.0,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4b/E3",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0,
+   "holdout": "blind",
+   "power": 0.0,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4b/E4",
+   "development": "visible",
+   "evidence": "",
+   "false_alarm": 0.0,
+   "holdout": "visible",
+   "power": 1.0,
+   "predicted": "visible",
+   "smallest_strength": "visible",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": false,
+   "cause": "resources",
+   "cell": "P4b/E5",
+   "development": "blind",
+   "evidence": "power 0.010 does not exceed 0.10: the contrast is below what the budget can detect",
+   "false_alarm": 0.048125,
+   "holdout": "blind",
+   "power": 0.01,
+   "predicted": "partial",
+   "smallest_strength": "blind",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4b/E5'",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0365625,
+   "holdout": "blind",
+   "power": 0.0521875,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P4b/E6",
+   "development": "partial",
+   "evidence": "",
+   "false_alarm": 0.03875,
+   "holdout": "partial",
+   "power": 0.1190625,
+   "predicted": "partial",
+   "smallest_strength": "blind",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": false,
+   "cause": "method",
+   "cell": "P5/E1",
+   "development": "partial",
+   "evidence": "power 0.187 versus null 0.053: the population statistic is invariant but its finite-shot distribution is not (pre-lock investigation for P5/E1)",
+   "false_alarm": 0.0528125,
+   "holdout": "partial",
+   "power": 0.186875,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P5/E2",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0640625,
+   "holdout": "blind",
+   "power": 0.0525,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": false,
+   "cause": "model",
+   "cell": "P5/E3",
+   "development": "visible",
+   "evidence": "power 0.982 reaches 0.80 with false alarm 0.048: the derivation underestimated the effect",
+   "false_alarm": 0.0475,
+   "holdout": "visible",
+   "power": 0.9821875,
+   "predicted": "partial",
+   "smallest_strength": "partial",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": false,
+   "cause": "model",
+   "cell": "P5/E4",
+   "development": "visible",
+   "evidence": "power 1.000 reaches 0.80 with false alarm 0.048: the derivation underestimated the effect",
+   "false_alarm": 0.0475,
+   "holdout": "visible",
+   "power": 1.0,
+   "predicted": "partial",
+   "smallest_strength": "partial",
+   "stratum": "sensitive"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P5/E5",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0578125,
+   "holdout": "blind",
+   "power": 0.05375,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": true,
+   "cause": "",
+   "cell": "P5/E5'",
+   "development": "blind",
+   "evidence": "",
+   "false_alarm": 0.0403125,
+   "holdout": "blind",
+   "power": 0.0403125,
+   "predicted": "blind",
+   "smallest_strength": "blind",
+   "stratum": "invariant"
+  },
+  {
+   "agree": false,
+   "cause": "model",
+   "cell": "P5/E6",
+   "development": "visible",
+   "evidence": "power 1.000 reaches 0.80 with false alarm 0.052: the derivation underestimated the effect",
+   "false_alarm": 0.0515625,
+   "holdout": "visible",
+   "power": 1.0,
+   "predicted": "partial",
+   "smallest_strength": "partial",
+   "stratum": "sensitive"
+  }
+ ],
+ "decision_failures": [
+  {
+   "cause": "design",
+   "evidence": "P4a's clean-E0 threshold is 0 (degenerate null); any readout flip alarms, so C(R1) = 0 (secondary endpoint)",
+   "item": "R1 coverage under E4, E5, E5', E6"
+  },
+  {
+   "cause": "method",
+   "evidence": "C(R1) 0.015 versus C(R0) 0.298; P1 alarms on most non-flipped graphs and only 0.065 on flipped ones",
+   "item": "R1 coverage under E1"
+  },
+  {
+   "cause": "resources",
+   "evidence": "P4b spreads n_P over 4*C(w,2) circuits; simultaneous intervals retain channels whose bound exceeds L_T (secondary endpoint)",
+   "item": "Readout certificate unresolved"
+  },
+  {
+   "cause": "design",
+   "evidence": "no development thresholds at f = 0.05 or 0.25",
+   "item": "f* not evaluable"
+  },
+  {
+   "cause": "method",
+   "evidence": "all in unresolved_anchor graphs, where the rule defaults to Raw without certification",
+   "item": "Proposition-1 directional misses (8)"
+  },
+  {
+   "cause": "design",
+   "evidence": "registered hit definition; 42 graphs had zero errors for both methods",
+   "item": "Proposition-1 ties counted as misses (47)"
+  }
+ ],
+ "dev_holdout_label_agreement": 40,
+ "inputs": {
+  "docs\\freeze\\dev_mismatch_v4.md": "ff5a9bb8d530455cf0541d1c278b9061e7b3d7cd35903471b1238547f5eab4a9",
+  "results\\holdout_v4\\primary_endpoint_v4.json": "2e9142d886c96ce870b231fdcb7c0583978f05cc3ca1c5bf80511f6303301c56",
+  "results\\holdout_v4\\reference\\holdout_reference_v4.csv": "7af4eaadab1fc0041927ce3f08c9685311acfb13cea18e4bfac4fd0881fc021a",
+  "results\\holdout_v4\\secondary_endpoints_v4.json": "f081ec3728ad8fed43758974c82693bcb7287408c6c0a0b0e33edbcd082eb3a0",
+  "results\\prop1\\prop1_scoring_v4.json": "70c7361baddf1f216434630073fe9f50e7bd4db9c66c23ecb4b13a40c912e8c9"
+ },
+ "p1b_exploratory_power": {
+  "E1": 0.0603125,
+  "E2": 0.060625,
+  "E3": 0.7640625,
+  "E4": 0.00125,
+  "E5": 0.0409375,
+  "E5'": 0.0321875,
+  "E6": 0.0353125
+ }
+}
