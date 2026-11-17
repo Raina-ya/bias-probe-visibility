@@ -40,3 +40,6 @@ results/development_v4/**/*.jsonl.gz
 
 # Holdout raw shards (hashes are recorded in the run log and the marker)
 results/holdout_v4/**/*.jsonl.gz
+
+# Proposition-1 raw counts (hashes are recorded in the run log)
+results/prop1/**/*.jsonl.gz
