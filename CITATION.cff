@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below."
+type: software
+title: "Runtime Visibility Limits of Bias Probes for Quantum Error-Mitigated Selection: code, protocol and results"
+authors:
+  - family-names: "Liu"
+    given-names: "Zhen-Jun"
+abstract: >-
+  Code, protocol, results and paper for a preregistered fixed-budget noisy-simulation
+  study of when a runtime bias probe can detect that a quantum error-mitigated
+  selection decision is wrong. No hardware was used.
+repository-code: "https://github.com/Raina-ya/bias-probe-visibility"
+url: "https://github.com/Raina-ya/bias-probe-visibility"
+license: MIT
+keywords:
+  - "quantum error mitigation"
+  - "zero-noise extrapolation"
+  - "bias detection"
+  - "preregistration"
+  - "fixed-budget comparison"
+  - "QAOA"
+  - "simulation"
