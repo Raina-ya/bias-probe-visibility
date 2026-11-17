@@ -15,15 +15,30 @@ QEM is unreliable. This project asks whether that unreliability can be detected 
 
 ## Status
 
-**No simulation results exist; nothing has been run on development or holdout data.**
-Protocol v3 was registered on OSF (`j67wy`). A pre-data audit
-([docs/freeze/pre_data_defect_audit_v3.md](docs/freeze/pre_data_defect_audit_v3.md)) then found
-definition conflicts that made its primary endpoint uninterpretable. Protocol v4
-([docs/freeze/frozen_protocol_v4.md](docs/freeze/frozen_protocol_v4.md)) repairs the design: a
-decision-level primary endpoint, matched nulls, component-level P4 cells, and a 42-cell
-stratified matrix. It is the current freeze candidate and must be committed and registered,
-with its complete execution code, before any noisy simulation. v3 stays registered and
-unchanged as the record.
+**Complete.** All four parts have been run under protocol v4, each confirmatory analysis once.
+Evidence type for every result: noisy simulation. No hardware was used.
+
+- Primary endpoint (holdout, 100 graphs, read once): the runtime probe rule reduced the
+  CI-only false-certification rate, dFC = +0.0080 (95% graph-cluster bootstrap
+  [+0.0029, +0.0142]), at a pooled coverage loss of 0.418.
+  [docs/results/primary_endpoint_v4.md](docs/results/primary_endpoint_v4.md)
+- Proposition-1 prediction test (predictions registered before scoring, OSF `abuct`):
+  45/100 hits, 95% Wilson [0.356, 0.548].
+  [docs/results/prop1_prediction_test_v4.md](docs/results/prop1_prediction_test_v4.md)
+- Secondary endpoints, boundary synthesis and failure causes:
+  [docs/results/](docs/results/)
+- Hardware go/no-go review: NO-GO, no job submitted.
+  [docs/hardware/review_v1.md](docs/hardware/review_v1.md)
+- Paper: [paper/main_v4.pdf](paper/main_v4.pdf). Every result number in it is generated
+  from the committed result files (`paper/numbers_v4.tex`).
+
+Registrations on OSF (project `y7m29`): protocol v3 `j67wy` (superseded by a pre-data audit,
+kept unchanged as the record), protocol v4 `r63vn`, confirmatory lock `j597k`, Proposition-1
+predictions `abuct`. Disclosed deviations are listed in the paper and in
+[docs/freeze/](docs/freeze/).
+
+The large raw shot-level files (`*.jsonl.gz`) are not in git; their SHA-256 hashes are in the
+committed result JSONs and run markers.
 
 - Plan: [docs/project_plan_v0.md](docs/project_plan_v0.md) (in Chinese)
 - Literature review and research anchors: [docs/literature_review.md](docs/literature_review.md)

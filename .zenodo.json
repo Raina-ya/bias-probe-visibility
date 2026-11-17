@@ -1,0 +1,47 @@
+{
+  "title": "Runtime Visibility Limits of Bias Probes for Quantum Error-Mitigated Selection: code, protocol and results",
+  "upload_type": "software",
+  "description": "<p>Code, protocol, results and paper for a preregistered fixed-budget simulation study of when a runtime bias probe can detect that a quantum error-mitigated selection decision is wrong.</p><p>Evidence type for every result: noisy simulation (no hardware). Primary endpoint on a 100-graph holdout read once: the probe rule reduced the CI-only false-certification rate, dFC = +0.0080 (95% graph-cluster bootstrap [+0.0029, +0.0142]), at a pooled coverage loss of 0.418. A registered Proposition-1 prediction test scored 45/100 hits (95% Wilson [0.356, 0.548]).</p><p>Registrations on OSF (project y7m29): protocol v3 j67wy, protocol v4 r63vn, confirmatory lock j597k, Proposition-1 predictions abuct. Large raw shot-level files are not in this archive; their SHA-256 hashes are recorded in the result JSONs.</p>",
+  "creators": [
+    {
+      "name": "Liu, Zhen-Jun"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "quantum error mitigation",
+    "zero-noise extrapolation",
+    "bias detection",
+    "preregistration",
+    "fixed-budget comparison",
+    "QAOA",
+    "simulation"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://osf.io/y7m29/",
+      "relation": "isSupplementTo",
+      "resource_type": "other"
+    },
+    {
+      "identifier": "https://osf.io/r63vn/",
+      "relation": "isDocumentedBy",
+      "resource_type": "other"
+    },
+    {
+      "identifier": "https://osf.io/j597k/",
+      "relation": "isDocumentedBy",
+      "resource_type": "other"
+    },
+    {
+      "identifier": "https://osf.io/abuct/",
+      "relation": "isDocumentedBy",
+      "resource_type": "other"
+    },
+    {
+      "identifier": "https://osf.io/j67wy/",
+      "relation": "isDocumentedBy",
+      "resource_type": "other"
+    }
+  ]
+}
