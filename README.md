@@ -37,8 +37,25 @@ kept unchanged as the record), protocol v4 `r63vn`, confirmatory lock `j597k`, P
 predictions `abuct`. Disclosed deviations are listed in the paper and in
 [docs/freeze/](docs/freeze/).
 
+The immutable `abuct` registration was created without file attachments. Copies of
+`predictions.csv` and `prop1_plan_v4.md` were later added to the OSF project `y7m29` Files;
+their SHA-256 hashes match the values recorded in
+[registration_prop1_v4.json](docs/freeze/registration_prop1_v4.json). They are project-file
+copies, not retroactive attachments to the registration.
+
 The large raw shot-level files (`*.jsonl.gz`) are not in git; their SHA-256 hashes are in the
 committed result JSONs and run markers.
+
+### Verification boundary
+
+All verification to date is internal to the project; no third party has yet performed the
+blind recomputation described in
+[third_party_blind_recompute_v1.md](docs/reproducibility/third_party_blind_recompute_v1.md).
+The primary endpoint was reproduced byte-identically with the frozen scorer on Windows and
+Linux and was also recomputed through a separate code path. The secondary endpoints were
+reproduced byte-identically on both platforms with the same scorer. Proposition-1 predictions
+and hits were recomputed through separate project code. The boundary map is a deterministic
+synthesis of committed results, not a separate confirmatory data run.
 
 - Plan: [docs/project_plan_v0.md](docs/project_plan_v0.md) (in Chinese)
 - Literature review and research anchors: [docs/literature_review.md](docs/literature_review.md)

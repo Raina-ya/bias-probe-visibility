@@ -1,65 +1,106 @@
 # DOI post-release checklist
 
-This checklist is intentionally unfilled. Never guess a DOI from a draft URL.
-Use the DOI displayed on the published Zenodo record.
+This project will have two distinct archival records. Never guess a DOI from a
+draft URL; use the DOI displayed on each published Zenodo record.
 
-## Before publishing the Zenodo record
+1. **Software record:** created from GitHub release `v1.0` through the Zenodo
+   GitHub integration. It archives the repository, protocol, results, and paper.
+2. **Raw-data record:** the manually uploaded shot-level data package. It has a
+   separate dataset DOI because the large raw files are not in git.
+
+## Before publishing either record
 
 - Ensure the GitHub commit containing `.zenodo.json`, `CITATION.cff`, the final
-  paper, and intended release files is pushed and is the release target.
-- Confirm the Zenodo creator is `Liu, Zhen-Jun`, the title matches
-  `.zenodo.json`, and the evidence description says noisy simulation with no
-  hardware.
-- A DOI is not required inside `CITATION.cff` for this release. If a DOI must
-  appear inside the archived files, Zenodo supports reserving one before
-  publication; otherwise leave it absent until the record is published.
+  paper, and intended release files is pushed and is the `v1.0` release target.
+- Confirm that Zenodo's GitHub integration is enabled for this repository before
+  creating the GitHub release.
+- Confirm both records name the creator as `Liu, Zhen-Jun` and describe all
+  results as noisy simulation with no hardware run.
+- Confirm the software record states the repository's dual licensing: code and
+  tests under MIT; paper, documentation, figures, configurations, manifests,
+  and results under CC BY 4.0.
+- Confirm the raw-data record's file list and checksums against the committed
+  result JSONs and run markers before publishing it.
+- A DOI is not required inside `CITATION.cff` before the release. Zenodo can
+  reserve either DOI before publication if cross-linking the two draft records
+  in advance is useful; otherwise add the links immediately after publication.
 
 ## Record immediately after publication
 
+### Software record
+
 - Version DOI: `TODO`
+- Concept DOI, if displayed: `TODO`
 - DOI URL (`https://doi.org/...`): `TODO`
 - Zenodo record URL: `TODO`
 - Publication date: `TODO`
-- GitHub release tag and commit: `TODO`
+- GitHub release tag and commit: `v1.0` / `TODO`
 
-Open the DOI URL in a private browser window and confirm that it resolves to
-the intended record before editing repository metadata.
+### Raw-data record
 
-## Three required updates
+- Dataset DOI: `TODO`
+- DOI URL (`https://doi.org/...`): `TODO`
+- Zenodo record URL: `TODO`
+- Publication date: `TODO`
 
-1. Add this badge near the top of `README.md`, replacing `DOI_VALUE`:
+Open both DOI URLs in a private browser window and confirm that each resolves to
+the intended record before editing repository or OSF metadata.
+
+## Required metadata updates
+
+1. Add the **software DOI** badge near the top of `README.md`, replacing
+   `SOFTWARE_DOI`:
 
    ```markdown
-   [![DOI](https://zenodo.org/badge/DOI/DOI_VALUE.svg)](https://doi.org/DOI_VALUE)
+   [![Software DOI](https://zenodo.org/badge/DOI/SOFTWARE_DOI.svg)](https://doi.org/SOFTWARE_DOI)
    ```
 
-2. Add to the OSF project `y7m29` description:
+   Add a separate raw-data link nearby:
+
+   ```markdown
+   Raw shot-level data: [DATA_DOI](https://doi.org/DATA_DOI)
+   ```
+
+2. Add both records to the OSF project `y7m29` description:
 
    ```text
-   Archived software, protocol, results, raw-data package, and paper:
-   https://doi.org/DOI_VALUE
+   Archived software, protocol, results, and paper:
+   https://doi.org/SOFTWARE_DOI
+
+   Archived raw shot-level data:
+   https://doi.org/DATA_DOI
    ```
 
-3. Add the published version metadata to `CITATION.cff`:
+3. Add only the **software version DOI** to `CITATION.cff`:
 
    ```yaml
-   version: "RELEASE_TAG"
-   doi: "DOI_VALUE"
+   version: "v1.0"
+   doi: "SOFTWARE_DOI"
    date-released: YYYY-MM-DD
    ```
 
-Keep `.zenodo.json` as the authoritative Zenodo deposit metadata. Do not add a
-made-up DOI field there.
+4. Cross-link the two Zenodo records with related identifiers. The software
+   record should identify the raw-data record as supplementary data, and the
+   raw-data record should identify the software record as the related software.
+   Check the direction shown in Zenodo's form before publishing the metadata.
+
+5. After the dataset DOI exists, add it as a related identifier in
+   `.zenodo.json` for future software releases. Do not add a placeholder DOI.
+
+Keep `.zenodo.json` as the authoritative metadata for software deposits. The
+raw-data DOI belongs in links and related identifiers, not in the `doi` field of
+`CITATION.cff`.
 
 ## Verification and handoff
 
-- Confirm GitHub's default branch displays “Cite this repository” and that its
+- Confirm GitHub's default branch displays **Cite this repository** and that its
   APA/BibTeX export contains Zhen-Jun Liu, the correct title, release tag, and
-  DOI.
-- Confirm the README badge resolves, the OSF link resolves, and the Zenodo file
-  list and checksums match the intended upload.
-- Commit and push only the post-release metadata update; do not recreate or
-  overwrite the published Zenodo record merely to add the DOI to the default
+  software DOI.
+- Confirm both README links and both OSF links resolve to the intended records.
+- Confirm the software archive contains the intended release commit and the
+  dataset file list/checksums match the upload manifest.
+- Commit and push only the post-release metadata update. Do not recreate or
+  overwrite either published Zenodo record merely to add its DOI to the default
   branch.
 
 Official references:

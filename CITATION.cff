@@ -8,7 +8,8 @@ authors:
 abstract: >-
   Code, protocol, results and paper for a preregistered fixed-budget noisy-simulation
   study of when a runtime bias probe can detect that a quantum error-mitigated
-  selection decision is wrong. No hardware was used.
+  selection decision is wrong. No hardware was used. Source code and tests are
+  MIT licensed; documentation and results are licensed under CC BY 4.0.
 repository-code: "https://github.com/Raina-ya/bias-probe-visibility"
 url: "https://github.com/Raina-ya/bias-probe-visibility"
 license: MIT
