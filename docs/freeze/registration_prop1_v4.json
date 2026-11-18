@@ -4,14 +4,15 @@
   "timestamp_utc": "2026-11-17T03:19:45Z",
   "commit": "1e8396f9e2a0e04f55ae9d0b27c1a0b92d4f929d",
   "approved": "2026-11-17, public, no embargo",
-  "note": "At registration time, the files were listed by hash in the OSF summary but the attachment upload did not complete. The immutable abuct registration therefore has no file attachments.",
+  "note": "Registered files are listed by hash in the OSF summary; the attachment upload did not complete, so OSF holds no file copies.",
   "files": {
     "results/prop1/predictions.csv": "2a6007c7b08fe38fe1a3067eaee083dd040d508a46678250270586ce31e74a12",
     "docs/part3/prop1_plan_v4.md": "3639d8b40b0930098f133209b58618af5daca8e1a10464483e3739b8dff749be"
   },
   "post_registration_file_copies": {
     "location": "https://osf.io/y7m29/files/",
-    "date_checked": "2026-11-18",
+    "date_checked": "2026-11-17",
+    "verification_method": "OSF API file metadata and SHA-256 comparison",
     "note": "Copies were added to the parent OSF project's Files after registration. They are not attachments to the immutable abuct registration.",
     "files": {
       "predictions.csv": "2a6007c7b08fe38fe1a3067eaee083dd040d508a46678250270586ce31e74a12",
