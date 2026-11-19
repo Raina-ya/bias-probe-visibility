@@ -54,6 +54,21 @@ class PaperLedger(unittest.TestCase):
         allowed = {"verified", "verified-preprint", "verified (previous project)"}
         self.assertEqual({k for k in keys if status.get(k) not in allowed}, set())
 
+    def test_required_method_and_limit_citations(self) -> None:
+        """QEM cost bounds, the Wilson interval and the cluster bootstrap are cited."""
+
+        text = TEX.read_text(encoding="utf-8")
+        keys = {
+            k.strip()
+            for group in re.findall(r"\\cite\{([^}]*)\}", text)
+            for k in group.split(",")
+        }
+        required = {
+            "takagi2022", "takagi2023", "tsubouchi2023", "quek2024",
+            "wilson1927", "field2007",
+        }
+        self.assertEqual(required - keys, set())
+
     def test_no_draft_markers(self) -> None:
         text = TEX.read_text(encoding="utf-8")
         for marker in ("TODO", "Pre-results", "Affiliation"):

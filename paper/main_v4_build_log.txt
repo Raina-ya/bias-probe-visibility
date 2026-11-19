@@ -15,13 +15,21 @@ Build: latexmk -xelatex -interaction=nonstopmode -halt-on-error main_v4.tex
 Engine: XeTeX 3.141592653-2.6-0.999995 (TeX Live 2023/Debian); BibTeX 0.99d (TeX Live 2023/Debian)
 Environment: Linux cloud workspace.
 Result: exit 0; 0 undefined citations or references; 0 BibTeX warnings;
-one overfull box of 1.6 pt in the bibliography; Pages: 8.
+one overfull box of 1.6 pt in the bibliography; Pages: 9.
 Checks: tests/test_paper_v4.py (numbers file equals recomputation from results;
 every \num macro defined; every citation in references.bib and verified in
 docs/literature/library.csv; no draft markers). All pages visually inspected.
 
+Citation audit (2026-11-19, before release v1.0): added the QEM sampling-cost
+lower bounds (takagi2022, takagi2023, tsubouchi2023, quek2024) to the
+introduction and limitations, the cluster-bootstrap source (field2007) where
+the graph-cluster bootstrap is defined, and the Wilson-interval source
+(wilson1927) where the Proposition-1 interval is reported. Claims follow the
+abstracts read on 2026-11-19 (arXiv abstract pages with DOIs; notes in
+docs/literature/library.csv). No number or result changed.
+
 SHA-256 (LF-normalized text; PDF byte hash)
-paper/main_v4.tex fa175579f82c3c91c33dfdb3dff5f01e73850fe380564347287645edee4dbacc
+paper/main_v4.tex 71f015df5fe5bfdf650140195bbb570ce77a102bbf4359a16a89b2eeb57d32e9
 paper/numbers_v4.tex a41b8573118f92723b0f6732c358eca64801e7dae4ba60aecefc304a72058ea3
-paper/main_v4.pdf 554538e2dc17963315959f3c08602edc6066b420aeda8e7b791cadf771ef52c9
+paper/main_v4.pdf 8367239412ac187cb1c5a7611dd75f605d85362508742556e6799012a2246b24
 figures/boundary_map_v4.pdf 80c305791487d5fca41e073289f2283db787e02f4b17ead6c2bfb4cc71984aff

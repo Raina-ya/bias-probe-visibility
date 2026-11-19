@@ -68,6 +68,16 @@ between candidates determines the action. Improved average accuracy need not
 imply a more reliable decision, particularly when the two candidates acquire
 different systematic biases.
 
+Lower bounds on the sampling cost of QEM show that, for broad classes of
+protocols and noise models, the number of samples needed to reach a fixed
+estimator accuracy grows exponentially with circuit
+depth\cite{takagi2022,takagi2023,tsubouchi2023}, and that worst-case noisy
+circuits can require a superpolynomial number of samples already at shallow
+depth\cite{quek2024}. These results bound estimators. The present study addresses a
+complementary, decision-level question at small scale, where the mitigation
+overhead is modest: whether a decision certified by a confidence interval can
+be recognized as wrong at runtime.
+
 Let the ideal candidate values be $\mu_A$ and $\mu_B$, with ideal gap
 $g=\mu_A-\mu_B$ and margin $\Delta=|g|$. Under an error process, let the
 population gap be $g_{\mathrm n}=g+b_A-b_B$. The decision-relevant bias is
@@ -289,8 +299,9 @@ The primary estimand is
  \label{eq:dfc}
 \end{equation}
 where false certification means certifying the wrong ideal winner. A 95\%
-interval is obtained from 10,000 stratified graph-cluster bootstrap resamples
-with shared graph indices across rules and structures. The prespecified outcome
+interval is obtained from 10,000 stratified graph-cluster bootstrap resamples,
+which resample whole graphs as clusters\cite{field2007}, with shared graph
+indices across rules and structures. The prespecified outcome
 is ``improvement'' when the lower endpoint is positive, ``no decision problem''
 when the 97.5th bootstrap percentile of pooled CI-only false certification is
 below 0.01, and ``inconclusive'' otherwise.
@@ -494,8 +505,8 @@ text. It was fixed after the holdout results were known and before splits 30
 and 31 existed, and this was disclosed in the registration. The rule predicted
 raw for all 100 graphs: $\numPoneSep$ certified, $\numPoneUnc$ by default with
 overlapping risk intervals, and $\numPoneUnr$ with an unresolved anchor. The
-registered hit rate was $\numPoneHits/100=\numPoneRate$ (Wilson
-$[\numPoneLo,\numPoneHi]$). Of the misses, $\numPoneTies$ were exact ties,
+registered hit rate was $\numPoneHits/100=\numPoneRate$ (95\% Wilson
+interval\cite{wilson1927} $[\numPoneLo,\numPoneHi]$). Of the misses, $\numPoneTies$ were exact ties,
 $\numPoneTieZero$ of them with zero errors for both methods. In the other
 $\numPoneZneBetter$, ZNE was strictly better, and all of these were
 unresolved-anchor graphs. ZNE was never strictly better where the pilot had
@@ -576,7 +587,10 @@ mechanisms beyond these cells.
 The error classes are structured simulations, not a sample of real devices;
 E5$'$ is synthetic. E4 and E6 cannot reverse the population decision under the
 symmetry of Eq.~\eqref{eq:readoutscale}. Candidate generation, graph families,
-depths, and the deliberate CX--CX contrast limit generalization. The matched
+depths, and the deliberate CX--CX contrast limit generalization. Widths stop
+at eight qubits; the cost bounds cited in the introduction indicate that both
+mitigation and probing face rapidly growing sample requirements at larger
+depth, which this study does not test. The matched
 nulls live inside the simulated error model. The theoretical lemmas rest on
 established statistics and information theory. The $f^\ast$ endpoint was not
 evaluable, GVS was not run, and the Proposition-1 noise model was fixed late,
