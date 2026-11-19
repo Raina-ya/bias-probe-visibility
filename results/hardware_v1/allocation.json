@@ -1,0 +1,22 @@
+{
+ "go": true,
+ "margin_shots": 77200,
+ "median_readout_error": 0.01708984375,
+ "plan": [
+  {
+   "p4a_all0": 87200,
+   "p4a_all1": 87200
+  }
+ ],
+ "q_pilot": 3.0,
+ "q_run": 0.01,
+ "r": 0.001875,
+ "reason": "shots per circuit reach S_min",
+ "s_min": 10000,
+ "s_pilot": 2000,
+ "s_remaining": 174400,
+ "shots_per_circuit": {
+  "p4a_all0": 87200,
+  "p4a_all1": 87200
+ }
+}

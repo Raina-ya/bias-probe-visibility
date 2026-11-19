@@ -1,0 +1,2 @@
+{"job_id": "dbv9r8darooc73fl64p0", "job_index": 0, "max_execution_time": 360, "shots_per_circuit": {"p4a_all0": 1000, "p4a_all1": 1000}, "stage": "pilot", "submitted_utc": "2026-11-19T06:56:34.062989Z"}
+{"job_id": "dbv9svv82tmc73dul5lg", "job_index": 0, "max_execution_time": 357, "shots_per_circuit": {"p4a_all0": 87200, "p4a_all1": 87200}, "stage": "main", "submitted_utc": "2026-11-19T07:00:16.061994Z"}

@@ -1,0 +1,198 @@
+{
+ "authorization": {
+  "backend": "ibm_marrakesh",
+  "owner_statement_original": "\u6211\u6388\u6b0a\u5728 ibm_marrakesh \u4e0a\uff0c\u65bc 2026-11-19 \u57f7\u884c hardware readout amendment v1 \u4e00\u6b21\uff0c\u6700\u591a\u4f7f\u7528 360 \u79d2\u56de\u5831\u7684 QPU \u6642\u9593\u3002",
+  "recorded_by": "Claude (assistant), from the owner's chat message of 2026-11-19 14:54 +08:00; the owner commits this file",
+  "run_date": "2026-11-19",
+  "signed_by": "Zhen-Jun Liu",
+  "signed_date": "2026-11-19",
+  "statement": "I authorize one run under hardware readout amendment v1, using at most 360 reported QPU seconds."
+ },
+ "backend": "ibm_marrakesh",
+ "calibration_timestamp": "2026-11-19T14:27:53+08:00",
+ "constants": {
+  "cap_seconds": 360,
+  "pilot_shots_per_circuit": 1000,
+  "q_grid": [
+   0.005,
+   0.01,
+   0.02,
+   0.05
+  ],
+  "reserve_seconds": 30,
+  "s_min": {
+   "0.005": 30000,
+   "0.01": 10000,
+   "0.02": 10000,
+   "0.05": 3000
+  },
+  "safety": 1.25
+ },
+ "dry_run": false,
+ "environment": {
+  "numpy_config": {
+   "Build Dependencies": {
+    "blas": {
+     "detection method": "pkgconfig",
+     "found": true,
+     "include directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-ju7w319k/cp314-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/include",
+     "lib directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-ju7w319k/cp314-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/lib",
+     "name": "scipy-openblas",
+     "openblas configuration": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=24",
+     "pc file directory": "D:/a/numpy-release/numpy-release/.openblas",
+     "version": "0.3.30"
+    },
+    "lapack": {
+     "detection method": "pkgconfig",
+     "found": true,
+     "include directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-ju7w319k/cp314-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/include",
+     "lib directory": "C:/Users/runneradmin/AppData/Local/Temp/cibw-run-ju7w319k/cp314-win_amd64/build/venv/Lib/site-packages/scipy_openblas64/lib",
+     "name": "scipy-openblas",
+     "openblas configuration": "OpenBLAS 0.3.30  USE64BITINT DYNAMIC_ARCH NO_AFFINITY Haswell MAX_THREADS=24",
+     "pc file directory": "D:/a/numpy-release/numpy-release/.openblas",
+     "version": "0.3.30"
+    }
+   },
+   "Compilers": {
+    "c": {
+     "commands": "cl",
+     "linker": "link",
+     "name": "msvc",
+     "version": "19.44.35217"
+    },
+    "c++": {
+     "commands": "cl",
+     "linker": "link",
+     "name": "msvc",
+     "version": "19.44.35217"
+    },
+    "cython": {
+     "commands": "cython",
+     "linker": "cython",
+     "name": "cython",
+     "version": "3.1.4"
+    }
+   },
+   "Machine Information": {
+    "build": {
+     "cpu": "x86_64",
+     "endian": "little",
+     "family": "x86_64",
+     "system": "windows"
+    },
+    "host": {
+     "cpu": "x86_64",
+     "endian": "little",
+     "family": "x86_64",
+     "system": "windows"
+    }
+   },
+   "Python Information": {
+    "path": "C:\\Users\\runneradmin\\AppData\\Local\\Temp\\build-env-8umlmfdd\\Scripts\\python.exe",
+    "version": "3.14"
+   },
+   "SIMD Extensions": {
+    "baseline": [
+     "SSE",
+     "SSE2",
+     "SSE3"
+    ],
+    "found": [
+     "SSSE3",
+     "SSE41",
+     "POPCNT",
+     "SSE42",
+     "AVX",
+     "F16C",
+     "FMA3",
+     "AVX2"
+    ],
+    "not found": [
+     "AVX512F",
+     "AVX512CD",
+     "AVX512_SKX",
+     "AVX512_CLX",
+     "AVX512_CNL",
+     "AVX512_ICL"
+    ]
+   }
+  },
+  "platform": "Windows-11-10.0.26300-SP0",
+  "versions": {
+   "numpy": "2.3.4",
+   "python": "3.14.7",
+   "qiskit": "2.6.2",
+   "qiskit_aer": null,
+   "qiskit_ibm_runtime": "0.52.1",
+   "scipy": "1.16.3"
+  }
+ },
+ "git_head": "f769c6d255af8a9319151dae7e9bbbe0efe4ef41",
+ "median_readout_error": 0.01708984375,
+ "registration": {
+  "approved": "2026-11-19, public, no embargo; archiving complete (checked via OSF API 2026-11-19)",
+  "commit": "88ae3a69bca037a48876105c2e409b50f27ee8d9",
+  "files": {
+   "docs/hardware/amendment_readout_v1.md": "c0f508e885179cd720b7afe34466be29bc8f6f31b82568ac7b206fb3cc24b0a5",
+   "docs/hardware/package_manifest_v1.json": "ec1c54da72d7ba76095019ee629b4fd4c8a05287d7b7fcfb47f005e02715beea"
+  },
+  "note": "Both files are attached to the registration (checked by SHA-256 via the OSF API). The hardware package files are identical in commit 64b55e1, where they were added; 88ae3a6 adds only release-DOI metadata outside the package.",
+  "package_manifest_sha256": "ec1c54da72d7ba76095019ee629b4fd4c8a05287d7b7fcfb47f005e02715beea",
+  "registration_type": "Open-Ended Registration",
+  "registry": "OSF",
+  "timestamp_utc": "2026-11-19T06:39:26Z",
+  "url": "https://osf.io/wh5rs/"
+ },
+ "sampler_options": {
+  "class": "qiskit_ibm_runtime.executor_sampler.sampler.Sampler",
+  "dynamical_decoupling_enable": false,
+  "init_qubits": true,
+  "meas_type": "classified",
+  "twirling_enable_gates": false,
+  "twirling_enable_measure": false
+ },
+ "selected_physical_qubits": [
+  140,
+  141,
+  142,
+  143,
+  136,
+  144,
+  145,
+  146
+ ],
+ "selected_readout_errors": [
+  0.00439453125,
+  0.015625,
+  0.0185546875,
+  0.0625,
+  0.01416015625,
+  0.02978515625,
+  0.0185546875,
+  0.01025390625
+ ],
+ "terms_check": {
+  "allowance": "Open Plan: the RU equivalent of up to 10 minutes per 28-day rolling window (plans overview, read 2026-11-19). Owner-reported remaining allowance on 2026-11-19: 10 minutes. This run is capped at 360 reported QPU seconds.",
+  "allows_run": true,
+  "checked_date": "2026-11-19",
+  "max_shots_per_circuit": 100000,
+  "notes": "The plans page states no shot limit; the per-circuit limit is the backend configuration max_shots read on 2026-11-19. Open Plan instances exist only in us-east.",
+  "sources": [
+   "https://quantum.cloud.ibm.com/docs/guides/plans-overview (read 2026-11-19)",
+   "https://quantum.cloud.ibm.com/docs/en/guides/save-credentials (read 2026-11-19)",
+   "https://quantum.cloud.ibm.com/docs/en/guides/sampler-options (read 2026-11-19)",
+   "https://quantum.cloud.ibm.com/docs/en/guides/max-execution-time (read 2026-11-19)",
+   "https://quantum.cloud.ibm.com/docs/en/guides/monitor-job (read 2026-11-19)",
+   "Backend listing run by the owner, 2026-11-19 14:50 +08:00 (instance open-instance, plan open): ibm_marrakesh, 156 qubits, 0 pending jobs, max_shots 100000, last calibration 2026-11-19 14:27:53 +08:00"
+  ],
+  "unit_conversion": "1 RU = 1 minute of QPU compute time for standard QPU workloads (plans overview, as of November 2026)."
+ },
+ "transpiled_qasm3": {
+  "p4a_all0": "OPENQASM 3.0;\ninclude \"stdgates.inc\";\nbit[8] c;\nbarrier $140, $141, $142, $143, $136, $144, $145, $146;\nc[0] = measure $140;\nc[1] = measure $141;\nc[2] = measure $142;\nc[3] = measure $143;\nc[4] = measure $136;\nc[5] = measure $144;\nc[6] = measure $145;\nc[7] = measure $146;\n",
+  "p4a_all1": "OPENQASM 3.0;\ninclude \"stdgates.inc\";\nbit[8] c;\nx $136;\nx $140;\nx $141;\nx $142;\nx $143;\nx $144;\nx $145;\nx $146;\nbarrier $140, $141, $142, $143, $136, $144, $145, $146;\nc[0] = measure $140;\nc[1] = measure $141;\nc[2] = measure $142;\nc[3] = measure $143;\nc[4] = measure $136;\nc[5] = measure $144;\nc[6] = measure $145;\nc[7] = measure $146;\n"
+ },
+ "transpiled_sha256": {
+  "p4a_all0": "89ce81dce1a81db468d9d91234036b75f9cb4769fb10356cca32f3dee78b2d84",
+  "p4a_all1": "c8bfc783747ac41f2224c21ba27644f12908dda689be8e93a56654af91be1e37"
+ }
+}
