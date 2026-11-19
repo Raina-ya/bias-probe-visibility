@@ -1,5 +1,9 @@
 # Bias Probe Visibility
 
+[![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24360452.svg)](https://doi.org/10.5281/zenodo.24360452)
+
+Raw shot-level data: [10.5281/zenodo.24300969](https://doi.org/10.5281/zenodo.24300969)
+
 When can a runtime bias probe tell that a quantum error-mitigated decision is wrong?
 
 Confidence-interval certification controls sampling error only. A decision can be certified

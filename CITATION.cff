@@ -21,3 +21,6 @@ keywords:
   - "fixed-budget comparison"
   - "QAOA"
   - "simulation"
+version: "v1.0"
+doi: "10.5281/zenodo.24360452"
+date-released: 2026-11-19

@@ -29,19 +29,20 @@ draft URL; use the DOI displayed on each published Zenodo record.
 
 ### Software record
 
-- Version DOI: `TODO`
-- Concept DOI, if displayed: `TODO`
-- DOI URL (`https://doi.org/...`): `TODO`
-- Zenodo record URL: `TODO`
-- Publication date: `TODO`
-- GitHub release tag and commit: `v1.0` / `TODO`
+- Version DOI: `10.5281/zenodo.24360452`
+- Concept DOI, if displayed: `10.5281/zenodo.24360451`
+- DOI URL (`https://doi.org/...`): `https://doi.org/10.5281/zenodo.24360452`
+- Zenodo record URL: `https://zenodo.org/records/24360452`
+- Publication date: `2026-11-19`
+- GitHub release tag and commit: `v1.0` / `a41dad3f491963b845c0c974b060747d250408da` (annotated tag object `baed154`; the archived zip contains no hardware-amendment files)
 
 ### Raw-data record
 
-- Dataset DOI: `TODO`
-- DOI URL (`https://doi.org/...`): `TODO`
-- Zenodo record URL: `TODO`
-- Publication date: `TODO`
+- Dataset DOI: `10.5281/zenodo.24300969` (concept `10.5281/zenodo.24300968`)
+- DOI URL (`https://doi.org/...`): `https://doi.org/10.5281/zenodo.24300969`
+- Zenodo record URL: `https://zenodo.org/records/24300969`
+- Publication date: published 2026-11-19; the record's metadata field shows 2026-11-17, the date the draft was created
+- Files: 7 (`SHA256SUMS.txt` and 6 zip archives), MD5 of each checked against the local files before publication
 
 Open both DOI URLs in a private browser window and confirm that each resolves to
 the intended record before editing repository or OSF metadata.
