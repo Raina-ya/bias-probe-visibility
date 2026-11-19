@@ -1,0 +1,14 @@
+{
+ "registry": "OSF",
+ "url": "https://osf.io/wh5rs/",
+ "timestamp_utc": "2026-11-19T06:39:26Z",
+ "commit": "88ae3a69bca037a48876105c2e409b50f27ee8d9",
+ "package_manifest_sha256": "ec1c54da72d7ba76095019ee629b4fd4c8a05287d7b7fcfb47f005e02715beea",
+ "approved": "2026-11-19, public, no embargo; archiving complete (checked via OSF API 2026-11-19)",
+ "registration_type": "Open-Ended Registration",
+ "files": {
+  "docs/hardware/amendment_readout_v1.md": "c0f508e885179cd720b7afe34466be29bc8f6f31b82568ac7b206fb3cc24b0a5",
+  "docs/hardware/package_manifest_v1.json": "ec1c54da72d7ba76095019ee629b4fd4c8a05287d7b7fcfb47f005e02715beea"
+ },
+ "note": "Both files are attached to the registration (checked by SHA-256 via the OSF API). The hardware package files are identical in commit 64b55e1, where they were added; 88ae3a6 adds only release-DOI metadata outside the package."
+}

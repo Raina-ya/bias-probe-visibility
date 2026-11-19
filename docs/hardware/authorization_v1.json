@@ -1,0 +1,9 @@
+{
+ "backend": "ibm_marrakesh",
+ "run_date": "2026-11-19",
+ "statement": "I authorize one run under hardware readout amendment v1, using at most 360 reported QPU seconds.",
+ "signed_by": "Zhen-Jun Liu",
+ "signed_date": "2026-11-19",
+ "owner_statement_original": "我授權在 ibm_marrakesh 上，於 2026-11-19 執行 hardware readout amendment v1 一次，最多使用 360 秒回報的 QPU 時間。",
+ "recorded_by": "Claude (assistant), from the owner's chat message of 2026-11-19 14:54 +08:00; the owner commits this file"
+}

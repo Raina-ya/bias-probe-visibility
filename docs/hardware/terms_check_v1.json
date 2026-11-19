@@ -1,0 +1,16 @@
+{
+ "checked_date": "2026-11-19",
+ "sources": [
+  "https://quantum.cloud.ibm.com/docs/guides/plans-overview (read 2026-11-19)",
+  "https://quantum.cloud.ibm.com/docs/en/guides/save-credentials (read 2026-11-19)",
+  "https://quantum.cloud.ibm.com/docs/en/guides/sampler-options (read 2026-11-19)",
+  "https://quantum.cloud.ibm.com/docs/en/guides/max-execution-time (read 2026-11-19)",
+  "https://quantum.cloud.ibm.com/docs/en/guides/monitor-job (read 2026-11-19)",
+  "Backend listing run by the owner, 2026-11-19 14:50 +08:00 (instance open-instance, plan open): ibm_marrakesh, 156 qubits, 0 pending jobs, max_shots 100000, last calibration 2026-11-19 14:27:53 +08:00"
+ ],
+ "allowance": "Open Plan: the RU equivalent of up to 10 minutes per 28-day rolling window (plans overview, read 2026-11-19). Owner-reported remaining allowance on 2026-11-19: 10 minutes. This run is capped at 360 reported QPU seconds.",
+ "unit_conversion": "1 RU = 1 minute of QPU compute time for standard QPU workloads (plans overview, as of November 2026).",
+ "max_shots_per_circuit": 100000,
+ "allows_run": true,
+ "notes": "The plans page states no shot limit; the per-circuit limit is the backend configuration max_shots read on 2026-11-19. Open Plan instances exist only in us-east."
+}
