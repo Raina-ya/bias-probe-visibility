@@ -4,11 +4,11 @@ Reads only committed hardware records (results/hardware_v1/, results/hardware_v1
 and the registered amendment's analytic threshold, and writes:
 
   paper/numbers_hw_v4_1.tex           LaTeX macros for every hardware number in the paper
-  figures/hw_relevance_v4_1.svg       (a) rho_hat with intervals; (b) reported vs measured errors
+  paper/hw_figure_v4_1.tex            pgfplots figure: (a) rho_hat with intervals; (b) reported vs measured
   docs/results/hardware_readout_v1.md results note
 
 Outputs are derived (overwritten deterministically); the records they read are
-immutable.  The SVG is converted to PDF with headless Chromium (see build log).
+immutable.  The figure is typeset by pgfplots inside the paper.
 """
 
 from __future__ import annotations
@@ -23,7 +23,7 @@ sys.path.insert(0, str(REPO / "experiments" / "hardware"))
 import hw_circuits_v1 as hc  # noqa: E402
 import hw_stats_v1 as st  # noqa: E402
 
-OUTPUTS = ("numbers_hw_v4_1.tex", "hw_relevance_v4_1.svg", "hardware_readout_v1.md")
+OUTPUTS = ("numbers_hw_v4_1.tex", "hw_figure_v4_1.tex", "hardware_readout_v1.md")
 RUN = REPO / "results" / "hardware_v1"
 ANALYSIS = REPO / "results" / "hardware_v1_analysis" / "analysis_v1.json"
 E5_MAX_TAU, E5_MARGINAL = 0.01, 0.10  # protocol v4 Section 3.1
@@ -89,99 +89,85 @@ def md_table(d: dict) -> str:
 
 
 def figure(d: dict) -> str:
-    """Full-width SVG with two panels.
+    """pgfplots code for the two-panel hardware figure (typeset with the paper's fonts).
 
-    (a) Estimated correlation coefficient rho_hat with 95% percentile bootstrap
-        intervals (unadjusted) for 28 pairs x 2 preparations, on the scale of the
-        data; the relevance threshold and the largest E5 setting lie far above
-        the axis and are marked by arrows.
-    (b) Reported calibration readout error versus measured flip rate per
-        selected qubit, both preparations, with the line y = x.
+    (a) Caterpillar plot: rho_hat with unadjusted 95% percentile-bootstrap
+        intervals for all 56 pair-preparations, ordered by estimate; circles
+        are preparation all-0, squares all-1.  The E5 setting and the
+        relevance threshold lie far above the axis and are named in a note.
+    (b) Reported calibration readout error against measured flip rate per
+        selected qubit, both preparations joined by a grey line, with y = x.
     """
 
     a, m = d["analysis"], d["manifest"]
-    pairs = a["pairs"]
-    order = hc_pairs()
-    W, H = 700, 252
-    colors = {"p4a_all0": "#1f5fa8", "p4a_all1": "#c2571a"}
-    out = [f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}" '
-           'font-family="Helvetica, Arial, sans-serif">', f'<rect width="{W}" height="{H}" fill="#ffffff"/>']
-
-    def text(x, y, t, size=9, anchor="start", fill="#333", weight="normal", rotate=None):
-        tr = f' transform="rotate({rotate} {x:.1f} {y:.1f})"' if rotate is not None else ""
-        out.append(f'<text x="{x:.1f}" y="{y:.1f}" font-size="{size}" text-anchor="{anchor}" '
-                   f'fill="{fill}" font-weight="{weight}"{tr}>{t}</text>')
-
-    # ---------------- panel (a)
-    L, T, PW, PH = 52, 40, 400, 160
-    ymin, ymax = -0.025, 0.025
-    ya = lambda v: T + (ymax - v) / (ymax - ymin) * PH  # noqa: E731
-    xa = lambda i, k: L + (i + 0.5) / len(order) * PW + (-2.6 if k == 0 else 2.6)  # noqa: E731
-    text(8, 14, "a", 12, weight="bold", fill="#111")
-    text(26, 14, "Measured pair correlations are about 1% or less", 10, fill="#111")
-    for v in (-0.02, -0.01, 0.0, 0.01, 0.02):
-        out.append(f'<line x1="{L}" y1="{ya(v):.1f}" x2="{L + PW}" y2="{ya(v):.1f}" '
-                   f'stroke="{"#999" if v == 0 else "#e6e6e6"}" stroke-width="1"/>')
-        text(L - 5, ya(v) + 3, f"{v:+.2f}".replace("+0.00", "0"), 8.5, "end", "#444")
-    by = {(p["circuit"], tuple(p["pair"])): p for p in pairs}
-    for i, pr in enumerate(order):
-        for k, circ in enumerate(hc.CIRCUITS):
-            p = by[(circ, pr)]
-            den = (p["q_i"] * (1 - p["q_i"]) * p["q_j"] * (1 - p["q_j"])) ** 0.5
-            lo, hi = (min(max(v / den, ymin), ymax) for v in p["c_interval_95"])
-            cx = xa(i, k)
-            out.append(f'<line x1="{cx:.1f}" y1="{ya(hi):.1f}" x2="{cx:.1f}" y2="{ya(lo):.1f}" '
-                       f'stroke="{colors[circ]}" stroke-width="1" opacity="0.8"/>')
-            out.append(f'<circle cx="{cx:.1f}" cy="{ya(p["rho_hat"]):.1f}" r="2" fill="{colors[circ]}"/>')
-        text(L + (i + 0.5) / len(order) * PW + 2.5, T + PH + 6, f"{pr[0]}-{pr[1]}", 6.8, "end", "#444", rotate=-90)
+    pts = []
+    for p in a["pairs"]:
+        den = (p["q_i"] * (1 - p["q_i"]) * p["q_j"] * (1 - p["q_j"])) ** 0.5
+        lo, hi = (v / den for v in p["c_interval_95"])
+        pts.append((p["rho_hat"], lo, hi, p["circuit"]))
+    pts.sort(key=lambda t: (t[0], t[3]))
     rho_star = min(p["c_star"] / ((p["q_i"] * (1 - p["q_i"]) * p["q_j"] * (1 - p["q_j"])) ** 0.5)
-                   for p in pairs if p["q_i"] > 0 and p["q_j"] > 0)
+                   for p in a["pairs"] if p["q_i"] > 0 and p["q_j"] > 0)
     e5 = E5_MAX_TAU / (E5_MARGINAL * (1 - E5_MARGINAL))
-    xx = L + 10
-    out.append(f'<line x1="{xx:.1f}" y1="{T - 2}" x2="{xx:.1f}" y2="{T - 15}" stroke="#555" stroke-width="1"/>')
-    out.append(f'<path d="M {xx - 3.5:.1f} {T - 12} L {xx:.1f} {T - 19} L {xx + 3.5:.1f} {T - 12} Z" fill="#555"/>')
-    text(xx + 7, T - 13, f"Far above this axis: largest simulated E5 setting, ρ = {e5:.2f};", 8.3, "start", "#444")
-    text(xx + 7, T - 3, f"threshold where tensored mitigation becomes worse than none, ρ* = {rho_star:.2f} or more", 8.3, "start", "#444")
-    text(L + PW / 2, T + PH + 38, "logical qubit pair", 9, "middle", "#222")
-    text(14, T + PH / 2, "correlation coefficient ρ", 9, "middle", "#222", rotate=-90)
-    lx, ly = L + 8, T + PH - 22
-    for k, (circ, lab) in enumerate((("p4a_all0", "prepared all 0"), ("p4a_all1", "prepared all 1"))):
-        out.append(f'<circle cx="{lx + 98 * k}" cy="{ly}" r="2.4" fill="{colors[circ]}"/>')
-        text(lx + 6 + 98 * k, ly + 3, lab, 8.5)
 
-    # ---------------- panel (b)
-    L2, T2, S = 520, 40, 160
-    vmax = 7.0
-    xb = lambda v: L2 + v / vmax * S  # noqa: E731
-    yb = lambda v: T2 + (vmax - v) / vmax * S  # noqa: E731
-    text(L2 - 44, 14, "b", 12, weight="bold", fill="#111")
-    text(L2 - 26, 14, "Reported errors miss measured flip rates", 10, fill="#111")
-    for v in range(0, 8):
-        out.append(f'<line x1="{xb(v):.1f}" y1="{T2}" x2="{xb(v):.1f}" y2="{T2 + S}" stroke="#eeeeee" stroke-width="1"/>')
-        out.append(f'<line x1="{L2}" y1="{yb(v):.1f}" x2="{L2 + S}" y2="{yb(v):.1f}" stroke="#eeeeee" stroke-width="1"/>')
-        if v % 2 == 0:
-            text(xb(v), T2 + S + 12, str(v), 8.5, "middle", "#444")
-            text(L2 - 5, yb(v) + 3, str(v), 8.5, "end", "#444")
-    out.append(f'<rect x="{L2}" y="{T2}" width="{S}" height="{S}" fill="none" stroke="#999" stroke-width="1"/>')
-    out.append(f'<line x1="{xb(0):.1f}" y1="{yb(0):.1f}" x2="{xb(vmax):.1f}" y2="{yb(vmax):.1f}" '
-               'stroke="#222" stroke-width="1" stroke-dasharray="4 3"/>')
-    text(xb(5.9), yb(6.35), "y = x", 8.5, "end", "#222")
+    def series(circ):
+        rows = [f"    {k + 1} {r:.6f} {hi - r:.6f} {r - lo:.6f}"
+                for k, (r, lo, hi, c) in enumerate(pts) if c == circ]
+        return "\n".join(rows)
+
     rep = m["selected_readout_errors"]
     rates = a["flip_rates_per_logical_qubit"]
+    joins, marks0, marks1, labels = [], [], [], []
     for k, q in enumerate(m["selected_physical_qubits"]):
-        ys = [100 * rates[c][k] for c in hc.CIRCUITS]
-        out.append(f'<line x1="{xb(100 * rep[k]):.1f}" y1="{yb(min(ys)):.1f}" x2="{xb(100 * rep[k]):.1f}" '
-                   f'y2="{yb(max(ys)):.1f}" stroke="#9a9a9a" stroke-width="1"/>')
-        for circ in hc.CIRCUITS:
-            out.append(f'<circle cx="{xb(100 * rep[k]):.1f}" cy="{yb(100 * rates[circ][k]):.1f}" r="2.6" '
-                       f'fill="{colors[circ]}" opacity="0.9"/>')
-        if max(abs(y - 100 * rep[k]) for y in ys) > 2.5:
-            text(xb(100 * rep[k]) + (-5 if rep[k] > 0.05 else 5), yb(max(ys)) - 4, f"q{q}", 8,
-                 "end" if rep[k] > 0.05 else "start", "#444")
-    text(L2 + S / 2, T2 + S + 26, "reported readout error (%)", 9, "middle", "#222")
-    text(L2 - 26, T2 + S / 2, "measured flip rate (%)", 9, "middle", "#222", rotate=-90)
-    out.append("</svg>")
-    return "\n".join(out) + "\n"
+        x = 100 * rep[k]
+        y0, y1 = 100 * rates["p4a_all0"][k], 100 * rates["p4a_all1"][k]
+        joins.append(f"  \\draw[gray!70] (axis cs:{x:.3f},{y0:.3f}) -- (axis cs:{x:.3f},{y1:.3f});")
+        marks0.append(f"({x:.3f},{y0:.3f})")
+        marks1.append(f"({x:.3f},{y1:.3f})")
+        if max(abs(y0 - x), abs(y1 - x)) > 2.5:
+            anchor = "east" if x > 5 else "west"
+            labels.append(f"  \\node[font=\\scriptsize,anchor={anchor},inner sep=2pt] at "
+                          f"(axis cs:{x:.3f},{max(y0, y1):.3f}) {{{q}}};")
+    return "\n".join([
+        "% Generated by experiments/synthesis/hw_paper_v4_1.py from the hardware records. Do not edit by hand.",
+        "\\definecolor{hwblue}{RGB}{31,95,168}\\definecolor{hworange}{RGB}{194,87,26}",
+        "\\begin{tikzpicture}",
+        "\\begin{axis}[name=pa, width=11.6cm, height=5.4cm, xmin=0, xmax=57, ymin=-0.025, ymax=0.025,",
+        "  xtick=\\empty, ytick={-0.02,-0.01,0,0.01,0.02},",
+        "  yticklabel style={/pgf/number format/fixed,/pgf/number format/precision=2,/pgf/number format/fixed zerofill},",
+        "  scaled y ticks=false, tick label style={font=\\footnotesize}, label style={font=\\small},",
+        "  xlabel={pair-preparations, ordered by estimate}, ylabel={correlation $\\hat\\rho$},",
+        "  axis lines*=left, ymajorgrids, grid style={gray!20},",
+        "  legend style={font=\\footnotesize, draw=none, fill=none, at={(0.02,0.04)}, anchor=south west},",
+        "  legend columns=2, legend cell align=left, legend style={/tikz/every even column/.append style={column sep=0.45cm}},",
+        "  title={\\textbf{(a)} Pair correlations are about 1\\% or less}, title style={font=\\small, at={(0,1)}, anchor=south west, xshift=-1.0cm}]",
+        "\\addplot[gray!60, forget plot] coordinates {(0,0) (57,0)};",
+        "\\addplot[only marks, mark=*, mark size=1.3pt, hwblue, error bars/.cd, y dir=both, y explicit, error bar style={hwblue!70}]",
+        "  table[x index=0, y index=1, y error plus index=2, y error minus index=3] {",
+        series("p4a_all0"), "  };",
+        "\\addlegendentry{all qubits prepared in 0}",
+        "\\addplot[only marks, mark=square*, mark size=1.2pt, hworange, error bars/.cd, y dir=both, y explicit, error bar style={hworange!70}]",
+        "  table[x index=0, y index=1, y error plus index=2, y error minus index=3] {",
+        series("p4a_all1"), "  };",
+        "\\addlegendentry{all qubits prepared in 1}",
+        f"\\node[font=\\scriptsize, align=left, anchor=north west, fill=white, inner sep=2pt] at (rel axis cs:0.015,0.985)",
+        f"  {{Far above this axis: largest simulated E5 setting, $\\rho={e5:.2f}$;\\\\threshold where tensored mitigation is worse than none, $\\rho^\\ast \\ge {rho_star:.2f}$}};",
+        "\\end{axis}",
+        "\\begin{axis}[at={(pa.north east)}, anchor=north west, xshift=1.5cm, width=5.4cm, height=5.4cm,",
+        "  xmin=0, xmax=7, ymin=0, ymax=7, xtick={0,2,4,6}, ytick={0,2,4,6},",
+        "  tick label style={font=\\footnotesize}, label style={font=\\small},",
+        "  xlabel={reported readout error (\\%)}, ylabel={measured flip rate (\\%)},",
+        "  grid=major, grid style={gray!20},",
+        "  title={\\textbf{(b)} Reported errors miss measured rates}, title style={font=\\small, at={(0,1)}, anchor=south west, xshift=-1.0cm}]",
+        "\\addplot[black, dashed, forget plot] coordinates {(0,0) (7,7)};",
+        "\\node[font=\\scriptsize, anchor=east] at (axis cs:5.7,6.3) {$y=x$};",
+        *joins,
+        f"\\addplot[only marks, mark=*, mark size=1.5pt, hwblue] coordinates {{{' '.join(marks0)}}};",
+        f"\\addplot[only marks, mark=square*, mark size=1.4pt, hworange] coordinates {{{' '.join(marks1)}}};",
+        *labels,
+        "\\end{axis}",
+        "\\end{tikzpicture}",
+    ]) + "\n"
 
 
 def hc_pairs():
@@ -235,7 +221,7 @@ def main() -> int:
     lines = ["% Generated by experiments/synthesis/hw_paper_v4_1.py. Do not edit by hand."]
     lines += [f"\\newcommand{{\\num{k}}}{{{val}}} % {src}" for k, (val, src) in sorted(n.items())]
     (REPO / "paper" / OUTPUTS[0]).write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
-    (REPO / "figures" / OUTPUTS[1]).write_text(figure(d), encoding="utf-8", newline="\n")
+    (REPO / "paper" / OUTPUTS[1]).write_text(figure(d), encoding="utf-8", newline="\n")
     (REPO / "docs" / "results" / OUTPUTS[2]).write_text(note(d, n), encoding="utf-8", newline="\n")
     print("\n".join(f"{k} = {val}" for k, (val, _) in sorted(n.items())))
     return 0

@@ -36,6 +36,10 @@ class PaperLedger(unittest.TestCase):
                                 HW_NUMBERS.read_text(encoding="utf-8")))
         self.assertEqual(found, expected)
 
+    def test_hardware_figure_matches_records(self) -> None:
+        figure = (REPO / "paper" / "hw_figure_v4_1.tex").read_text(encoding="utf-8")
+        self.assertEqual(figure, hw_numbers.figure(hw_numbers.load()))
+
     def test_hardware_macros_do_not_collide(self) -> None:
         self.assertEqual(set(numbers.numbers()) & set(hw_numbers.numbers()), set())
 

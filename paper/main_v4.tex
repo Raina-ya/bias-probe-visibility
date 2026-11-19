@@ -11,6 +11,8 @@
 \usepackage{hyperref}
 \usepackage{url}
 \usepackage{graphicx}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
 \input{numbers_v4}
 \input{numbers_hw_v4_1}
 
@@ -570,16 +572,17 @@ preparations.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{../figures/hw_relevance_v4_1.pdf}
+\input{hw_figure_v4_1}
 \caption{\textbf{Readout correlations on \code{ibm\_marrakesh} are about one
 percent or less, far below both the simulated E5 stress level and the level at
 which tensored readout mitigation fails.} (a)~Estimated correlation
-coefficient for each of the 28 pairs of the eight selected qubits under the
-two preparations, with unadjusted 95\% percentile-bootstrap intervals; the
-E5 setting and the threshold lie far above the plotted range. (b)~The backend's
+coefficient for all 56 pair-preparations (28 pairs of the eight selected
+qubits, two preparations), ordered by estimate, with unadjusted 95\%
+percentile-bootstrap intervals; circles, all qubits prepared in 0; squares,
+in 1. The E5 setting and the threshold lie far above the plotted range. (b)~The backend's
 reported readout error of each selected qubit against its measured flip rate
-under each preparation (grey lines join the two preparations of one qubit);
-points far from $y=x$ show that the reported calibration did not predict the
+under each preparation (grey lines join the two preparations of one qubit; numbers are physical
+qubit indices); points far from $y=x$ show that the reported calibration did not predict the
 measured rates.}
 \label{fig:hw}
 \end{figure*}
