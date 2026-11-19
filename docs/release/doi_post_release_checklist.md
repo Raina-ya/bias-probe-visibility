@@ -109,3 +109,14 @@ Official references:
 - [GitHub: About CITATION files](https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-citation-files)
 - [Zenodo: reserve a DOI](https://help.zenodo.org/docs/deposit/describe-records/reserve-doi/)
 - [Zenodo: manage versions](https://help.zenodo.org/docs/deposit/manage-versions/)
+
+## Release v1.1 (2026-11-19)
+
+- Version DOI: `10.5281/zenodo.24362003`; concept DOI (all versions): `10.5281/zenodo.24360451`
+- Zenodo record URL: `https://zenodo.org/records/24362003`
+- GitHub release tag and commit: `v1.1` / `67c6a60` (archive root checked: hardware records,
+  analysis, amendment, authorization and paper v4.1 present; superseded SVG figure and table absent)
+- Contents added since v1.0: hardware readout addendum (OSF `wh5rs`), single run on
+  `ibm_marrakesh`, analysis, paper v4.1 with the hardware section and figure.
+- After release: dataset `10.5281/zenodo.24300969` links v1.1 (metadata edit, DOI unchanged); OSF `y7m29`
+  description updated; README badge and `CITATION.cff` point to the concept DOI.

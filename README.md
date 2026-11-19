@@ -1,6 +1,9 @@
 # Bias Probe Visibility
 
-[![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24360452.svg)](https://doi.org/10.5281/zenodo.24360452)
+[![Software DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24360451.svg)](https://doi.org/10.5281/zenodo.24360451)
+
+Software DOI (all versions): [10.5281/zenodo.24360451](https://doi.org/10.5281/zenodo.24360451); v1.1, with the hardware addendum:
+[10.5281/zenodo.24362003](https://doi.org/10.5281/zenodo.24362003); v1.0: [10.5281/zenodo.24360452](https://doi.org/10.5281/zenodo.24360452).
 
 Raw shot-level data: [10.5281/zenodo.24300969](https://doi.org/10.5281/zenodo.24300969)
 

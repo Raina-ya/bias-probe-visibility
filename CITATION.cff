@@ -22,6 +22,19 @@ keywords:
   - "fixed-budget comparison"
   - "QAOA"
   - "simulation"
-version: "v1.0"
-doi: "10.5281/zenodo.24360452"
+version: "v1.1"
+doi: "10.5281/zenodo.24360451"
 date-released: 2026-11-19
+identifiers:
+  - type: doi
+    value: "10.5281/zenodo.24360451"
+    description: "All versions (concept DOI)"
+  - type: doi
+    value: "10.5281/zenodo.24362003"
+    description: "Version v1.1 (hardware readout addendum, paper v4.1)"
+  - type: doi
+    value: "10.5281/zenodo.24360452"
+    description: "Version v1.0"
+  - type: doi
+    value: "10.5281/zenodo.24300969"
+    description: "Raw shot-level simulation data (dataset)"
