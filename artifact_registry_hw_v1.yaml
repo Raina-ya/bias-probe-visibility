@@ -1,0 +1,107 @@
+{
+  "version": "hw_v1",
+  "artifacts": [
+    {
+      "path": "experiments/hardware/readout_power_v1.csv",
+      "sha256": "a7ac6920641d5170288b6f465dac6af1d26fe8f78f13e99afa8043a668db34da",
+      "generator": "experiments/hardware/readout_power_v1.py",
+      "output_pattern": "readout_power_v1.csv",
+      "status": "planning_split99_numpy2.3.4"
+    },
+    {
+      "path": "experiments/hardware/readout_power_v1.json",
+      "sha256": "10bd77e435fc6298517f748bd02e2ff11ff670b5f5a24839e95433b60f2df501",
+      "generator": "experiments/hardware/readout_power_v1.py",
+      "output_pattern": "readout_power_v1.json",
+      "status": "planning_split99_numpy2.3.4"
+    },
+    {
+      "path": "experiments/hardware/readout_power_v1_run_log.txt",
+      "sha256": "3055096160c82d3d9bf7da462628f5a76f1ca3ffaa33abef35bf689b3cd99234",
+      "generator": "experiments/hardware/readout_power_v1.py",
+      "output_pattern": "readout_power_v1_run_log.txt",
+      "status": "planning_split99_numpy2.3.4",
+      "capture": "stdout"
+    },
+    {
+      "path": "experiments/hardware/readout_power_v1_numpy2.5.3.csv",
+      "sha256": "129cd7b15052f454b7c6cc0a66fa9ba0a4e7c20db120a9c263521c821c188bb3",
+      "generator": "experiments/hardware/readout_power_v1.py",
+      "output_pattern": "readout_power_v1_numpy2.5.3.csv",
+      "status": "retained_first_run_numpy2.5.3",
+      "renamed_from": "readout_power_v1.csv"
+    },
+    {
+      "path": "experiments/hardware/readout_power_v1_numpy2.5.3.json",
+      "sha256": "d89130ee39b0d4273b6515a1491e9b5d3da7cf493fe8e01073761216d5c3ab02",
+      "generator": "experiments/hardware/readout_power_v1.py",
+      "output_pattern": "readout_power_v1_numpy2.5.3.json",
+      "status": "retained_first_run_numpy2.5.3",
+      "renamed_from": "readout_power_v1.json"
+    },
+    {
+      "path": "experiments/hardware/readout_power_v1_numpy2.5.3_run_log.txt",
+      "sha256": "efbb3c48d205a4626f86b985fe477914d686f839d37fbf083adc7c314173a80d",
+      "generator": "experiments/hardware/readout_power_v1.py",
+      "output_pattern": "readout_power_v1_numpy2.5.3_run_log.txt",
+      "status": "retained_first_run_numpy2.5.3",
+      "capture": "stdout"
+    },
+    {
+      "path": "experiments/hardware/dry_run/dry_run_v1_summary.json",
+      "sha256": "bf18de664d60fc222b67d2e605129170c90f93962f26ca7d0f454349d811dee6",
+      "generator": "experiments/hardware/hw_dry_run_v1.py",
+      "output_pattern": "dry_run_v1_summary.json",
+      "status": "offline_dry_run_split99"
+    },
+    {
+      "path": "experiments/hardware/dry_run/dry_run_v1_log.txt",
+      "sha256": "755e0ef7cdf1339458783e774ee239275d01983aeb897ab00e024d0574067904",
+      "generator": "experiments/hardware/hw_dry_run_v1.py",
+      "output_pattern": "dry_run_v1_log.txt",
+      "status": "offline_dry_run_split99"
+    },
+    {
+      "path": "experiments/hardware/dry_run/null_analysis/analysis_v1.json",
+      "sha256": "5896113e403454e1cd2dc21e21acd82b8815d9d029e7e6a3f6b8209e7f945864",
+      "generator": "experiments/hardware/hw_analysis_v1.py",
+      "output_pattern": "analysis_v1.json",
+      "status": "offline_dry_run_split99"
+    },
+    {
+      "path": "experiments/hardware/dry_run/null_analysis/analysis_v1.md",
+      "sha256": "4266cc3bda957a91c5b954da636187ac6a11e4db0214baccd58482733987a099",
+      "generator": "experiments/hardware/hw_analysis_v1.py",
+      "output_pattern": "analysis_v1.md",
+      "status": "offline_dry_run_split99"
+    },
+    {
+      "path": "experiments/hardware/dry_run/correlated_analysis/analysis_v1.json",
+      "sha256": "a917cab5d8bad6a5e9462f6365a999a27f0f82f3c0d8358314b07db44e1af483",
+      "generator": "experiments/hardware/hw_analysis_v1.py",
+      "output_pattern": "analysis_v1.json",
+      "status": "offline_dry_run_split99"
+    },
+    {
+      "path": "experiments/hardware/dry_run/correlated_analysis/analysis_v1.md",
+      "sha256": "bf6dcae089125b3eba6d38a0ab6bcb8fe19abd388a0546005befd98acb79f3a0",
+      "generator": "experiments/hardware/hw_analysis_v1.py",
+      "output_pattern": "analysis_v1.md",
+      "status": "offline_dry_run_split99"
+    },
+    {
+      "path": "experiments/hardware/adapter_smoke/adapter_smoke_v1.json",
+      "sha256": "5437ecd55f5953222665c965ef3bb5b7585f8f2b30335519a1500de917f1e8d1",
+      "generator": "experiments/hardware/hw_adapter_smoke_v1.py",
+      "output_pattern": "adapter_smoke_v1.json",
+      "status": "offline_adapter_smoke_runtime0.52.1_unseeded"
+    },
+    {
+      "path": "experiments/hardware/adapter_smoke/adapter_smoke_v1_log.txt",
+      "sha256": "698562f1dc0691c9cebfefb083b407444ae184dd148b983a06c6bf0f5f9d411b",
+      "generator": "experiments/hardware/hw_adapter_smoke_v1.py",
+      "output_pattern": "adapter_smoke_v1_log.txt",
+      "status": "offline_adapter_smoke_runtime0.52.1_unseeded"
+    }
+  ]
+}

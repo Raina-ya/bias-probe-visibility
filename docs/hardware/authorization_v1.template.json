@@ -1,0 +1,8 @@
+{
+ "_instructions": "The owner copies this file to authorization_v1.json on the run day and fills every field. The statement must be copied exactly. The runner refuses if the backend or run_date differs from the command and today's date.",
+ "backend": "",
+ "run_date": "",
+ "statement": "I authorize one run under hardware readout amendment v1, using at most 360 reported QPU seconds.",
+ "signed_by": "",
+ "signed_date": ""
+}

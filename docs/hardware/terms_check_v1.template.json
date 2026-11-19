@@ -1,0 +1,9 @@
+{
+ "_instructions": "Filled on the run day from IBM Quantum's official pages, read that day. allows_run must be true only if the terms permit this run within the Open Plan allowance. max_shots_per_circuit is the provider limit read that day.",
+ "checked_date": "",
+ "sources": [],
+ "allowance": "",
+ "unit_conversion": "",
+ "max_shots_per_circuit": null,
+ "allows_run": null
+}

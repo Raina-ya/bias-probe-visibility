@@ -1,0 +1,78 @@
+{
+ "authorization": {
+  "backend": "fake_generic_27",
+  "run_date": "2026-01-01",
+  "signed_by": "DRY RUN (no owner signature)",
+  "signed_date": "2026-01-01",
+  "statement": "I authorize one run under hardware readout amendment v1, using at most 360 reported QPU seconds."
+ },
+ "backend": "fake_generic_27",
+ "calibration_timestamp": "2026-01-01T00:00:00.000000Z",
+ "constants": {
+  "cap_seconds": 360,
+  "pilot_shots_per_circuit": 1000,
+  "q_grid": [
+   0.005,
+   0.01,
+   0.02,
+   0.05
+  ],
+  "reserve_seconds": 30,
+  "s_min": {
+   "0.005": 30000,
+   "0.01": 10000,
+   "0.02": 10000,
+   "0.05": 3000
+  },
+  "safety": 1.25
+ },
+ "dry_run": true,
+ "environment": null,
+ "git_head": null,
+ "median_readout_error": 0.009677999999999999,
+ "registration": null,
+ "sampler_options": {
+  "class": "FakeAdapter",
+  "dynamical_decoupling_enable": false,
+  "twirling_enable_gates": false,
+  "twirling_enable_measure": false
+ },
+ "selected_physical_qubits": [
+  17,
+  1,
+  3,
+  19,
+  13,
+  22,
+  6,
+  2
+ ],
+ "selected_readout_errors": [
+  0.007366,
+  0.008158,
+  0.008929,
+  0.0094,
+  0.009956,
+  0.011538,
+  0.016072,
+  0.017728
+ ],
+ "terms_check": {
+  "allowance": "synthetic",
+  "allows_run": true,
+  "checked_date": "2026-01-01",
+  "max_shots_per_circuit": 50000,
+  "sources": [
+   "dry run: no terms read"
+  ],
+  "unit_conversion": "synthetic"
+ },
+ "transpiled_qasm3": {
+  "p4a_all0": "OPENQASM 3.0;\ninclude \"stdgates.inc\";\nbit[8] c;\nbarrier $17, $1, $3, $19, $13, $22, $6, $2;\nc[0] = measure $17;\nc[1] = measure $1;\nc[2] = measure $3;\nc[3] = measure $19;\nc[4] = measure $13;\nc[5] = measure $22;\nc[6] = measure $6;\nc[7] = measure $2;\n",
+  "p4a_all1": "OPENQASM 3.0;\ninclude \"stdgates.inc\";\nbit[8] c;\nx $1;\nx $2;\nx $3;\nx $6;\nx $13;\nx $17;\nx $19;\nx $22;\nbarrier $17, $1, $3, $19, $13, $22, $6, $2;\nc[0] = measure $17;\nc[1] = measure $1;\nc[2] = measure $3;\nc[3] = measure $19;\nc[4] = measure $13;\nc[5] = measure $22;\nc[6] = measure $6;\nc[7] = measure $2;\n"
+ },
+ "transpiled_sha256": {
+  "p4a_all0": "90e0f5d987d5341a4cbd53d6c1b95291338ca95e1941758defd1aa00ff4c32ec",
+  "p4a_all1": "73267344e26444245618b0ae316b4a6b85cafbe4427f7e6a8f2452bef2a7cb4d"
+ }
+}

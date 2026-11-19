@@ -1,0 +1,32 @@
+{
+ "0.005": {
+  "detection_rho_0.02": null,
+  "detection_rho_0.05": 30000,
+  "detection_rho_0.1": 30000,
+  "detection_rho_0.2": 10000,
+  "relevance_1.5cstar": 30000
+ },
+ "0.01": {
+  "detection_rho_0.02": null,
+  "detection_rho_0.05": 30000,
+  "detection_rho_0.1": 10000,
+  "detection_rho_0.2": 3000,
+  "relevance_1.5cstar": 10000
+ },
+ "0.02": {
+  "detection_rho_0.02": null,
+  "detection_rho_0.05": 30000,
+  "detection_rho_0.1": 10000,
+  "detection_rho_0.2": 3000,
+  "relevance_1.5cstar": 10000
+ },
+ "0.05": {
+  "detection_rho_0.02": null,
+  "detection_rho_0.05": 10000,
+  "detection_rho_0.1": 3000,
+  "detection_rho_0.2": 1000,
+  "relevance_1.5cstar": 3000
+ }
+}
+{"detection_rho_0": 0.001, "relevance_at_cstar": 0.003} 41.7 s
+exit 0

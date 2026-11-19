@@ -1,0 +1,12 @@
+runtime_version: 0.52.1
+backend: fake_torino
+selected_physical_qubits: [51, 52, 37, 33, 32, 31, 30, 18]
+selected_readout_errors: [0.005126953125, 0.031494140625, 0.00634765625, 0.0234375, 0.01220703125, 0.05029296875, 0.00537109375, 0.00830078125]
+sampler_options: {'class': 'qiskit_ibm_runtime.executor_sampler.sampler.Sampler', 'twirling_enable_gates': False, 'twirling_enable_measure': False, 'dynamical_decoupling_enable': False, 'init_qubits': True, 'meas_type': 'classified'}
+transpiled_op_counts: {'p4a_all0': {'measure': 8, 'x': 0, 'barrier': 1}, 'p4a_all1': {'measure': 8, 'x': 8, 'barrier': 1}}
+pilot_shots_returned: {'p4a_all0': 1000, 'p4a_all1': 1000}
+pilot_usage_seconds: 0.0
+allocation_go: False
+allocation_reason: pilot reported no positive QPU seconds
+main_refused: allocation is NO-GO: pilot reported no positive QPU seconds
+index_problems: []

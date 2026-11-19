@@ -1,0 +1,4 @@
+{"job_id": "dryrun-null-0", "job_index": 0, "max_execution_time": 360, "shots_per_circuit": {"p4a_all0": 1000, "p4a_all1": 1000}, "stage": "pilot", "submitted_utc": "2026-01-01T00:00:00.000000Z"}
+{"job_id": "dryrun-null-1", "job_index": 0, "max_execution_time": 357, "shots_per_circuit": {"p4a_all0": 34934, "p4a_all1": 34934}, "stage": "main", "submitted_utc": "2026-01-01T00:00:00.000000Z"}
+{"job_id": "dryrun-null-2", "job_index": 1, "max_execution_time": 338, "shots_per_circuit": {"p4a_all0": 34933, "p4a_all1": 34933}, "stage": "main", "submitted_utc": "2026-01-01T00:00:00.000000Z"}
+{"job_id": "dryrun-null-3", "job_index": 2, "max_execution_time": 318, "shots_per_circuit": {"p4a_all0": 34933, "p4a_all1": 34933}, "stage": "main", "submitted_utc": "2026-01-01T00:00:00.000000Z"}

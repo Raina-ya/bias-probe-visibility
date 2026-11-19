@@ -1,0 +1,2 @@
+null: supported (no relevance rejection); relevance rejections 0 []; detection 0; allocation go=True (shots per circuit reach S_min); main jobs 3; shots {'p4a_all0': 104800, 'p4a_all1': 104800}; index problems []
+correlated: falsified (at least one relevance rejection); relevance rejections 2 [[0, 1, 'p4a_all0'], [0, 1, 'p4a_all1']]; detection 2; allocation go=True (shots per circuit reach S_min); main jobs 3; shots {'p4a_all0': 104800, 'p4a_all1': 104800}; index problems []

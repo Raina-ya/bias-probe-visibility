@@ -1,0 +1,7 @@
+{
+ "go": false,
+ "median_readout_error": 0.01025390625,
+ "q_pilot": 0.0,
+ "reason": "pilot reported no positive QPU seconds",
+ "s_pilot": 2000
+}

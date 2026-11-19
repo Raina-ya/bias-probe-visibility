@@ -1,0 +1,30 @@
+{
+ "go": true,
+ "margin_shots": 74800,
+ "median_readout_error": 0.009677999999999999,
+ "plan": [
+  {
+   "p4a_all0": 34934,
+   "p4a_all1": 34934
+  },
+  {
+   "p4a_all0": 34933,
+   "p4a_all1": 34933
+  },
+  {
+   "p4a_all0": 34933,
+   "p4a_all1": 34933
+  }
+ ],
+ "q_pilot": 2.5,
+ "q_run": 0.005,
+ "r": 0.0015625,
+ "reason": "shots per circuit reach S_min",
+ "s_min": 30000,
+ "s_pilot": 2000,
+ "s_remaining": 209600,
+ "shots_per_circuit": {
+  "p4a_all0": 104800,
+  "p4a_all1": 104800
+ }
+}

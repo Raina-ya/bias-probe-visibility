@@ -1,0 +1,75 @@
+{
+ "allocation_go": false,
+ "allocation_reason": "pilot reported no positive QPU seconds",
+ "backend": "fake_torino",
+ "index_problems": [],
+ "main_refused": "allocation is NO-GO: pilot reported no positive QPU seconds",
+ "pilot_flip_rates_per_logical_qubit": {
+  "p4a_all0": [
+   0.007,
+   0.03,
+   0.006,
+   0.031,
+   0.016,
+   0.044,
+   0.006,
+   0.008
+  ],
+  "p4a_all1": [
+   0.005,
+   0.028,
+   0.01,
+   0.021,
+   0.011,
+   0.056,
+   0.008,
+   0.01
+  ]
+ },
+ "pilot_shots_returned": {
+  "p4a_all0": 1000,
+  "p4a_all1": 1000
+ },
+ "pilot_usage_seconds": 0.0,
+ "runtime_version": "0.52.1",
+ "sampler_options": {
+  "class": "qiskit_ibm_runtime.executor_sampler.sampler.Sampler",
+  "dynamical_decoupling_enable": false,
+  "init_qubits": true,
+  "meas_type": "classified",
+  "twirling_enable_gates": false,
+  "twirling_enable_measure": false
+ },
+ "selected_physical_qubits": [
+  51,
+  52,
+  37,
+  33,
+  32,
+  31,
+  30,
+  18
+ ],
+ "selected_readout_errors": [
+  0.005126953125,
+  0.031494140625,
+  0.00634765625,
+  0.0234375,
+  0.01220703125,
+  0.05029296875,
+  0.00537109375,
+  0.00830078125
+ ],
+ "transpiled_op_counts": {
+  "p4a_all0": {
+   "barrier": 1,
+   "measure": 8,
+   "x": 0
+  },
+  "p4a_all1": {
+   "barrier": 1,
+   "measure": 8,
+   "x": 8
+  }
+ }
+}
