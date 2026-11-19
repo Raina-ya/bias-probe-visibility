@@ -12,6 +12,7 @@
 \usepackage{url}
 \usepackage{graphicx}
 \input{numbers_v4}
+\input{numbers_hw_v4_1}
 
 \definecolor{linkblue}{RGB}{28,78,121}
 \hypersetup{colorlinks=true,allcolors=linkblue,pdfauthor={Zhen-Jun Liu},
@@ -30,7 +31,7 @@
 Quantum Error-Mitigated Selection}\vspace{0.35em}\\
 \large A Preregistered Fixed-Budget Study}
 \author{Zhen-Jun Liu}
-\date{17 November 2026}
+\date{19 November 2026 (v4.1: hardware addendum; v4.0 of 17 November 2026 is release v1.0)}
 
 \begin{document}
 \maketitle
@@ -52,7 +53,10 @@ $\numFCGraphs$ graphs. A registered test of when zero-noise extrapolation beats 
 estimation predicted raw for every graph and scored $\numPoneHits/100$ hits,
 with ties counted as misses. Probe visibility is therefore mechanism-specific
 and expensive: a probe helps a decision only where the error both reverses
-decisions and leaves a signature the probe can see within its shot share.
+decisions and leaves a signature the probe can see within its shot share. An
+exploratory hardware addendum, registered after the main study, found no
+readout pair correlation on one IBM Quantum device close to the level at which
+tensored readout mitigation becomes worse than none.
 \end{abstract}
 
 \section{Introduction}
@@ -110,10 +114,12 @@ not that any individual probe or concentration bound is new. It is the
 preregistered joint test of analytic visibility, finite budget, and
 decision-level false certification across a common QAOA selection task.
 
-All evidence is noisy simulation. No hardware experiment was run: a
-go/no-go review before the end of the study returned no-go
-(Section~\ref{sec:hw}). The synthetic three-body readout structure has no
-asserted hardware provenance. The contribution is therefore a precise,
+All decision-level evidence is noisy simulation. A go/no-go review at the end
+of the study returned no-go (Section~\ref{sec:hw}); after the study was
+released, a separately registered exploratory readout test was run once on one
+IBM Quantum device (Section~\ref{sec:hwadd}). It bears on the plausibility of
+the synthetic readout structures, not on any decision endpoint. The synthetic
+three-body readout structure has no asserted hardware provenance. The contribution is therefore a precise,
 falsifiable map of where runtime probes can and cannot certify a decision under
 one budget, together with a record of how the registered predictions fared.
 
@@ -524,9 +530,64 @@ registered conclusion would change. The provider's Open Plan then offered the
 resource-unit equivalent of 10 QPU minutes per 28 days, inside which the
 protocol's 360-second cap fits.
 
+\subsection{Hardware addendum (exploratory, registered after release)}\label{sec:hwadd}
+
+On one IBM Quantum device, no qubit pair's readout correlation came near the
+level at which a tensored (independent) readout model does worse than no
+correction. The test was registered at OSF \code{wh5rs} with its complete
+execution code (commit \code{88ae3a6}) before any hardware data existed, and
+was run once on \code{ibm\_marrakesh} on 2026-11-19. Two P4a circuits (all
+qubits prepared in 0; all in 1) on eight connected qubits observe all 28 pairs
+at once. For a pair with assignment-flip rates $q_i,q_j$ and flip covariance
+$c$, the tensored model corrects the edge parity $\langle Z_iZ_j\rangle$ worse
+than no correction exactly when
+\begin{equation}
+c > c^\ast(q_i,q_j)=\frac{r(1-2r)}{4(1-r)},\qquad r=q_i+q_j-2q_iq_j .
+\end{equation}
+The registered prediction was that no pair-preparation rejects $c\le c^\ast$
+(one-sided parametric bootstrap, Holm over $\numHwTests$ tests); a two-sided
+Fisher exact test of independence was secondary\cite{fisher1935,holm1979}.
+
+A 1,000-shot pilot used $\numHwPilotSec$ reported QPU seconds; the
+protocol's allocation formula then gave $\numHwShots$ shots per circuit, above
+the registered minimum of $\numHwSmin$, in one job of $\numHwMainSec$
+seconds ($\numHwTotalSec$ of the 360-second cap). The prediction held:
+$\numHwRelRej$ of $\numHwTests$ relevance tests and $\numHwDetRej$ of
+$\numHwTests$ detection tests rejected. The largest estimated correlation
+coefficient was $\numHwMaxRho$ and the largest ratio $c/c^\ast$ was
+$\numHwMaxRatio$ (95\% upper bound $\numHwMaxUpperRatio$), against
+$\numEfiveRatio$ for the largest simulated E5 setting. In correlation units
+the measured values stay within $\pm\numHwMaxRho$, against $\numEfiveRho$ for
+that E5 setting (Fig.~\ref{fig:hw}a); the E5 grid is therefore a stress test
+relative to this device. Unadjusted 95\% intervals excluded zero for
+$\numHwCiExcl$ of $\numHwTests$ pair-preparations, so weak correlations of
+this size may exist, but none survived the Holm correction. Reported
+calibration errors were a poor guide to the measured flip rates
+(Fig.~\ref{fig:hw}b). An independent recomputation with separate code
+reproduced every table, covariance, $p$-value, and decision. The result is
+limited to one device, one calibration window, and the two uniform
+preparations.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{../figures/hw_relevance_v4_1.pdf}
+\caption{\textbf{Readout correlations on \code{ibm\_marrakesh} are about one
+percent or less, far below both the simulated E5 stress level and the level at
+which tensored readout mitigation fails.} (a)~Estimated correlation
+coefficient for each of the 28 pairs of the eight selected qubits under the
+two preparations, with unadjusted 95\% percentile-bootstrap intervals; the
+E5 setting and the threshold lie far above the plotted range. (b)~The backend's
+reported readout error of each selected qubit against its measured flip rate
+under each preparation (grey lines join the two preparations of one qubit);
+points far from $y=x$ show that the reported calibration did not predict the
+measured rates.}
+\label{fig:hw}
+\end{figure*}
+
 \begin{table}[t]
 \centering
-\caption{Every claim is noisy simulation; nothing is hardware evidence.}
+\caption{Every decision-level claim is noisy simulation; the readout addendum
+is the only hardware evidence.}
 \label{tab:status}
 \begin{tabularx}{\columnwidth}{@{}p{0.34\columnwidth}X@{}}
 \toprule
@@ -538,7 +599,7 @@ Development (split 10) & Descriptive; thresholds locked (OSF j597k) \\
 Holdout (split 20) & Confirmatory primary endpoint; secondary endpoints \\
 Prop.~1 (splits 30/31) & Registered (OSF abuct); secondary \\
 Failure causes, P1b & Exploratory interpretation \\
-Hardware & Not run; review returned no-go \\
+Hardware & No-go review in the main study; exploratory readout addendum (OSF \code{wh5rs}), no relevant correlation \\
 \bottomrule
 \end{tabularx}
 \end{table}
@@ -555,7 +616,10 @@ trade than structure-matched probes. Readout structures produced no
 decision errors to intercept, and the matched readout certificate abstained
 almost always. Most predicted blind cells were blind, and the failed predictions
 lay mostly in the budget-sensitive stratum. Null, negative, and mismatched outcomes were
-admissible under the registration and are reported as such.
+admissible under the registration and are reported as such. On hardware, the
+registered readout test found pair correlations far below the level at which
+tensored mitigation fails, so the synthetic readout structures used here are
+stress tests rather than typical behaviour of the device measured.
 
 \section{Discussion}
 
@@ -596,7 +660,9 @@ established statistics and information theory. The $f^\ast$ endpoint was not
 evaluable, GVS was not run, and the Proposition-1 noise model was fixed late,
 as disclosed. All verification was internal. Results were reproduced
 byte-identically on Windows and Linux and independently recomputed from raw
-rows, but no third party has recomputed them. No hardware run was authorized.
+rows, but no third party has recomputed them. The hardware addendum used one
+device, one day, and two preparations, with qubits chosen for low reported
+readout error.
 
 \subsection{Reproducibility}
 
@@ -713,6 +779,7 @@ Lock & OSF \code{j597k}, commit \code{5e2edde}; split 20 never instantiated. \\
 Holdout & 13,300 units, no failures, single run at commit \code{6fc6637}. \\
 Prop.~1 & Plan \code{bd3e29a}; predictions \code{1e8396f}, OSF \code{abuct}; scoring at \code{0956527}, single run. \\
 Synthesis & Boundary map, failure causes, hardware no-go review. \\
+Hardware addendum & OSF \code{wh5rs}, package commit \code{88ae3a6}; single run on \code{ibm\_marrakesh} on 2026-11-19; records commit \code{1f5833b}. \\
 \bottomrule
 \end{tabularx}
 \end{table}

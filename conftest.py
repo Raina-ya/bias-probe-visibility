@@ -18,6 +18,16 @@ Once the full confirmatory-lock check passes, they are marked
 xfail(strict=True); ``tests/test_registration_state_v4.py`` asserts the
 post-confirmatory state.  Logged as implementation error 4 in
 docs/freeze/implementation_error_log_v4_post_lock.md.
+
+After the single registered hardware run (OSF wh5rs), one test in the
+registered hardware package asserts the pre-run state ("the real output folder
+does not exist"):
+``tests/test_hw_readout_v1.py::test_real_mode_refuses_without_registration``.
+The file is listed in docs/hardware/package_manifest_v1.json, whose hash the
+registration records, so it cannot be edited.  Once
+results/hardware_v1/markers/main.success exists, it is marked xfail(strict=True);
+``tests/test_hw_post_run_state_v1.py`` asserts the post-run state.  Logged as
+entry 1 in docs/hardware/implementation_error_log_hw_v1.md.
 """
 
 from __future__ import annotations
@@ -48,6 +58,11 @@ PRE_CONFIRMATORY_TESTS_V4 = frozenset(
 )
 
 
+PRE_HARDWARE_RUN_TESTS = frozenset(
+    {"tests/test_hw_readout_v1.py::test_real_mode_refuses_without_registration"}
+)
+
+
 RUNNER_HOLDOUT_TEST = "tests/test_execution.py::LockTests::test_runner_refuses_holdout"
 
 
@@ -68,6 +83,14 @@ def _registered_v4() -> bool:
 
 
 def pytest_collection_modifyitems(config, items):
+    if (REPO / "results" / "hardware_v1" / "markers" / "main.success").exists():
+        hw_marker = pytest.mark.xfail(
+            strict=True,
+            reason="asserts the pre-hardware-run state; superseded by test_hw_post_run_state_v1.py",
+        )
+        for item in items:
+            if item.nodeid.replace("\\", "/") in PRE_HARDWARE_RUN_TESTS:
+                item.add_marker(hw_marker)
     if not _registered_v4():
         return
     marker = pytest.mark.xfail(

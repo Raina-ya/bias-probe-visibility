@@ -20,7 +20,8 @@ QEM is unreliable. This project asks whether that unreliability can be detected 
 ## Status
 
 **Complete.** All four parts have been run under protocol v4, each confirmatory analysis once.
-Evidence type for every result: noisy simulation. No hardware was used.
+Evidence type for every decision-level result: noisy simulation. One exploratory readout test
+was run on hardware after release v1.0 (below).
 
 - Primary endpoint (holdout, 100 graphs, read once): the runtime probe rule reduced the
   CI-only false-certification rate, dFC = +0.0080 (95% graph-cluster bootstrap
@@ -31,8 +32,14 @@ Evidence type for every result: noisy simulation. No hardware was used.
   [docs/results/prop1_prediction_test_v4.md](docs/results/prop1_prediction_test_v4.md)
 - Secondary endpoints, boundary synthesis and failure causes:
   [docs/results/](docs/results/)
-- Hardware go/no-go review: NO-GO, no job submitted.
+- Hardware go/no-go review at the end of the study: NO-GO, no job submitted.
   [docs/hardware/review_v1.md](docs/hardware/review_v1.md)
+- Hardware addendum (exploratory, registered after v1.0 at OSF `wh5rs` with its execution
+  package): one run on `ibm_marrakesh` on 2026-11-19, 51 reported QPU seconds. The registered
+  prediction held: no qubit pair's readout correlation came near the level at which tensored
+  readout mitigation is worse than none (0 of 56 tests rejected).
+  [docs/results/hardware_readout_v1.md](docs/results/hardware_readout_v1.md),
+  [docs/hardware/amendment_readout_v1.md](docs/hardware/amendment_readout_v1.md)
 - Paper: [paper/main_v4.pdf](paper/main_v4.pdf). Every result number in it is generated
   from the committed result files (`paper/numbers_v4.tex`).
 

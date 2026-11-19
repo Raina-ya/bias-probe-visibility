@@ -11,10 +11,12 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO / "experiments" / "synthesis"))
 
+import hw_paper_v4_1 as hw_numbers  # noqa: E402
 import paper_numbers_v4 as numbers  # noqa: E402
 
 TEX = REPO / "paper" / "main_v4.tex"
 NUMBERS = REPO / "paper" / "numbers_v4.tex"
+HW_NUMBERS = REPO / "paper" / "numbers_hw_v4_1.tex"
 
 
 class PaperLedger(unittest.TestCase):
@@ -28,9 +30,18 @@ class PaperLedger(unittest.TestCase):
         )
         self.assertEqual(found, expected)
 
+    def test_hardware_numbers_match_records(self) -> None:
+        expected = {k: v for k, (v, _) in hw_numbers.numbers().items()}
+        found = dict(re.findall(r"\\newcommand\{\\num(\w+)\}\{([^}]*)\}",
+                                HW_NUMBERS.read_text(encoding="utf-8")))
+        self.assertEqual(found, expected)
+
+    def test_hardware_macros_do_not_collide(self) -> None:
+        self.assertEqual(set(numbers.numbers()) & set(hw_numbers.numbers()), set())
+
     def test_every_macro_used_is_defined(self) -> None:
         used = set(re.findall(r"\\num([A-Za-z]+)", TEX.read_text(encoding="utf-8")))
-        defined = set(numbers.numbers())
+        defined = set(numbers.numbers()) | set(hw_numbers.numbers())
         self.assertEqual(used - defined, set())
 
     def test_citations_are_in_bib_and_verified(self) -> None:
