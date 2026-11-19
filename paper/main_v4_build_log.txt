@@ -39,10 +39,34 @@ Added citation: fisher1935 (verified 2026-11-18). Version 4.0 is preserved at
 tag v1.0 (Zenodo 10.5281/zenodo.24360452). One overfull box of 1.6 pt in the
 bibliography remains; Pages: 10.
 
+Version 4.2 (2026-11-19, readability revision; not yet a release): no result,
+number, registration, or registered file changed. Changes: abstract limited to
+three result numbers; new Section 2 "Related work" positioning the study against
+mitigation methods, cost bounds, QEM benchmarks and audits (including the
+closest prior work, scavino2026, and govia2025), characterization and
+identifiability, and statistical decision theory; result numbers gathered into
+one results table (Table 4) and the per-structure table (Table 5), with the text
+referring to them instead of repeating numbers; probe and error-structure tables
+shortened (full grids and statistics moved to Appendix B); failure causes as a
+table; design checks, defect audit, and development results moved to Appendix A;
+discussion now precedes a short conclusion and includes "Relation to prior work".
+Corrected the paraphrase of lipsitch2010 (negative controls require the control
+to share the target's unmeasured causes, not "a shared bias mechanism") and scoped
+the cross-platform byte-identity statement to the main-study scorers (hardware
+implementation log entry 2). Citations: 19 -> 80 keys, all from
+docs/literature/library.csv with status verified, verified-preprint, or verified
+(previous project); each claim follows the abstract-level notes there.
+library.csv: scavino2026 status normalized from "verified (arXiv record
+2026-11-10; title corrected)" to "verified-preprint" (note moved to
+source_checked). references.bib: kimnelson2006 publisher moved to its own field.
+Build: exit 0; 0 undefined citations or references; 0 BibTeX warnings; no
+overfull boxes; Pages: 12.
+
 SHA-256 (LF-normalized text; PDF byte hash)
-paper/main_v4.tex e40761f7b356e8a66313cfa89574de6edc33e2a38bcf088eb8d71c61b4623b30
+paper/main_v4.tex 3c893766868bed0ee43fa6728dca6845b10b7c4ec7a3c35e80cf56eb71163c79
 paper/numbers_v4.tex a41b8573118f92723b0f6732c358eca64801e7dae4ba60aecefc304a72058ea3
-paper/main_v4.pdf 951238bc97098041a7c6c8cf907ad2e2efbddc6ba6161c18eb301e82ce8efb05
+paper/main_v4.pdf 4ce31157c8fcc3b05bbd1829227aa22fe3910d96749e8ac4becf28919ac5bbb4
 figures/boundary_map_v4.pdf 80c305791487d5fca41e073289f2283db787e02f4b17ead6c2bfb4cc71984aff
 paper/numbers_hw_v4_1.tex b22c0ddf709246b2b9d9a5048082ba3e971bc220fd52af01df760ad407a50b06
 paper/hw_figure_v4_1.tex 76eb4812b76ba547e8e8712743a7cb6df9e5e4f711cbb062ce58d72bc1464b53
+paper/references.bib 3659e23330b59632dbd90415f5c39e31c39d11b1e2831f573912a45a7bffa43b
